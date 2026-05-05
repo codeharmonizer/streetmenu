@@ -59,11 +59,12 @@ export default async function PublicMenuPage({ params }: Props) {
     : null
 
   // Group items by category
+  type MenuItem = NonNullable<typeof items>[number]
   const categories = [...new Set(items?.map(i => i.category || 'Other') ?? [])]
-  const grouped = categories.reduce((acc, cat) => {
+  const grouped = categories.reduce<Record<string, MenuItem[]>>((acc, cat) => {
     acc[cat] = items?.filter(i => (i.category || 'Other') === cat) ?? []
     return acc
-  }, {} as Record<string, typeof items>)
+  }, {})
 
   return (
     <div className="min-h-screen pb-20" style={{ background: 'var(--bg)' }}>
