@@ -20,7 +20,7 @@ export async function sendContactEmail(_: { error?: string; success?: boolean },
 
   try {
     await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL ?? 'StreetMenu <onboarding@resend.dev>',
+      from: process.env.RESEND_FROM_EMAIL?.includes('@') ? process.env.RESEND_FROM_EMAIL : 'StreetMenu <onboarding@resend.dev>',
       to:   process.env.CONTACT_EMAIL!,
       replyTo: email,
       subject: `[StreetMenu] ${subject}`,

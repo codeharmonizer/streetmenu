@@ -31,21 +31,18 @@ function ResetPasswordForm() {
   const [verified,  setVerified]  = useState(false)
   const [done,      setDone]      = useState(false)
 
-  /* ── On mount: exchange the token_hash from the URL ── */
+  /* ── On mount: exchange the PKCE code from the URL ── */
   useEffect(() => {
+    const code       = searchParams.get('code')
+    // Legacy token_hash flow (fallback)
     const token_hash = searchParams.get('token_hash')
     const type       = searchParams.get('type') as 'recovery' | null
 
-    if (!token_hash || type !== 'recovery') {
-      toast.error('رابط غير صالح أو منتهي الصلاحية.')
-      setVerifying(false)
-      return
-    }
-
     const supabase = createClient()
-    supabase.auth
-      .verifyOtp({ token_hash, type: 'recovery' })
-      .then(({ error }) => {
+
+    if (code) {
+      // PKCE flow — exchange code for session
+      supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
         if (error) {
           toast.error('انتهت صلاحية الرابط. يرجى طلب رابط جديد.')
         } else {
@@ -53,6 +50,20 @@ function ResetPasswordForm() {
         }
         setVerifying(false)
       })
+    } else if (token_hash && type === 'recovery') {
+      // Implicit/token_hash flow
+      supabase.auth.verifyOtp({ token_hash, type: 'recovery' }).then(({ error }) => {
+        if (error) {
+          toast.error('انتهت صلاحية الرابط. يرجى طلب رابط جديد.')
+        } else {
+          setVerified(true)
+        }
+        setVerifying(false)
+      })
+    } else {
+      toast.error('رابط غير صالح أو منتهي الصلاحية.')
+      setVerifying(false)
+    }
   }, [searchParams])
 
   async function handleSubmit(e: React.FormEvent) {
