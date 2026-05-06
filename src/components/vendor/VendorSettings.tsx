@@ -3,17 +3,56 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Vendor } from '@/types'
-import { Save, ToggleLeft, ToggleRight } from 'lucide-react'
+import { Save, ToggleLeft, ToggleRight, Camera, X } from 'lucide-react'
+import Image from 'next/image'
+import { getInitials } from '@/lib/utils'
 import toast from 'react-hot-toast'
 
 export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) {
   const [vendor, setVendor] = useState(initial)
   const [saving, setSaving] = useState(false)
+  const [logoFile, setLogoFile] = useState<File | null>(null)
+  const [logoPreview, setLogoPreview] = useState<string | null>(initial.logo_url)
   const supabase = createClient()
+
+  function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setLogoFile(file)
+    setLogoPreview(URL.createObjectURL(file))
+  }
+
+  function removeLogo() {
+    setLogoFile(null)
+    setLogoPreview(null)
+    setVendor(v => ({ ...v, logo_url: null }))
+  }
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true)
+
+    let logoUrl = vendor.logo_url
+
+    if (logoFile) {
+      const ext = logoFile.name.split('.').pop()
+      const path = `${vendor.id}/logo.${ext}`
+      const { error: uploadError } = await supabase.storage
+        .from('menu-photos')
+        .upload(path, logoFile, { upsert: true })
+
+      if (uploadError) {
+        toast.error('فشل رفع الصورة')
+        setSaving(false)
+        return
+      }
+
+      const { data: urlData } = supabase.storage.from('menu-photos').getPublicUrl(path)
+      logoUrl = urlData.publicUrl
+    } else if (logoPreview === null) {
+      logoUrl = null
+    }
+
     const { error } = await supabase
       .from('vendors')
       .update({
@@ -23,11 +62,16 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
         address: vendor.address,
         phone: vendor.phone,
         hours: vendor.hours,
+        logo_url: logoUrl,
       })
       .eq('id', vendor.id)
 
     if (error) toast.error('فشل الحفظ')
-    else toast.success('تم حفظ الإعدادات!')
+    else {
+      setVendor(v => ({ ...v, logo_url: logoUrl }))
+      setLogoFile(null)
+      toast.success('تم حفظ الإعدادات!')
+    }
     setSaving(false)
   }
 
@@ -77,6 +121,48 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
       </div>
 
       <form onSubmit={handleSave} className="card space-y-4">
+
+        {/* Logo upload */}
+        <div>
+          <label className="label">صورة البسطة</label>
+          <div className="flex items-center gap-4">
+            {/* Avatar preview */}
+            <div className="relative flex-shrink-0">
+              {logoPreview ? (
+                <div className="w-20 h-20 rounded-2xl overflow-hidden relative">
+                  <Image src={logoPreview} alt="شعار البسطة" fill className="object-cover" />
+                </div>
+              ) : (
+                <div className="w-20 h-20 rounded-2xl flex items-center justify-center font-black text-2xl text-white"
+                  style={{ background: 'var(--brand)' }}>
+                  {getInitials(vendor.name)}
+                </div>
+              )}
+              {logoPreview && (
+                <button type="button" onClick={removeLogo}
+                  className="absolute -top-2 -left-2 w-6 h-6 rounded-full flex items-center justify-center shadow-md"
+                  style={{ background: '#ef4444' }}>
+                  <X size={12} color="white" />
+                </button>
+              )}
+            </div>
+
+            {/* Upload button */}
+            <div className="flex flex-col gap-2">
+              <label className="btn-secondary cursor-pointer text-xs gap-2">
+                <Camera size={14} />
+                {logoPreview ? 'تغيير الصورة' : 'رفع صورة'}
+                <input type="file" accept="image/*" className="hidden" onChange={handleLogoChange} />
+              </label>
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                PNG أو JPG، حجم أقصى 2 ميغابايت
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t" style={{ borderColor: 'var(--border)' }} />
+
         {field('اسم البسطة *', 'name', 'مثال: مطبخ أم فاطمة')}
         <div>
           <label className="label">الوصف</label>

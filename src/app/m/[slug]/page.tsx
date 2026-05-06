@@ -71,10 +71,16 @@ export default async function PublicMenuPage({ params }: Props) {
       {/* Header */}
       <div className="px-4 pt-8 pb-6 max-w-lg mx-auto">
         <div className="flex items-start gap-4 mb-4">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 font-bold text-white"
-            style={{ background: 'var(--brand)' }}>
-            {vendor.name.slice(0, 2).toUpperCase()}
-          </div>
+          {vendor.logo_url ? (
+            <div className="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 relative">
+              <Image src={vendor.logo_url} alt={vendor.name} fill className="object-cover" />
+            </div>
+          ) : (
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 font-bold text-white"
+              style={{ background: 'var(--brand)' }}>
+              {vendor.name.slice(0, 2).toUpperCase()}
+            </div>
+          )}
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-black leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
               {vendor.name}

@@ -6,6 +6,7 @@ import { QrCode, LayoutDashboard, UtensilsCrossed, QrCodeIcon, BarChart3, LogOut
 import { createClient } from '@/lib/supabase/client'
 import { Vendor } from '@/types'
 import { getInitials, cn } from '@/lib/utils'
+import Image from 'next/image'
 import toast from 'react-hot-toast'
 
 const navItems = [
@@ -44,10 +45,16 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
       {/* Vendor info */}
       <div className="p-4 border-b mx-4 my-4 rounded-xl" style={{ background: 'var(--surface-2)', borderColor: 'var(--border)' }}>
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm text-white flex-shrink-0"
-            style={{ background: 'var(--brand)' }}>
-            {getInitials(vendor.name)}
-          </div>
+          {vendor.logo_url ? (
+            <div className="w-9 h-9 rounded-lg overflow-hidden flex-shrink-0 relative">
+              <Image src={vendor.logo_url} alt={vendor.name} fill className="object-cover" />
+            </div>
+          ) : (
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm text-white flex-shrink-0"
+              style={{ background: 'var(--brand)' }}>
+              {getInitials(vendor.name)}
+            </div>
+          )}
           <div className="min-w-0">
             <p className="font-semibold text-sm truncate">{vendor.name}</p>
             <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{vendor.category || 'طعام شعبي'}</p>
