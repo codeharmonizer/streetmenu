@@ -91,7 +91,7 @@ export default async function PublicMenuPage({ params }: Props) {
                   background: vendor.is_open ? '#dcfce7' : '#fee2e2',
                   color: vendor.is_open ? '#15803d' : '#dc2626',
                 }}>
-                {vendor.is_open ? '● Open now' : '○ Closed'}
+                {vendor.is_open ? '● مفتوح الآن' : '○ مغلق'}
               </span>
               {avgRating && (
                 <span className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
@@ -121,7 +121,7 @@ export default async function PublicMenuPage({ params }: Props) {
           {vendor.phone && (
             <a href={`https://wa.me/${vendor.phone.replace(/\D/g, '')}`}
               className="flex items-center gap-2 text-sm" style={{ color: 'var(--brand)' }}>
-              <Phone size={13} /> {vendor.phone} (WhatsApp)
+              <Phone size={13} /> {vendor.phone} (واتساب)
             </a>
           )}
         </div>
@@ -132,8 +132,8 @@ export default async function PublicMenuPage({ params }: Props) {
         {!items?.length ? (
           <div className="card text-center py-12">
             <ShoppingBag size={32} className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
-            <p className="font-semibold">Menu coming soon</p>
-            <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>Check back later!</p>
+            <p className="font-semibold">القائمة قريباً</p>
+            <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>تفقد لاحقاً!</p>
           </div>
         ) : (
           Object.entries(grouped).map(([category, catItems]) => (
@@ -152,7 +152,7 @@ export default async function PublicMenuPage({ params }: Props) {
                         {!item.available && (
                           <div className="absolute inset-0 flex items-center justify-center rounded-xl"
                             style={{ background: 'rgba(0,0,0,0.5)' }}>
-                            <span className="text-white text-xs font-bold">Sold out</span>
+                            <span className="text-white text-xs font-bold">نفد</span>
                           </div>
                         )}
                       </div>
@@ -169,7 +169,7 @@ export default async function PublicMenuPage({ params }: Props) {
                         {formatPrice(item.price)}
                       </p>
                       {!item.available && (
-                        <span className="text-xs mt-1 inline-block" style={{ color: 'var(--text-muted)' }}>Currently unavailable</span>
+                        <span className="text-xs mt-1 inline-block" style={{ color: 'var(--text-muted)' }}>غير متوفر حالياً</span>
                       )}
                     </div>
                   </div>
@@ -183,7 +183,7 @@ export default async function PublicMenuPage({ params }: Props) {
       {/* Reviews */}
       <div className="max-w-lg mx-auto px-4 mt-8">
         <h2 className="font-bold text-lg mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-          Reviews {reviews?.length ? `(${reviews.length})` : ''}
+          التقييمات {reviews?.length ? `(${reviews.length})` : ''}
         </h2>
 
         {reviews?.length ? (
@@ -205,7 +205,7 @@ export default async function PublicMenuPage({ params }: Props) {
             ))}
           </div>
         ) : (
-          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>No reviews yet. Be the first!</p>
+          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>لا توجد تقييمات بعد. كن الأول!</p>
         )}
 
         <ReviewForm vendorId={vendor.id} />
@@ -213,7 +213,7 @@ export default async function PublicMenuPage({ params }: Props) {
 
       {/* Footer */}
       <div className="text-center mt-12 text-xs" style={{ color: 'var(--text-muted)' }}>
-        Powered by <a href="/" className="font-semibold hover:underline" style={{ color: 'var(--brand)' }}>StreetMenu</a>
+        مدعوم من <a href="/" className="font-semibold hover:underline" style={{ color: 'var(--brand)' }}>StreetMenu</a>
       </div>
     </div>
   )

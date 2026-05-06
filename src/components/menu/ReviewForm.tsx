@@ -15,7 +15,7 @@ export default function ReviewForm({ vendorId }: { vendorId: string }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!rating) { toast.error('Please select a rating'); return }
+    if (!rating) { toast.error('يرجى اختيار تقييم'); return }
     setSubmitting(true)
 
     const supabase = createClient()
@@ -27,9 +27,9 @@ export default function ReviewForm({ vendorId }: { vendorId: string }) {
     })
 
     if (error) {
-      toast.error('Failed to submit review')
+      toast.error('فشل إرسال التقييم')
     } else {
-      toast.success('Thanks for your review!')
+      toast.success('شكراً على تقييمك!')
       setSubmitted(true)
     }
     setSubmitting(false)
@@ -39,17 +39,17 @@ export default function ReviewForm({ vendorId }: { vendorId: string }) {
     return (
       <div className="card text-center py-6">
         <p className="text-2xl mb-2">🙏</p>
-        <p className="font-semibold">Thank you for your review!</p>
+        <p className="font-semibold">شكراً على تقييمك!</p>
       </div>
     )
   }
 
   return (
     <div className="card">
-      <h3 className="font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>Leave a review</h3>
+      <h3 className="font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>اكتب تقييماً</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="label">Rating *</label>
+          <label className="label">التقييم *</label>
           <div className="flex gap-1">
             {[1,2,3,4,5].map(s => (
               <button key={s} type="button"
@@ -65,16 +65,16 @@ export default function ReviewForm({ vendorId }: { vendorId: string }) {
           </div>
         </div>
         <div>
-          <label className="label">Your name (optional)</label>
-          <input className="input" placeholder="e.g. Ahmed" value={name} onChange={e => setName(e.target.value)} />
+          <label className="label">اسمك (اختياري)</label>
+          <input className="input" placeholder="مثال: أحمد" value={name} onChange={e => setName(e.target.value)} />
         </div>
         <div>
-          <label className="label">Comment (optional)</label>
-          <textarea className="input resize-none" rows={3} placeholder="Tell others about your experience…"
+          <label className="label">تعليق (اختياري)</label>
+          <textarea className="input resize-none" rows={3} placeholder="أخبر الآخرين عن تجربتك…"
             value={comment} onChange={e => setComment(e.target.value)} />
         </div>
         <button type="submit" disabled={submitting} className="btn-primary w-full">
-          {submitting ? 'Submitting…' : 'Submit review'}
+          {submitting ? 'جارٍ الإرسال…' : 'إرسال التقييم'}
         </button>
       </form>
     </div>

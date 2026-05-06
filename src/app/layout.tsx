@@ -3,17 +3,17 @@ import './globals.css'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
-  title: 'StreetMenu — Scan. See. Eat.',
-  description: 'QR-powered menus for street food vendors, food trucks, and home cooks.',
+  title: 'StreetMenu — امسح. شاهد. كل.',
+  description: 'قوائم طعام رقمية بالرمز QR لأصحاب البسطات وشاحنات الطعام والمطابخ المنزلية.',
   openGraph: {
     title: 'StreetMenu',
-    description: 'Scan the QR code to see what\'s cooking nearby.',
+    description: 'امسح رمز QR لترى ما يُطبخ قريباً.',
   },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ar" dir="rtl">
       <body>
         {children}
         <Toaster

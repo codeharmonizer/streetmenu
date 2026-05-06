@@ -27,9 +27,9 @@ export default async function DashboardPage() {
     : null
 
   const stats = [
-    { label: 'Menu items', value: itemCount ?? 0, icon: UtensilsCrossed, href: '/dashboard/menu', cta: 'Add items' },
-    { label: 'Total scans', value: scanCount ?? 0, icon: BarChart3, href: '/dashboard/analytics', cta: 'View analytics' },
-    { label: 'Reviews', value: reviews?.length ?? 0, icon: Star, href: `/m/${vendor.slug}`, cta: 'See reviews' },
+    { label: 'أصناف القائمة', value: itemCount ?? 0, icon: UtensilsCrossed, href: '/dashboard/menu', cta: 'إضافة أصناف' },
+    { label: 'إجمالي المسح', value: scanCount ?? 0, icon: BarChart3, href: '/dashboard/analytics', cta: 'عرض الإحصائيات' },
+    { label: 'التقييمات', value: reviews?.length ?? 0, icon: Star, href: `/m/${vendor.slug}`, cta: 'عرض التقييمات' },
   ]
 
   const isNew = (itemCount ?? 0) === 0
@@ -39,9 +39,9 @@ export default async function DashboardPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>
-          Hey 👋
+          أهلاً 👋
         </h1>
-        <p style={{ color: 'var(--text-secondary)' }}>Here's how <strong>{vendor.name}</strong> is doing.</p>
+        <p style={{ color: 'var(--text-secondary)' }}>إليك أداء <strong>{vendor.name}</strong>.</p>
       </div>
 
       {/* Onboarding banner */}
@@ -50,12 +50,12 @@ export default async function DashboardPage() {
           style={{ background: 'var(--brand-light)', border: '1px solid #ffd4a8' }}>
           <div className="text-2xl">🚀</div>
           <div className="flex-1">
-            <p className="font-bold mb-1" style={{ color: 'var(--brand)' }}>You're almost live!</p>
+            <p className="font-bold mb-1" style={{ color: 'var(--brand)' }}>أنتَ على وشك الإطلاق!</p>
             <p className="text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>
-              Add your first menu item to activate your public menu and QR code.
+              أضف أول صنف لتفعيل قائمتك العامة ورمز QR.
             </p>
             <Link href="/dashboard/menu" className="btn-primary text-sm px-4 py-2">
-              Add first item →
+              أضف أول صنف ←
             </Link>
           </div>
         </div>
@@ -81,13 +81,13 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick actions */}
-      <h2 className="font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>Quick actions</h2>
+      <h2 className="font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>إجراءات سريعة</h2>
       <div className="grid sm:grid-cols-2 gap-3">
         {[
-          { href: '/dashboard/menu', icon: UtensilsCrossed, title: 'Manage menu', desc: 'Add, edit, or remove dishes' },
-          { href: '/dashboard/qr', icon: QrCode, title: 'Download QR code', desc: 'Print and stick it at your stall' },
-          { href: `//m/${vendor.slug}`, icon: TrendingUp, title: 'Preview public menu', desc: 'See what customers see' },
-          { href: '/dashboard/analytics', icon: BarChart3, title: 'View analytics', desc: 'Scan count and trends' },
+          { href: '/dashboard/menu', icon: UtensilsCrossed, title: 'إدارة القائمة', desc: 'إضافة أو تعديل أو حذف الأصناف' },
+          { href: '/dashboard/qr', icon: QrCode, title: 'تحميل رمز QR', desc: 'اطبعه وضعه في بسطتك' },
+          { href: `/m/${vendor.slug}`, icon: TrendingUp, title: 'معاينة القائمة العامة', desc: 'شاهد ما يراه الزبائن' },
+          { href: '/dashboard/analytics', icon: BarChart3, title: 'عرض الإحصائيات', desc: 'عدد عمليات المسح والاتجاهات' },
         ].map(({ href, icon: Icon, title, desc }) => (
           <Link key={href} href={href}
             className="card flex items-center gap-4 group hover:-translate-y-0.5 transition-all duration-200">

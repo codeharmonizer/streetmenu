@@ -39,19 +39,19 @@ export default function LoginPage() {
             </div>
             <span className="font-bold text-xl" style={{ fontFamily: 'var(--font-display)' }}>StreetMenu</span>
           </Link>
-          <h1 className="text-2xl font-bold mt-6 mb-1" style={{ fontFamily: 'var(--font-display)' }}>Welcome back</h1>
-          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Sign in to manage your menu</p>
+          <h1 className="text-2xl font-bold mt-6 mb-1" style={{ fontFamily: 'var(--font-display)' }}>مرحباً بعودتك</h1>
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>سجّل دخولك لإدارة قائمتك</p>
         </div>
 
         <div className="card">
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="label">Email</label>
+              <label className="label">البريد الإلكتروني</label>
               <div className="relative">
-                <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
+                <Mail size={15} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
                 <input
                   type="email"
-                  className="input pl-9"
+                  className="input pr-9"
                   placeholder="you@example.com"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
@@ -60,33 +60,33 @@ export default function LoginPage() {
               </div>
             </div>
             <div>
-              <label className="label">Password</label>
+              <label className="label">كلمة المرور</label>
               <div className="relative">
-                <Lock size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
+                <Lock size={15} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
                 <input
                   type={showPw ? 'text' : 'password'}
-                  className="input pl-9 pr-10"
+                  className="input pr-9 pl-10"
                   placeholder="••••••••"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   required
                 />
                 <button type="button" onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }}>
+                  className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }}>
                   {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
             </div>
             <button type="submit" disabled={loading} className="btn-primary w-full py-3 mt-2">
-              {loading ? 'Signing in…' : 'Sign in'}
+              {loading ? 'جارٍ تسجيل الدخول…' : 'تسجيل الدخول'}
             </button>
           </form>
         </div>
 
         <p className="text-center text-sm mt-6" style={{ color: 'var(--text-secondary)' }}>
-          No account?{' '}
+          ليس لديك حساب؟{' '}
           <Link href="/register" className="font-semibold" style={{ color: 'var(--brand)' }}>
-            Create one free
+            أنشئ حساباً مجاناً
           </Link>
         </p>
       </div>

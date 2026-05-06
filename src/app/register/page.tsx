@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { QrCode, Mail, Lock, User, Store } from 'lucide-react'
+import { QrCode, Mail, Lock, Store } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { slugify } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -41,23 +41,21 @@ export default function RegisterPage() {
       return
     }
 
-    // If email confirmation is required, session will be null — sign in immediately
     let userId = authData.user?.id
     if (!userId) {
-      toast.error('Please check your email to confirm your account, then sign in.')
+      toast.error('يرجى التحقق من بريدك الإلكتروني لتأكيد حسابك ثم تسجيل الدخول.')
       setLoading(false)
       router.push('/login')
       return
     }
 
-    // Ensure the session is active before writing to the DB
     if (!authData.session) {
       const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
         email: form.email,
         password: form.password,
       })
       if (signInError || !signInData.user) {
-        toast.error('Account created! Please sign in to finish setup.')
+        toast.error('تم إنشاء الحساب! يرجى تسجيل الدخول لإكمال الإعداد.')
         setLoading(false)
         router.push('/login')
         return
@@ -79,17 +77,20 @@ export default function RegisterPage() {
 
     if (vendorError) {
       console.error('Vendor insert error:', vendorError)
-      toast.error(`Setup failed: ${vendorError.message}`)
+      toast.error(`فشل الإعداد: ${vendorError.message}`)
       setLoading(false)
       return
     }
 
-    toast.success('Welcome to StreetMenu!')
+    toast.success('مرحباً بك في StreetMenu!')
     router.push('/dashboard')
     router.refresh()
   }
 
-  const categories = ['Street Food', 'Food Truck', 'Home Kitchen', 'Bakery', 'Sweets & Desserts', 'Drinks & Juices', 'BBQ & Grills', 'Other']
+  const categories = [
+    'أكل شعبي', 'شاحنة طعام', 'مطبخ منزلي', 'مخبز',
+    'حلويات', 'مشروبات وعصائر', 'مشاوي', 'أخرى',
+  ]
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--bg)' }}>
@@ -102,10 +103,10 @@ export default function RegisterPage() {
             <span className="font-bold text-xl" style={{ fontFamily: 'var(--font-display)' }}>StreetMenu</span>
           </Link>
           <h1 className="text-2xl font-bold mt-6 mb-1" style={{ fontFamily: 'var(--font-display)' }}>
-            {step === 1 ? 'Create your account' : 'Set up your stall'}
+            {step === 1 ? 'إنشاء حسابك' : 'إعداد بسطتك'}
           </h1>
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            {step === 1 ? 'Free forever. No credit card needed.' : 'Tell customers who you are.'}
+            {step === 1 ? 'مجاني دائماً. لا حاجة لبطاقة ائتمان.' : 'أخبر الزبائن عن نفسك.'}
           </p>
         </div>
 
@@ -122,18 +123,18 @@ export default function RegisterPage() {
             {step === 1 ? (
               <>
                 <div>
-                  <label className="label">Email</label>
+                  <label className="label">البريد الإلكتروني</label>
                   <div className="relative">
-                    <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
-                    <input type="email" className="input pl-9" placeholder="you@example.com"
+                    <Mail size={15} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
+                    <input type="email" className="input pr-9" placeholder="you@example.com"
                       value={form.email} onChange={e => update('email', e.target.value)} required />
                   </div>
                 </div>
                 <div>
-                  <label className="label">Password</label>
+                  <label className="label">كلمة المرور</label>
                   <div className="relative">
-                    <Lock size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
-                    <input type="password" className="input pl-9" placeholder="Min. 8 characters"
+                    <Lock size={15} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
+                    <input type="password" className="input pr-9" placeholder="8 أحرف على الأقل"
                       value={form.password} onChange={e => update('password', e.target.value)} minLength={8} required />
                   </div>
                 </div>
@@ -141,20 +142,20 @@ export default function RegisterPage() {
             ) : (
               <>
                 <div>
-                  <label className="label">Stall / Kitchen name</label>
+                  <label className="label">اسم البسطة / المطبخ</label>
                   <div className="relative">
-                    <Store size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
-                    <input type="text" className="input pl-9" placeholder="e.g. Mama Fatima's Kitchen"
+                    <Store size={15} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
+                    <input type="text" className="input pr-9" placeholder="مثال: مطبخ أم فاطمة"
                       value={form.vendorName} onChange={e => update('vendorName', e.target.value)} required />
                   </div>
                 </div>
                 <div>
-                  <label className="label">Category</label>
+                  <label className="label">الفئة</label>
                   <div className="grid grid-cols-2 gap-2">
                     {categories.map(cat => (
                       <button key={cat} type="button"
                         onClick={() => update('category', cat)}
-                        className="px-3 py-2 rounded-xl text-xs font-medium text-left transition-all"
+                        className="px-3 py-2 rounded-xl text-xs font-medium text-right transition-all"
                         style={{
                           background: form.category === cat ? 'var(--brand)' : 'var(--surface-2)',
                           color: form.category === cat ? 'white' : 'var(--text-primary)',
@@ -169,14 +170,14 @@ export default function RegisterPage() {
             )}
 
             <button type="submit" disabled={loading} className="btn-primary w-full py-3 mt-2">
-              {loading ? 'Creating your menu…' : step === 1 ? 'Continue →' : 'Create my menu'}
+              {loading ? 'جارٍ إنشاء قائمتك…' : step === 1 ? 'متابعة ←' : 'إنشاء قائمتي'}
             </button>
           </form>
         </div>
 
         <p className="text-center text-sm mt-6" style={{ color: 'var(--text-secondary)' }}>
-          Already have an account?{' '}
-          <Link href="/login" className="font-semibold" style={{ color: 'var(--brand)' }}>Sign in</Link>
+          لديك حساب بالفعل؟{' '}
+          <Link href="/login" className="font-semibold" style={{ color: 'var(--brand)' }}>تسجيل الدخول</Link>
         </p>
       </div>
     </div>

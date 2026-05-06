@@ -14,7 +14,7 @@ export function slugify(text: string): string {
 }
 
 export function formatPrice(price: number, currency = 'BHD'): string {
-  return new Intl.NumberFormat('en-BH', {
+  return new Intl.NumberFormat('ar-BH', {
     style: 'currency',
     currency,
     minimumFractionDigits: 3,

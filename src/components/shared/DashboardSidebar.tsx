@@ -9,11 +9,11 @@ import { getInitials, cn } from '@/lib/utils'
 import toast from 'react-hot-toast'
 
 const navItems = [
-  { href: '/dashboard', icon: LayoutDashboard, label: 'Overview' },
-  { href: '/dashboard/menu', icon: UtensilsCrossed, label: 'Menu' },
-  { href: '/dashboard/qr', icon: QrCodeIcon, label: 'QR Code' },
-  { href: '/dashboard/analytics', icon: BarChart3, label: 'Analytics' },
-  { href: '/dashboard/settings', icon: Settings, label: 'Settings' },
+  { href: '/dashboard', icon: LayoutDashboard, label: 'نظرة عامة' },
+  { href: '/dashboard/menu', icon: UtensilsCrossed, label: 'القائمة' },
+  { href: '/dashboard/qr', icon: QrCodeIcon, label: 'رمز QR' },
+  { href: '/dashboard/analytics', icon: BarChart3, label: 'الإحصائيات' },
+  { href: '/dashboard/settings', icon: Settings, label: 'الإعدادات' },
 ]
 
 export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
@@ -23,13 +23,13 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
   async function handleLogout() {
     const supabase = createClient()
     await supabase.auth.signOut()
-    toast.success('Signed out')
+    toast.success('تم تسجيل الخروج')
     router.push('/login')
     router.refresh()
   }
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 flex flex-col border-r hidden md:flex"
+    <aside className="fixed right-0 top-0 h-full w-64 flex flex-col border-l hidden md:flex"
       style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
       {/* Logo */}
       <div className="p-6 border-b" style={{ borderColor: 'var(--border)' }}>
@@ -50,7 +50,7 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
           </div>
           <div className="min-w-0">
             <p className="font-semibold text-sm truncate">{vendor.name}</p>
-            <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{vendor.category || 'Street food'}</p>
+            <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{vendor.category || 'طعام شعبي'}</p>
           </div>
         </div>
         <Link
@@ -59,7 +59,7 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
           className="flex items-center gap-1.5 mt-3 text-xs font-medium transition-colors hover:opacity-70"
           style={{ color: 'var(--brand)' }}>
           <ExternalLink size={11} />
-          View public menu
+          عرض القائمة العامة
         </Link>
       </div>
 
@@ -87,7 +87,7 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium w-full transition-all hover:bg-red-50"
           style={{ color: 'var(--text-secondary)' }}>
           <LogOut size={16} />
-          Sign out
+          تسجيل الخروج
         </button>
       </div>
     </aside>

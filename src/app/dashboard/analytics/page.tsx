@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { BarChart3, Eye, TrendingUp, Calendar } from 'lucide-react'
 import { format, subDays } from 'date-fns'
+import { ar } from 'date-fns/locale'
 
 export default async function AnalyticsPage() {
   const supabase = await createClient()
@@ -48,16 +49,16 @@ export default async function AnalyticsPage() {
   const maxCount = Math.max(...chartData.map(d => d.count), 1)
 
   const stats = [
-    { label: 'Total scans (30d)', value: totalScans, icon: Eye },
-    { label: 'This week', value: weekScans, icon: TrendingUp },
-    { label: 'Today', value: todayScans, icon: Calendar },
+    { label: 'إجمالي المسح (30 يوم)', value: totalScans, icon: Eye },
+    { label: 'هذا الأسبوع', value: weekScans, icon: TrendingUp },
+    { label: 'اليوم', value: todayScans, icon: Calendar },
   ]
 
   return (
     <div className="max-w-3xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>Analytics</h1>
-        <p style={{ color: 'var(--text-secondary)' }}>How many people scanned your QR code.</p>
+        <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>الإحصائيات</h1>
+        <p style={{ color: 'var(--text-secondary)' }}>عدد الأشخاص الذين مسحوا رمز QR الخاص بك.</p>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-8">
@@ -73,18 +74,18 @@ export default async function AnalyticsPage() {
       {/* Bar chart */}
       <div className="card">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-bold" style={{ fontFamily: 'var(--font-display)' }}>Scans — last 30 days</h2>
+          <h2 className="font-bold" style={{ fontFamily: 'var(--font-display)' }}>عمليات المسح — آخر 30 يوم</h2>
           <BarChart3 size={16} style={{ color: 'var(--text-muted)' }} />
         </div>
         {totalScans === 0 ? (
           <div className="text-center py-12">
             <p className="text-3xl mb-2">📊</p>
-            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>No scans yet. Share your QR code to start tracking!</p>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>لا توجد عمليات مسح بعد. شارك رمز QR الخاص بك للبدء!</p>
           </div>
         ) : (
           <div className="flex items-end gap-1 h-32">
             {chartData.map(({ date, count }) => (
-              <div key={date} className="flex-1 flex flex-col items-center gap-1 group" title={`${format(new Date(date), 'MMM d')}: ${count} scans`}>
+              <div key={date} className="flex-1 flex flex-col items-center gap-1 group" title={`${format(new Date(date), 'd MMM', { locale: ar })}: ${count} مسح`}>
                 <div className="w-full rounded-t-sm transition-all duration-200 group-hover:opacity-80"
                   style={{
                     height: `${(count / maxCount) * 100}%`,
@@ -96,8 +97,8 @@ export default async function AnalyticsPage() {
           </div>
         )}
         <div className="flex justify-between mt-2">
-          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>30 days ago</span>
-          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Today</span>
+          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>منذ 30 يوم</span>
+          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>اليوم</span>
         </div>
       </div>
     </div>

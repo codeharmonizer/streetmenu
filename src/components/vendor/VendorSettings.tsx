@@ -26,8 +26,8 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
       })
       .eq('id', vendor.id)
 
-    if (error) toast.error('Failed to save')
-    else toast.success('Settings saved!')
+    if (error) toast.error('فشل الحفظ')
+    else toast.success('تم حفظ الإعدادات!')
     setSaving(false)
   }
 
@@ -57,42 +57,42 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
   return (
     <div className="max-w-2xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>Settings</h1>
-        <p style={{ color: 'var(--text-secondary)' }}>Update your stall profile visible to customers.</p>
+        <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>الإعدادات</h1>
+        <p style={{ color: 'var(--text-secondary)' }}>حدّث ملف بسطتك الظاهر للزبائن.</p>
       </div>
 
       {/* Open/closed toggle */}
       <div className="card flex items-center justify-between mb-6">
         <div>
-          <p className="font-semibold">Stall status</p>
+          <p className="font-semibold">حالة البسطة</p>
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            {vendor.is_open ? 'Customers can see your menu' : 'Menu is hidden from customers'}
+            {vendor.is_open ? 'الزبائن يمكنهم رؤية قائمتك' : 'القائمة مخفية عن الزبائن'}
           </p>
         </div>
         <button onClick={toggleOpen} className="flex items-center gap-2 text-sm font-medium">
           {vendor.is_open
-            ? <><ToggleRight size={28} style={{ color: 'var(--brand)' }} /> Open</>
-            : <><ToggleLeft size={28} style={{ color: 'var(--text-muted)' }} /> Closed</>}
+            ? <><ToggleRight size={28} style={{ color: 'var(--brand)' }} /> مفتوح</>
+            : <><ToggleLeft size={28} style={{ color: 'var(--text-muted)' }} /> مغلق</>}
         </button>
       </div>
 
       <form onSubmit={handleSave} className="card space-y-4">
-        {field('Stall name *', 'name', 'e.g. Mama Fatima\'s Kitchen')}
+        {field('اسم البسطة *', 'name', 'مثال: مطبخ أم فاطمة')}
         <div>
-          <label className="label">Description</label>
+          <label className="label">الوصف</label>
           <textarea className="input resize-none" rows={3}
-            placeholder="Tell customers what makes your food special…"
+            placeholder="أخبر الزبائن عما يميز طعامك…"
             value={vendor.description || ''}
             onChange={e => setVendor(v => ({ ...v, description: e.target.value }))} />
         </div>
-        {field('Category', 'category', 'e.g. Street Food, Home Kitchen')}
-        {field('Address / Location', 'address', 'e.g. Near Gate 3, Block 320')}
-        {field('Phone / WhatsApp', 'phone', '+973 3XXX XXXX', 'tel')}
-        {field('Operating hours', 'hours', 'e.g. Fri–Sat 6PM–12AM')}
+        {field('الفئة', 'category', 'مثال: أكل شعبي، مطبخ منزلي')}
+        {field('العنوان / الموقع', 'address', 'مثال: بالقرب من البوابة 3، بلوك 320')}
+        {field('الهاتف / واتساب', 'phone', '+973 3XXX XXXX', 'tel')}
+        {field('ساعات العمل', 'hours', 'مثال: الجمعة–السبت 6 م–12 م')}
 
         <button type="submit" disabled={saving} className="btn-primary">
           <Save size={15} />
-          {saving ? 'Saving…' : 'Save changes'}
+          {saving ? 'جارٍ الحفظ…' : 'حفظ التغييرات'}
         </button>
       </form>
     </div>

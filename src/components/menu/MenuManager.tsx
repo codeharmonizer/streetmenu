@@ -69,7 +69,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
         .upload(path, photoFile, { upsert: true })
 
       if (uploadError) {
-        toast.error('Photo upload failed')
+        toast.error('فشل رفع الصورة')
         setSaving(false)
         return
       }
@@ -96,9 +96,9 @@ export default function MenuManager({ vendor, initialItems }: Props) {
         .select()
         .single()
 
-      if (error) { toast.error('Failed to update'); setSaving(false); return }
+      if (error) { toast.error('فشل التحديث'); setSaving(false); return }
       setItems(prev => prev.map(i => i.id === editing.id ? data : i))
-      toast.success('Item updated')
+      toast.success('تم تحديث الصنف')
     } else {
       const { data, error } = await supabase
         .from('menu_items')
@@ -106,9 +106,9 @@ export default function MenuManager({ vendor, initialItems }: Props) {
         .select()
         .single()
 
-      if (error) { toast.error('Failed to add item'); setSaving(false); return }
+      if (error) { toast.error('فشل إضافة الصنف'); setSaving(false); return }
       setItems(prev => [...prev, data])
-      toast.success('Item added!')
+      toast.success('تمت إضافة الصنف!')
     }
 
     setSaving(false)
@@ -116,11 +116,11 @@ export default function MenuManager({ vendor, initialItems }: Props) {
   }
 
   async function handleDelete(id: string) {
-    if (!confirm('Delete this item?')) return
+    if (!confirm('حذف هذا الصنف؟')) return
     const { error } = await supabase.from('menu_items').delete().eq('id', id)
-    if (error) { toast.error('Failed to delete'); return }
+    if (error) { toast.error('فشل الحذف'); return }
     setItems(prev => prev.filter(i => i.id !== id))
-    toast.success('Item removed')
+    toast.success('تم حذف الصنف')
   }
 
   async function toggleAvailable(item: MenuItem) {
@@ -128,7 +128,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
       .from('menu_items')
       .update({ available: !item.available })
       .eq('id', item.id)
-    if (error) { toast.error('Failed to update'); return }
+    if (error) { toast.error('فشل التحديث'); return }
     setItems(prev => prev.map(i => i.id === item.id ? { ...i, available: !i.available } : i))
   }
 
@@ -136,11 +136,11 @@ export default function MenuManager({ vendor, initialItems }: Props) {
     <div className="max-w-3xl">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-black" style={{ fontFamily: 'var(--font-display)' }}>Menu</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>{items.length} item{items.length !== 1 ? 's' : ''}</p>
+          <h1 className="text-3xl font-black" style={{ fontFamily: 'var(--font-display)' }}>القائمة</h1>
+          <p style={{ color: 'var(--text-secondary)' }}>{items.length} {items.length === 1 ? 'صنف' : 'أصناف'}</p>
         </div>
         <button onClick={openAdd} className="btn-primary">
-          <Plus size={16} /> Add item
+          <Plus size={16} /> إضافة صنف
         </button>
       </div>
 
@@ -149,7 +149,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
         <div className="card mb-6 animate-slide-up">
           <div className="flex items-center justify-between mb-5">
             <h2 className="font-bold text-lg" style={{ fontFamily: 'var(--font-display)' }}>
-              {editing ? 'Edit item' : 'New item'}
+              {editing ? 'تعديل الصنف' : 'صنف جديد'}
             </h2>
             <button onClick={() => setShowForm(false)} style={{ color: 'var(--text-muted)' }}>
               <X size={18} />
@@ -158,30 +158,30 @@ export default function MenuManager({ vendor, initialItems }: Props) {
           <form onSubmit={handleSave} className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="label">Name *</label>
-                <input className="input" placeholder="e.g. Chicken Shawarma" required
+                <label className="label">الاسم *</label>
+                <input className="input" placeholder="مثال: شاورما دجاج" required
                   value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} />
               </div>
               <div>
-                <label className="label">Price (BHD) *</label>
+                <label className="label">السعر (د.ب.) *</label>
                 <input className="input" type="number" step="0.001" min="0" placeholder="0.500" required
                   value={form.price} onChange={e => setForm(p => ({ ...p, price: e.target.value }))} />
               </div>
             </div>
             <div>
-              <label className="label">Description</label>
-              <textarea className="input resize-none" rows={2} placeholder="What's in it?"
+              <label className="label">الوصف</label>
+              <textarea className="input resize-none" rows={2} placeholder="ماذا يحتوي؟"
                 value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} />
             </div>
             <div>
-              <label className="label">Category</label>
-              <input className="input" placeholder="e.g. Sandwiches, Drinks, Desserts"
+              <label className="label">الفئة</label>
+              <input className="input" placeholder="مثال: سندويشات، مشروبات، حلويات"
                 value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))} />
             </div>
 
             {/* Photo upload */}
             <div>
-              <label className="label">Photo</label>
+              <label className="label">الصورة</label>
               <div className="flex items-center gap-4">
                 {photoPreview ? (
                   <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
@@ -198,7 +198,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
                   </div>
                 )}
                 <label className="btn-secondary cursor-pointer text-xs">
-                  {photoPreview ? 'Change photo' : 'Upload photo'}
+                  {photoPreview ? 'تغيير الصورة' : 'رفع صورة'}
                   <input type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
                 </label>
               </div>
@@ -207,9 +207,9 @@ export default function MenuManager({ vendor, initialItems }: Props) {
             <div className="flex items-center gap-3 pt-2">
               <button type="submit" disabled={saving} className="btn-primary">
                 <Check size={15} />
-                {saving ? 'Saving…' : editing ? 'Save changes' : 'Add item'}
+                {saving ? 'جارٍ الحفظ…' : editing ? 'حفظ التغييرات' : 'إضافة صنف'}
               </button>
-              <button type="button" onClick={() => setShowForm(false)} className="btn-secondary">Cancel</button>
+              <button type="button" onClick={() => setShowForm(false)} className="btn-secondary">إلغاء</button>
             </div>
           </form>
         </div>
@@ -219,10 +219,10 @@ export default function MenuManager({ vendor, initialItems }: Props) {
       {items.length === 0 && !showForm ? (
         <div className="card text-center py-16">
           <div className="text-4xl mb-3">🍽️</div>
-          <p className="font-semibold mb-1">No items yet</p>
-          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>Add your first dish to go live</p>
+          <p className="font-semibold mb-1">لا توجد أصناف بعد</p>
+          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>أضف أول صنف لتفعيل قائمتك</p>
           <button onClick={openAdd} className="btn-primary mx-auto">
-            <Plus size={15} /> Add first item
+            <Plus size={15} /> إضافة أول صنف
           </button>
         </div>
       ) : (
@@ -253,7 +253,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
                 <p className="text-sm font-bold mt-1" style={{ color: 'var(--brand)' }}>{formatPrice(item.price)}</p>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
-                <button onClick={() => toggleAvailable(item)} title={item.available ? 'Mark sold out' : 'Mark available'}>
+                <button onClick={() => toggleAvailable(item)} title={item.available ? 'علّم كنافد' : 'علّم كمتوفر'}>
                   {item.available
                     ? <ToggleRight size={22} style={{ color: 'var(--brand)' }} />
                     : <ToggleLeft size={22} style={{ color: 'var(--text-muted)' }} />}
