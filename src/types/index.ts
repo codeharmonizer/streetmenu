@@ -15,6 +15,8 @@ export interface Vendor {
   logo_url: string | null
   plan: Plan
   is_open: boolean
+  is_active: boolean
+  reviews_enabled: boolean
   created_at: string
 }
 

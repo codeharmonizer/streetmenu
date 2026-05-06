@@ -37,6 +37,23 @@ export default async function PublicMenuPage({ params }: Props) {
 
   if (!vendor) notFound()
 
+  // Vendor disabled by admin
+  if (vendor.is_active === false) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--bg)' }}>
+        <div className="text-center max-w-sm">
+          <p className="text-5xl mb-4">🔒</p>
+          <h1 className="text-xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+            هذه البسطة غير متاحة حالياً
+          </h1>
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+            تواصل مع صاحب البسطة لمزيد من المعلومات.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   // Log scan
   try { await supabase.from('scans').insert({ vendor_id: vendor.id }) } catch {}
 
@@ -187,35 +204,37 @@ export default async function PublicMenuPage({ params }: Props) {
       </div>
 
       {/* Reviews */}
-      <div className="max-w-lg mx-auto px-4 mt-8">
-        <h2 className="font-bold text-lg mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-          التقييمات {reviews?.length ? `(${reviews.length})` : ''}
-        </h2>
+      {vendor.reviews_enabled !== false && (
+        <div className="max-w-lg mx-auto px-4 mt-8">
+          <h2 className="font-bold text-lg mb-4" style={{ fontFamily: 'var(--font-display)' }}>
+            التقييمات {reviews?.length ? `(${reviews.length})` : ''}
+          </h2>
 
-        {reviews?.length ? (
-          <div className="space-y-3 mb-6">
-            {reviews.map(r => (
-              <div key={r.id} className="card p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="flex">
-                    {[1,2,3,4,5].map(s => (
-                      <Star key={s} size={13}
-                        fill={s <= r.rating ? '#f59e0b' : 'none'}
-                        stroke={s <= r.rating ? '#f59e0b' : '#d1d5db'} />
-                    ))}
+          {reviews?.length ? (
+            <div className="space-y-3 mb-6">
+              {reviews.map(r => (
+                <div key={r.id} className="card p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="flex">
+                      {[1,2,3,4,5].map(s => (
+                        <Star key={s} size={13}
+                          fill={s <= r.rating ? '#f59e0b' : 'none'}
+                          stroke={s <= r.rating ? '#f59e0b' : '#d1d5db'} />
+                      ))}
+                    </div>
+                    <span className="text-sm font-medium">{r.reviewer_name || 'زبون'}</span>
                   </div>
-                  <span className="text-sm font-medium">{r.reviewer_name || 'Customer'}</span>
+                  {r.comment && <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{r.comment}</p>}
                 </div>
-                {r.comment && <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{r.comment}</p>}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>لا توجد تقييمات بعد. كن الأول!</p>
-        )}
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>لا توجد تقييمات بعد. كن الأول!</p>
+          )}
 
-        <ReviewForm vendorId={vendor.id} />
-      </div>
+          <ReviewForm vendorId={vendor.id} />
+        </div>
+      )}
 
       {/* Footer */}
       <div className="text-center mt-12 text-xs" style={{ color: 'var(--text-muted)' }}>
