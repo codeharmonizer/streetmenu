@@ -115,6 +115,9 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="border-t py-8 text-center text-sm" style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
+        <p className="mb-2">
+          <Link href="/contact" className="hover:underline" style={{ color: 'var(--brand)' }}>تواصل معنا</Link>
+        </p>
         <p>© 2024 StreetMenu. مصنوع لأهل الشارع.</p>
       </footer>
     </div>

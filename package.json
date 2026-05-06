@@ -21,6 +21,7 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-hot-toast": "^2.4.1",
+    "resend": "^6.12.3",
     "tailwind-merge": "^2.2.0"
   },
   "devDependencies": {

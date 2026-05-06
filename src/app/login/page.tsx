@@ -81,6 +81,11 @@ export default function LoginPage() {
               {loading ? 'جارٍ تسجيل الدخول…' : 'تسجيل الدخول'}
             </button>
           </form>
+          <p className="text-center text-sm mt-4" style={{ color: 'var(--text-secondary)' }}>
+            <Link href="/forgot-password" style={{ color: 'var(--brand)' }}>
+              نسيت كلمة المرور؟
+            </Link>
+          </p>
         </div>
 
         <p className="text-center text-sm mt-6" style={{ color: 'var(--text-secondary)' }}>
