@@ -1,15 +1,23 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { QrCode, Mail, ArrowRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import toast from 'react-hot-toast'
 
-export default function ForgotPasswordPage() {
+function ForgotPasswordInner() {
+  const searchParams = useSearchParams()
   const [email, setEmail]     = useState('')
   const [loading, setLoading] = useState(false)
   const [sent, setSent]       = useState(false)
+
+  useEffect(() => {
+    if (searchParams.get('error') === 'expired') {
+      toast.error('انتهت صلاحية الرابط. يرجى طلب رابط جديد.')
+    }
+  }, [searchParams])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -17,7 +25,7 @@ export default function ForgotPasswordPage() {
     const supabase = createClient()
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/reset-password`,
+      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/reset-password`,
     })
 
     if (error) {
@@ -95,5 +103,13 @@ export default function ForgotPasswordPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <Suspense>
+      <ForgotPasswordInner />
+    </Suspense>
   )
 }

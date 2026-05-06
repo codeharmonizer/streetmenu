@@ -1,70 +1,20 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { QrCode, Lock, Eye, EyeOff, CheckCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import toast from 'react-hot-toast'
 
 export default function ResetPasswordPage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
-        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>جارٍ التحميل…</p>
-      </div>
-    }>
-      <ResetPasswordForm />
-    </Suspense>
-  )
-}
+  const router = useRouter()
 
-function ResetPasswordForm() {
-  const router       = useRouter()
-  const searchParams = useSearchParams()
-
-  const [password,  setPassword]  = useState('')
-  const [confirm,   setConfirm]   = useState('')
-  const [showPw,    setShowPw]    = useState(false)
-  const [loading,   setLoading]   = useState(false)
-  const [verifying, setVerifying] = useState(true)
-  const [verified,  setVerified]  = useState(false)
-  const [done,      setDone]      = useState(false)
-
-  /* ── On mount: exchange the PKCE code from the URL ── */
-  useEffect(() => {
-    const code       = searchParams.get('code')
-    // Legacy token_hash flow (fallback)
-    const token_hash = searchParams.get('token_hash')
-    const type       = searchParams.get('type') as 'recovery' | null
-
-    const supabase = createClient()
-
-    if (code) {
-      // PKCE flow — exchange code for session
-      supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
-        if (error) {
-          toast.error('انتهت صلاحية الرابط. يرجى طلب رابط جديد.')
-        } else {
-          setVerified(true)
-        }
-        setVerifying(false)
-      })
-    } else if (token_hash && type === 'recovery') {
-      // Implicit/token_hash flow
-      supabase.auth.verifyOtp({ token_hash, type: 'recovery' }).then(({ error }) => {
-        if (error) {
-          toast.error('انتهت صلاحية الرابط. يرجى طلب رابط جديد.')
-        } else {
-          setVerified(true)
-        }
-        setVerifying(false)
-      })
-    } else {
-      toast.error('رابط غير صالح أو منتهي الصلاحية.')
-      setVerifying(false)
-    }
-  }, [searchParams])
+  const [password, setPassword] = useState('')
+  const [confirm,  setConfirm]  = useState('')
+  const [showPw,   setShowPw]   = useState(false)
+  const [loading,  setLoading]  = useState(false)
+  const [done,     setDone]     = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -111,12 +61,7 @@ function ResetPasswordForm() {
           </p>
         </div>
 
-        {verifying ? (
-          <div className="card text-center py-10">
-            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>جارٍ التحقق من الرابط…</p>
-          </div>
-
-        ) : done ? (
+        {done ? (
           <div className="card text-center py-10">
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
               style={{ background: 'var(--brand-light)' }}>
@@ -129,18 +74,6 @@ function ResetPasswordForm() {
               سيتم تحويلك لتسجيل الدخول…
             </p>
           </div>
-
-        ) : !verified ? (
-          <div className="card text-center py-10">
-            <p className="font-semibold mb-3">رابط غير صالح</p>
-            <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>
-              انتهت صلاحية رابط إعادة التعيين أو أنه غير صحيح.
-            </p>
-            <Link href="/forgot-password" className="btn-primary mx-auto">
-              طلب رابط جديد
-            </Link>
-          </div>
-
         ) : (
           <div className="card">
             <form onSubmit={handleSubmit} className="space-y-4">
