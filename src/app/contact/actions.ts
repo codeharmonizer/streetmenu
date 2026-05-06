@@ -2,6 +2,24 @@
 
 import { Resend } from 'resend'
 
+/** Normalise the from address.
+ *  Handles three env var formats:
+ *    "onboarding@resend.dev"            → unchanged
+ *    "StreetMenu <onboarding@resend.dev>" → unchanged
+ *    "StreetMenu onboarding@resend.dev" → "StreetMenu <onboarding@resend.dev>"
+ */
+function getFromAddress(): string {
+  const raw = process.env.RESEND_FROM_EMAIL?.trim()
+  if (!raw) return 'onboarding@resend.dev'
+  if (raw.includes('<')) return raw          // already correct
+  if (!raw.includes(' ')) return raw         // plain email, fine
+  // "Display Name email@domain" — wrap email in angle brackets
+  const lastSpace = raw.lastIndexOf(' ')
+  const name  = raw.slice(0, lastSpace)
+  const email = raw.slice(lastSpace + 1)
+  return `${name} <${email}>`
+}
+
 export async function sendContactEmail(_: { error?: string; success?: boolean }, formData: FormData) {
   const name    = (formData.get('name')    as string)?.trim()
   const email   = (formData.get('email')   as string)?.trim()
@@ -20,7 +38,7 @@ export async function sendContactEmail(_: { error?: string; success?: boolean },
 
   try {
     await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL?.includes('@') ? process.env.RESEND_FROM_EMAIL : 'StreetMenu <onboarding@resend.dev>',
+      from: getFromAddress(),
       to:   process.env.CONTACT_EMAIL!,
       replyTo: email,
       subject: `[StreetMenu] ${subject}`,
