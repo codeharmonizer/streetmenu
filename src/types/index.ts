@@ -19,6 +19,7 @@ export interface Vendor {
   is_active: boolean
   reviews_enabled: boolean
   subscription_status: SubscriptionStatus
+  subscription_starts_at: string | null
   subscription_expires_at: string | null
   created_at: string
 }

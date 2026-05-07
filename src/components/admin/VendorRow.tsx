@@ -5,7 +5,8 @@ import { createClient } from '@/lib/supabase/client'
 import { Vendor, SubscriptionStatus } from '@/types'
 import Image from 'next/image'
 import { getInitials } from '@/lib/utils'
-import { ExternalLink, Pencil, Check, X } from 'lucide-react'
+import { ExternalLink, Pencil, Check, X, MessageSquare } from 'lucide-react'
+import Link from 'next/link'
 import toast from 'react-hot-toast'
 
 interface Props {
@@ -30,14 +31,19 @@ function Toggle({ enabled, onToggle, loading }: { enabled: boolean; onToggle: ()
 const STATUS_META: Record<SubscriptionStatus, { label: string; bg: string; color: string }> = {
   free:    { label: 'Free',    bg: '#f1f5f9', color: '#64748b' },
   trial:   { label: 'Trial',   bg: '#eff6ff', color: '#2563eb' },
-  active:  { label: 'Active',  bg: '#dcfce7', color: '#16a34a' },
+  active:  { label: 'Active ✓', bg: '#dcfce7', color: '#16a34a' },
   expired: { label: 'Expired', bg: '#fee2e2', color: '#dc2626' },
+}
+
+function fmtDate(iso: string | null) {
+  if (!iso) return '—'
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' })
 }
 
 function SubBadge({ status }: { status: SubscriptionStatus }) {
   const m = STATUS_META[status]
   return (
-    <span className="text-xs px-2 py-0.5 rounded-full font-medium"
+    <span className="text-xs px-2 py-0.5 rounded-full font-semibold whitespace-nowrap"
       style={{ background: m.bg, color: m.color }}>
       {m.label}
     </span>
@@ -50,11 +56,8 @@ export default function VendorRow({ vendor: initial }: Props) {
   const [loadingReviews, setLoadingReviews] = useState(false)
   const [editingSub, setEditingSub]       = useState(false)
   const [subStatus, setSubStatus]         = useState<SubscriptionStatus>(initial.subscription_status)
-  const [subExpiry, setSubExpiry]         = useState(
-    initial.subscription_expires_at
-      ? initial.subscription_expires_at.slice(0, 10)
-      : ''
-  )
+  const [subStart, setSubStart]           = useState(initial.subscription_starts_at?.slice(0, 10) ?? '')
+  const [subExpiry, setSubExpiry]         = useState(initial.subscription_expires_at?.slice(0, 10) ?? '')
   const [savingSub, setSavingSub]         = useState(false)
   const supabase = createClient()
 
@@ -74,7 +77,7 @@ export default function VendorRow({ vendor: initial }: Props) {
     setLoadingReviews(true)
     const next = !vendor.reviews_enabled
     const { error } = await supabase.from('vendors').update({ reviews_enabled: next }).eq('id', vendor.id)
-    if (error) toast.error('Failed to update reviews status')
+    if (error) toast.error('Failed to update reviews')
     else {
       setVendor(v => ({ ...v, reviews_enabled: next }))
       toast.success(next ? 'Reviews enabled' : 'Reviews disabled')
@@ -84,23 +87,47 @@ export default function VendorRow({ vendor: initial }: Props) {
 
   async function saveSubscription() {
     setSavingSub(true)
-    const expires = subExpiry ? new Date(subExpiry).toISOString() : null
+
+    // Auto-set start to today when activating for the first time
+    const resolvedStart = subStart
+      || ((subStatus === 'active' || subStatus === 'trial') ? new Date().toISOString().slice(0, 10) : '')
+
+    const starts  = resolvedStart ? new Date(resolvedStart).toISOString()  : null
+    const expires = subExpiry     ? new Date(subExpiry).toISOString()       : null
+
     const { error } = await supabase
       .from('vendors')
-      .update({ subscription_status: subStatus, subscription_expires_at: expires })
+      .update({
+        subscription_status:     subStatus,
+        subscription_starts_at:  starts,
+        subscription_expires_at: expires,
+      })
       .eq('id', vendor.id)
 
     if (error) {
       toast.error('Failed to update subscription')
     } else {
-      setVendor(v => ({ ...v, subscription_status: subStatus, subscription_expires_at: expires }))
+      setVendor(v => ({
+        ...v,
+        subscription_status:     subStatus,
+        subscription_starts_at:  starts,
+        subscription_expires_at: expires,
+      }))
+      setSubStart(resolvedStart)
       setEditingSub(false)
       toast.success(`Subscription updated for ${vendor.name}`)
     }
     setSavingSub(false)
   }
 
-  const needsExpiry = subStatus === 'active' || subStatus === 'trial'
+  function cancelEdit() {
+    setEditingSub(false)
+    setSubStatus(vendor.subscription_status)
+    setSubStart(vendor.subscription_starts_at?.slice(0, 10) ?? '')
+    setSubExpiry(vendor.subscription_expires_at?.slice(0, 10) ?? '')
+  }
+
+  const isPaid = subStatus === 'active' || subStatus === 'trial'
 
   return (
     <tr className="border-b transition-colors hover:bg-slate-50" style={{ borderColor: '#f1f5f9' }}>
@@ -140,9 +167,17 @@ export default function VendorRow({ vendor: initial }: Props) {
         <span className="text-sm font-semibold">{initial.scan_count}</span>
         <p className="text-xs" style={{ color: '#94a3b8' }}>scans</p>
       </td>
+
+      {/* Reviews — count + manage link */}
       <td className="px-4 py-3 text-center">
         <span className="text-sm font-semibold">{initial.review_count}</span>
-        <p className="text-xs" style={{ color: '#94a3b8' }}>reviews</p>
+        <div>
+          <Link href={`/admin/vendors/${vendor.id}/reviews`}
+            className="inline-flex items-center gap-0.5 text-xs hover:underline mt-0.5"
+            style={{ color: 'var(--brand)' }}>
+            <MessageSquare size={10} /> إدارة
+          </Link>
+        </div>
       </td>
 
       {/* Joined */}
@@ -153,13 +188,14 @@ export default function VendorRow({ vendor: initial }: Props) {
       </td>
 
       {/* Subscription */}
-      <td className="px-4 py-3" style={{ minWidth: '200px' }}>
+      <td className="px-4 py-3" style={{ minWidth: '240px' }}>
         {editingSub ? (
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="space-y-2">
+            {/* Status */}
             <select
               value={subStatus}
               onChange={e => setSubStatus(e.target.value as SubscriptionStatus)}
-              className="text-xs border rounded-lg px-2 py-1 focus:outline-none"
+              className="w-full text-xs border rounded-lg px-2 py-1.5 focus:outline-none"
               style={{ borderColor: '#e2e8f0', color: '#0f172a' }}>
               <option value="free">Free</option>
               <option value="trial">Trial</option>
@@ -167,39 +203,56 @@ export default function VendorRow({ vendor: initial }: Props) {
               <option value="expired">Expired</option>
             </select>
 
-            {needsExpiry && (
-              <input
-                type="date"
-                value={subExpiry}
-                onChange={e => setSubExpiry(e.target.value)}
-                className="text-xs border rounded-lg px-2 py-1 focus:outline-none"
-                style={{ borderColor: '#e2e8f0', color: '#0f172a' }}
-              />
+            {isPaid && (
+              <>
+                <div>
+                  <label className="text-xs mb-0.5 block" style={{ color: '#94a3b8' }}>Start date</label>
+                  <input type="date" value={subStart} onChange={e => setSubStart(e.target.value)}
+                    className="w-full text-xs border rounded-lg px-2 py-1.5 focus:outline-none"
+                    style={{ borderColor: '#e2e8f0', color: '#0f172a' }} />
+                </div>
+                <div>
+                  <label className="text-xs mb-0.5 block" style={{ color: '#94a3b8' }}>End date</label>
+                  <input type="date" value={subExpiry} onChange={e => setSubExpiry(e.target.value)}
+                    className="w-full text-xs border rounded-lg px-2 py-1.5 focus:outline-none"
+                    style={{ borderColor: '#e2e8f0', color: '#0f172a' }} />
+                </div>
+              </>
             )}
 
-            <button onClick={saveSubscription} disabled={savingSub}
-              className="p-1 rounded-lg hover:bg-green-50 disabled:opacity-50"
-              style={{ color: '#16a34a' }}>
-              <Check size={14} />
-            </button>
-            <button onClick={() => { setEditingSub(false); setSubStatus(vendor.subscription_status); setSubExpiry(vendor.subscription_expires_at?.slice(0,10) ?? '') }}
-              className="p-1 rounded-lg hover:bg-red-50" style={{ color: '#dc2626' }}>
-              <X size={14} />
-            </button>
+            <div className="flex gap-2">
+              <button onClick={saveSubscription} disabled={savingSub}
+                className="flex-1 flex items-center justify-center gap-1 py-1 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
+                style={{ background: '#dcfce7', color: '#16a34a' }}>
+                <Check size={12} /> Save
+              </button>
+              <button onClick={cancelEdit}
+                className="flex-1 flex items-center justify-center gap-1 py-1 rounded-lg text-xs font-medium transition-colors"
+                style={{ background: '#fee2e2', color: '#dc2626' }}>
+                <X size={12} /> Cancel
+              </button>
+            </div>
           </div>
         ) : (
-          <div className="flex items-center gap-2">
-            <SubBadge status={vendor.subscription_status} />
-            {vendor.subscription_expires_at && (
-              <span className="text-xs" style={{ color: '#94a3b8' }}>
-                {new Date(vendor.subscription_expires_at) < new Date()
-                  ? '⚠ expired'
-                  : `→ ${new Date(vendor.subscription_expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}`
-                }
-              </span>
-            )}
+          <div className="flex items-start gap-2">
+            <div className="flex-1 min-w-0 space-y-1">
+              <SubBadge status={vendor.subscription_status} />
+              {(vendor.subscription_starts_at || vendor.subscription_expires_at) && (
+                <div className="text-xs space-y-0.5" style={{ color: '#64748b' }}>
+                  {vendor.subscription_starts_at && (
+                    <p>من: {fmtDate(vendor.subscription_starts_at)}</p>
+                  )}
+                  {vendor.subscription_expires_at && (
+                    <p style={{ color: new Date(vendor.subscription_expires_at) < new Date() ? '#dc2626' : '#64748b' }}>
+                      {new Date(vendor.subscription_expires_at) < new Date() ? '⚠ انتهى: ' : 'حتى: '}
+                      {fmtDate(vendor.subscription_expires_at)}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
             <button onClick={() => setEditingSub(true)}
-              className="p-1 rounded-lg hover:bg-slate-100 opacity-40 hover:opacity-100 transition-opacity"
+              className="p-1 rounded-lg hover:bg-slate-100 opacity-40 hover:opacity-100 transition-opacity flex-shrink-0"
               style={{ color: '#64748b' }}>
               <Pencil size={11} />
             </button>

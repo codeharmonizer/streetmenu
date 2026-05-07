@@ -60,7 +60,7 @@ export default function HomePage() {
               <Link href="/register" className="btn-primary text-base px-6 py-3">
                 أنشئ قائمتك — مجاناً
               </Link>
-              <Link href="/m/demo" className="btn-secondary text-base px-6 py-3">
+              <Link href="/demo" className="btn-secondary text-base px-6 py-3">
                 شاهد مثالاً ←
               </Link>
             </div>
