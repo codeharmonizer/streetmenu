@@ -62,7 +62,7 @@ export default async function DashboardPage() {
               تواصل معنا للتجديد والاستمرار في الاستفادة من جميع الميزات.
             </p>
           </div>
-          <Link href="/contact" className="text-xs font-semibold px-3 py-1.5 rounded-lg"
+          <Link href="/dashboard/upgrade" className="text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap"
             style={{ background: '#f59e0b', color: 'white' }}>
             تجديد الآن
           </Link>
@@ -79,7 +79,7 @@ export default async function DashboardPage() {
               بعض الميزات مقيّدة. تواصل معنا لتجديد اشتراكك.
             </p>
           </div>
-          <Link href="/contact" className="text-xs font-semibold px-3 py-1.5 rounded-lg"
+          <Link href="/dashboard/upgrade" className="text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap"
             style={{ background: '#dc2626', color: 'white' }}>
             تجديد الاشتراك
           </Link>
@@ -96,7 +96,7 @@ export default async function DashboardPage() {
               حد 10 أصناف · بدون إحصائيات. اشترك للحصول على ميزات غير محدودة.
             </p>
           </div>
-          <Link href="/contact" className="text-xs font-semibold px-3 py-1.5 rounded-lg"
+          <Link href="/dashboard/upgrade" className="text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap"
             style={{ background: 'var(--brand)', color: 'white' }}>
             ترقية الحساب
           </Link>

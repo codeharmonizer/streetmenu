@@ -241,10 +241,10 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/contact"
+              <Link href="/register"
                 className="w-full py-2.5 text-sm font-semibold rounded-xl flex items-center justify-center transition-all"
                 style={{ background: 'white', color: 'var(--brand)' }}>
-                تواصل للاشتراك
+                ابدأ مجاناً — ثم اشترك
               </Link>
             </div>
           </div>

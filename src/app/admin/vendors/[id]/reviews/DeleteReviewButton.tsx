@@ -2,47 +2,48 @@
 
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
+import { deleteReview } from './actions'
 import toast from 'react-hot-toast'
-import { useRouter } from 'next/navigation'
 
-export default function DeleteReviewButton({ reviewId }: { reviewId: string }) {
-  const [loading, setLoading] = useState(false)
+export default function DeleteReviewButton({ reviewId, vendorId }: { reviewId: string; vendorId: string }) {
+  const [loading,   setLoading]   = useState(false)
   const [confirmed, setConfirmed] = useState(false)
-  const router = useRouter()
+  const timerRef = { current: null as ReturnType<typeof setTimeout> | null }
 
-  async function handleDelete() {
+  async function handleClick() {
     if (!confirmed) {
       setConfirmed(true)
-      // Auto-reset after 3s if not confirmed
-      setTimeout(() => setConfirmed(false), 3000)
+      timerRef.current = setTimeout(() => setConfirmed(false), 3000)
       return
     }
+    if (timerRef.current) clearTimeout(timerRef.current)
     setLoading(true)
-    const supabase = createClient()
-    const { error } = await supabase.from('reviews').delete().eq('id', reviewId)
-    if (error) {
+    try {
+      await deleteReview(reviewId, vendorId)
+      toast.success('Review deleted')
+    } catch {
       toast.error('Failed to delete review')
       setLoading(false)
-    } else {
-      toast.success('Review deleted')
-      router.refresh()
+      setConfirmed(false)
     }
   }
 
   return (
     <button
-      onClick={handleDelete}
+      onClick={handleClick}
       disabled={loading}
-      title={confirmed ? 'Click again to confirm' : 'Delete review'}
+      title={confirmed ? 'Click again to confirm deletion' : 'Delete review'}
       className="flex-shrink-0 p-2 rounded-xl transition-all disabled:opacity-50"
       style={{
         background: confirmed ? '#fee2e2' : '#f8fafc',
-        color: confirmed ? '#dc2626' : '#94a3b8',
-        border: confirmed ? '1px solid #fca5a5' : '1px solid #e2e8f0',
+        color:      confirmed ? '#dc2626' : '#94a3b8',
+        border:     confirmed ? '1px solid #fca5a5' : '1px solid #e2e8f0',
+        minWidth: '2.5rem',
       }}>
-      {confirmed ? (
-        <span className="text-xs font-bold whitespace-nowrap px-1">تأكيد؟</span>
+      {loading ? (
+        <span className="text-xs">…</span>
+      ) : confirmed ? (
+        <span className="text-xs font-bold px-1">تأكيد؟</span>
       ) : (
         <Trash2 size={15} />
       )}

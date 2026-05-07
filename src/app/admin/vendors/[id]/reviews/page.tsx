@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
-import { ArrowRight, Star, Trash2 } from 'lucide-react'
+import { ArrowRight, Star } from 'lucide-react'
 import Link from 'next/link'
 import DeleteReviewButton from './DeleteReviewButton'
 
@@ -100,7 +100,7 @@ export default async function VendorReviewsPage({ params }: Props) {
               </div>
 
               {/* Delete */}
-              <DeleteReviewButton reviewId={review.id} />
+              <DeleteReviewButton reviewId={review.id} vendorId={vendor.id} />
             </div>
           ))}
         </div>

@@ -37,7 +37,7 @@ export default async function AnalyticsPage() {
           <p className="text-sm mb-6 max-w-xs mx-auto" style={{ color: 'var(--text-secondary)' }}>
             الإحصائيات متاحة للمشتركين المدفوعين فقط. اشترك لتعرف كم شخصاً يزور قائمتك يومياً.
           </p>
-          <Link href="/contact" className="btn-primary mx-auto">
+          <Link href="/dashboard/upgrade" className="btn-primary mx-auto">
             اشترك الآن
           </Link>
         </div>
