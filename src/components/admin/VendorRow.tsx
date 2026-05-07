@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Vendor } from '@/types'
+import { Vendor, SubscriptionStatus } from '@/types'
 import Image from 'next/image'
 import { getInitials } from '@/lib/utils'
-import { ExternalLink } from 'lucide-react'
+import { ExternalLink, Pencil, Check, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 interface Props {
@@ -27,23 +27,43 @@ function Toggle({ enabled, onToggle, loading }: { enabled: boolean; onToggle: ()
   )
 }
 
+const STATUS_META: Record<SubscriptionStatus, { label: string; bg: string; color: string }> = {
+  free:    { label: 'Free',    bg: '#f1f5f9', color: '#64748b' },
+  trial:   { label: 'Trial',   bg: '#eff6ff', color: '#2563eb' },
+  active:  { label: 'Active',  bg: '#dcfce7', color: '#16a34a' },
+  expired: { label: 'Expired', bg: '#fee2e2', color: '#dc2626' },
+}
+
+function SubBadge({ status }: { status: SubscriptionStatus }) {
+  const m = STATUS_META[status]
+  return (
+    <span className="text-xs px-2 py-0.5 rounded-full font-medium"
+      style={{ background: m.bg, color: m.color }}>
+      {m.label}
+    </span>
+  )
+}
+
 export default function VendorRow({ vendor: initial }: Props) {
-  const [vendor, setVendor] = useState(initial)
+  const [vendor, setVendor]               = useState(initial)
   const [loadingActive, setLoadingActive] = useState(false)
   const [loadingReviews, setLoadingReviews] = useState(false)
+  const [editingSub, setEditingSub]       = useState(false)
+  const [subStatus, setSubStatus]         = useState<SubscriptionStatus>(initial.subscription_status)
+  const [subExpiry, setSubExpiry]         = useState(
+    initial.subscription_expires_at
+      ? initial.subscription_expires_at.slice(0, 10)
+      : ''
+  )
+  const [savingSub, setSavingSub]         = useState(false)
   const supabase = createClient()
 
   async function toggleActive() {
     setLoadingActive(true)
     const next = !vendor.is_active
-    const { error } = await supabase
-      .from('vendors')
-      .update({ is_active: next })
-      .eq('id', vendor.id)
-
-    if (error) {
-      toast.error('Failed to update vendor status')
-    } else {
+    const { error } = await supabase.from('vendors').update({ is_active: next }).eq('id', vendor.id)
+    if (error) toast.error('Failed to update vendor status')
+    else {
       setVendor(v => ({ ...v, is_active: next }))
       toast.success(next ? `${vendor.name} enabled` : `${vendor.name} disabled`)
     }
@@ -53,22 +73,38 @@ export default function VendorRow({ vendor: initial }: Props) {
   async function toggleReviews() {
     setLoadingReviews(true)
     const next = !vendor.reviews_enabled
-    const { error } = await supabase
-      .from('vendors')
-      .update({ reviews_enabled: next })
-      .eq('id', vendor.id)
-
-    if (error) {
-      toast.error('Failed to update reviews status')
-    } else {
+    const { error } = await supabase.from('vendors').update({ reviews_enabled: next }).eq('id', vendor.id)
+    if (error) toast.error('Failed to update reviews status')
+    else {
       setVendor(v => ({ ...v, reviews_enabled: next }))
       toast.success(next ? 'Reviews enabled' : 'Reviews disabled')
     }
     setLoadingReviews(false)
   }
 
+  async function saveSubscription() {
+    setSavingSub(true)
+    const expires = subExpiry ? new Date(subExpiry).toISOString() : null
+    const { error } = await supabase
+      .from('vendors')
+      .update({ subscription_status: subStatus, subscription_expires_at: expires })
+      .eq('id', vendor.id)
+
+    if (error) {
+      toast.error('Failed to update subscription')
+    } else {
+      setVendor(v => ({ ...v, subscription_status: subStatus, subscription_expires_at: expires }))
+      setEditingSub(false)
+      toast.success(`Subscription updated for ${vendor.name}`)
+    }
+    setSavingSub(false)
+  }
+
+  const needsExpiry = subStatus === 'active' || subStatus === 'trial'
+
   return (
     <tr className="border-b transition-colors hover:bg-slate-50" style={{ borderColor: '#f1f5f9' }}>
+
       {/* Vendor */}
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
@@ -89,7 +125,7 @@ export default function VendorRow({ vendor: initial }: Props) {
         </div>
       </td>
 
-      {/* Public menu link */}
+      {/* Slug */}
       <td className="px-4 py-3">
         <a href={`/m/${vendor.slug}`} target="_blank" rel="noopener noreferrer"
           className="flex items-center gap-1 text-xs hover:underline"
@@ -114,6 +150,61 @@ export default function VendorRow({ vendor: initial }: Props) {
         <span className="text-xs" style={{ color: '#64748b' }}>
           {new Date(vendor.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
         </span>
+      </td>
+
+      {/* Subscription */}
+      <td className="px-4 py-3" style={{ minWidth: '200px' }}>
+        {editingSub ? (
+          <div className="flex items-center gap-2 flex-wrap">
+            <select
+              value={subStatus}
+              onChange={e => setSubStatus(e.target.value as SubscriptionStatus)}
+              className="text-xs border rounded-lg px-2 py-1 focus:outline-none"
+              style={{ borderColor: '#e2e8f0', color: '#0f172a' }}>
+              <option value="free">Free</option>
+              <option value="trial">Trial</option>
+              <option value="active">Active</option>
+              <option value="expired">Expired</option>
+            </select>
+
+            {needsExpiry && (
+              <input
+                type="date"
+                value={subExpiry}
+                onChange={e => setSubExpiry(e.target.value)}
+                className="text-xs border rounded-lg px-2 py-1 focus:outline-none"
+                style={{ borderColor: '#e2e8f0', color: '#0f172a' }}
+              />
+            )}
+
+            <button onClick={saveSubscription} disabled={savingSub}
+              className="p-1 rounded-lg hover:bg-green-50 disabled:opacity-50"
+              style={{ color: '#16a34a' }}>
+              <Check size={14} />
+            </button>
+            <button onClick={() => { setEditingSub(false); setSubStatus(vendor.subscription_status); setSubExpiry(vendor.subscription_expires_at?.slice(0,10) ?? '') }}
+              className="p-1 rounded-lg hover:bg-red-50" style={{ color: '#dc2626' }}>
+              <X size={14} />
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <SubBadge status={vendor.subscription_status} />
+            {vendor.subscription_expires_at && (
+              <span className="text-xs" style={{ color: '#94a3b8' }}>
+                {new Date(vendor.subscription_expires_at) < new Date()
+                  ? '⚠ expired'
+                  : `→ ${new Date(vendor.subscription_expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}`
+                }
+              </span>
+            )}
+            <button onClick={() => setEditingSub(true)}
+              className="p-1 rounded-lg hover:bg-slate-100 opacity-40 hover:opacity-100 transition-opacity"
+              style={{ color: '#64748b' }}>
+              <Pencil size={11} />
+            </button>
+          </div>
+        )}
       </td>
 
       {/* Active toggle */}

@@ -1,4 +1,5 @@
 export type Plan = 'free' | 'pro'
+export type SubscriptionStatus = 'free' | 'trial' | 'active' | 'expired'
 
 export interface Vendor {
   id: string
@@ -17,8 +18,20 @@ export interface Vendor {
   is_open: boolean
   is_active: boolean
   reviews_enabled: boolean
+  subscription_status: SubscriptionStatus
+  subscription_expires_at: string | null
   created_at: string
 }
+
+/** Returns true if the vendor currently has an active paid/trial subscription */
+export function isPaid(vendor: Pick<Vendor, 'subscription_status' | 'subscription_expires_at'>): boolean {
+  const { subscription_status, subscription_expires_at } = vendor
+  if (subscription_status !== 'active' && subscription_status !== 'trial') return false
+  if (!subscription_expires_at) return true          // no expiry = lifetime
+  return new Date(subscription_expires_at) > new Date()
+}
+
+export const FREE_ITEM_LIMIT = 10
 
 export interface MenuItem {
   id: string

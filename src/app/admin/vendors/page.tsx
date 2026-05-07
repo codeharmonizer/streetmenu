@@ -17,8 +17,10 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
     .select('*')
     .order('created_at', { ascending: false })
 
-  if (status === 'active') query = query.eq('is_active', true)
+  if (status === 'active')  query = query.eq('is_active', true)
   if (status === 'disabled') query = query.eq('is_active', false)
+  if (status === 'paying') query = query.eq('subscription_status', 'active')
+  if (status === 'trial')  query = query.eq('subscription_status', 'trial')
 
   const { data: vendors } = await query
 
@@ -43,9 +45,11 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
     .filter(v => !q || v.name.toLowerCase().includes(q) || v.slug.toLowerCase().includes(q))
 
   const tabs = [
-    { label: 'All', value: 'all', count: vendors?.length ?? 0 },
-    { label: 'Active', value: 'active', count: vendors?.filter(v => v.is_active).length ?? 0 },
+    { label: 'All',      value: 'all',      count: vendors?.length ?? 0 },
+    { label: 'Active',   value: 'active',   count: vendors?.filter(v => v.is_active).length ?? 0 },
     { label: 'Disabled', value: 'disabled', count: vendors?.filter(v => !v.is_active).length ?? 0 },
+    { label: '💳 Paying', value: 'paying',  count: vendors?.filter(v => v.subscription_status === 'active').length ?? 0 },
+    { label: '🔬 Trial',  value: 'trial',   count: vendors?.filter(v => v.subscription_status === 'trial').length ?? 0 },
   ]
 
   return (
@@ -110,6 +114,7 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
                 <th className="px-4 py-3 text-center">Scans</th>
                 <th className="px-4 py-3 text-center">Reviews</th>
                 <th className="px-4 py-3 text-right">Joined</th>
+                <th className="px-4 py-3 text-right">Subscription</th>
                 <th className="px-4 py-3 text-right">Active</th>
                 <th className="px-4 py-3 text-right">Reviews</th>
               </tr>

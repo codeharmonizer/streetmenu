@@ -1,8 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { BarChart3, Eye, TrendingUp, Calendar } from 'lucide-react'
+import { BarChart3, Eye, TrendingUp, Calendar, Lock } from 'lucide-react'
 import { format, subDays } from 'date-fns'
 import { ar } from 'date-fns/locale'
+import { isPaid } from '@/types'
+import Link from 'next/link'
 
 export default async function AnalyticsPage() {
   const supabase = await createClient()
@@ -11,11 +13,37 @@ export default async function AnalyticsPage() {
 
   const { data: vendor } = await supabase
     .from('vendors')
-    .select('id, name')
+    .select('id, name, subscription_status, subscription_expires_at')
     .eq('user_id', user.id)
     .single()
 
   if (!vendor) redirect('/register')
+
+  if (!isPaid(vendor)) {
+    return (
+      <div className="max-w-3xl">
+        <div className="mb-8">
+          <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>الإحصائيات</h1>
+          <p style={{ color: 'var(--text-secondary)' }}>عدد الأشخاص الذين مسحوا رمز QR الخاص بك.</p>
+        </div>
+        <div className="card text-center py-16">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
+            style={{ background: 'var(--surface-2)' }}>
+            <Lock size={28} style={{ color: 'var(--text-muted)' }} />
+          </div>
+          <h2 className="text-xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+            ميزة مدفوعة
+          </h2>
+          <p className="text-sm mb-6 max-w-xs mx-auto" style={{ color: 'var(--text-secondary)' }}>
+            الإحصائيات متاحة للمشتركين المدفوعين فقط. اشترك لتعرف كم شخصاً يزور قائمتك يومياً.
+          </p>
+          <Link href="/contact" className="btn-primary mx-auto">
+            اشترك الآن
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   const thirtyDaysAgo = subDays(new Date(), 30).toISOString()
   const sevenDaysAgo = subDays(new Date(), 7).toISOString()

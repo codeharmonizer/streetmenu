@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { UtensilsCrossed, QrCode, BarChart3, Star, ChevronRight, TrendingUp } from 'lucide-react'
+import { isPaid } from '@/types'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -32,7 +33,11 @@ export default async function DashboardPage() {
     { label: 'التقييمات', value: reviews?.length ?? 0, icon: Star, href: `/m/${vendor.slug}`, cta: 'عرض التقييمات' },
   ]
 
-  const isNew = (itemCount ?? 0) === 0
+  const isNew     = (itemCount ?? 0) === 0
+  const paid      = isPaid(vendor)
+  const subStatus = vendor.subscription_status
+  const expiresAt = vendor.subscription_expires_at ? new Date(vendor.subscription_expires_at) : null
+  const daysLeft  = expiresAt ? Math.ceil((expiresAt.getTime() - Date.now()) / 86_400_000) : null
 
   return (
     <div className="max-w-4xl">
@@ -43,6 +48,70 @@ export default async function DashboardPage() {
         </h1>
         <p style={{ color: 'var(--text-secondary)' }}>إليك أداء <strong>{vendor.name}</strong>.</p>
       </div>
+
+      {/* ── Subscription banner ── */}
+      {paid && daysLeft !== null && daysLeft <= 7 && (
+        <div className="rounded-2xl p-4 mb-6 flex items-center gap-3"
+          style={{ background: '#fffbeb', border: '1px solid #fcd34d' }}>
+          <span className="text-xl">⏳</span>
+          <div className="flex-1">
+            <p className="font-bold text-sm" style={{ color: '#92400e' }}>
+              {subStatus === 'trial' ? 'تجربتك المجانية' : 'اشتراكك'} ينتهي خلال {daysLeft} {daysLeft === 1 ? 'يوم' : 'أيام'}
+            </p>
+            <p className="text-xs" style={{ color: '#b45309' }}>
+              تواصل معنا للتجديد والاستمرار في الاستفادة من جميع الميزات.
+            </p>
+          </div>
+          <Link href="/contact" className="text-xs font-semibold px-3 py-1.5 rounded-lg"
+            style={{ background: '#f59e0b', color: 'white' }}>
+            تجديد الآن
+          </Link>
+        </div>
+      )}
+
+      {subStatus === 'expired' && (
+        <div className="rounded-2xl p-4 mb-6 flex items-center gap-3"
+          style={{ background: '#fef2f2', border: '1px solid #fca5a5' }}>
+          <span className="text-xl">🔒</span>
+          <div className="flex-1">
+            <p className="font-bold text-sm" style={{ color: '#991b1b' }}>انتهى اشتراكك</p>
+            <p className="text-xs" style={{ color: '#b91c1c' }}>
+              بعض الميزات مقيّدة. تواصل معنا لتجديد اشتراكك.
+            </p>
+          </div>
+          <Link href="/contact" className="text-xs font-semibold px-3 py-1.5 rounded-lg"
+            style={{ background: '#dc2626', color: 'white' }}>
+            تجديد الاشتراك
+          </Link>
+        </div>
+      )}
+
+      {(subStatus === 'free') && (
+        <div className="rounded-2xl p-4 mb-6 flex items-center gap-3"
+          style={{ background: 'var(--brand-light)', border: '1px solid #ffd4a8' }}>
+          <span className="text-xl">⭐</span>
+          <div className="flex-1">
+            <p className="font-bold text-sm" style={{ color: 'var(--brand)' }}>أنت على الخطة المجانية</p>
+            <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+              حد 10 أصناف · بدون إحصائيات. اشترك للحصول على ميزات غير محدودة.
+            </p>
+          </div>
+          <Link href="/contact" className="text-xs font-semibold px-3 py-1.5 rounded-lg"
+            style={{ background: 'var(--brand)', color: 'white' }}>
+            ترقية الحساب
+          </Link>
+        </div>
+      )}
+
+      {paid && subStatus === 'active' && daysLeft !== null && daysLeft > 7 && (
+        <div className="rounded-2xl p-4 mb-6 flex items-center gap-3"
+          style={{ background: '#f0fdf4', border: '1px solid #86efac' }}>
+          <span className="text-xl">✅</span>
+          <p className="text-sm font-medium" style={{ color: '#15803d' }}>
+            اشتراكك نشط حتى {expiresAt!.toLocaleDateString('ar-BH', { day: 'numeric', month: 'long', year: 'numeric' })}
+          </p>
+        </div>
+      )}
 
       {/* Onboarding banner */}
       {isNew && (

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Plus, Pencil, Trash2, ToggleLeft, ToggleRight, ImageIcon, X, Check } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
-import { MenuItem, Vendor } from '@/types'
+import { MenuItem, Vendor, isPaid, FREE_ITEM_LIMIT } from '@/types'
 import { formatPrice } from '@/lib/utils'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
@@ -24,9 +24,15 @@ export default function MenuManager({ vendor, initialItems }: Props) {
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
 
-  const supabase = createClient()
+  const supabase   = createClient()
+  const subscribed = isPaid(vendor)
+  const atLimit    = !subscribed && items.length >= FREE_ITEM_LIMIT
 
   function openAdd() {
+    if (atLimit) {
+      toast.error(`الخطة المجانية تسمح بـ ${FREE_ITEM_LIMIT} أصناف فقط. اشترك للمزيد.`)
+      return
+    }
     setEditing(null)
     setForm(EMPTY_FORM)
     setPhotoFile(null)
@@ -137,9 +143,18 @@ export default function MenuManager({ vendor, initialItems }: Props) {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-black" style={{ fontFamily: 'var(--font-display)' }}>القائمة</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>{items.length} {items.length === 1 ? 'صنف' : 'أصناف'}</p>
+          <p style={{ color: 'var(--text-secondary)' }}>
+            {items.length} {items.length === 1 ? 'صنف' : 'أصناف'}
+            {!subscribed && (
+              <span className="mr-2 text-xs px-1.5 py-0.5 rounded-full"
+                style={{ background: atLimit ? '#fee2e2' : 'var(--brand-light)', color: atLimit ? '#dc2626' : 'var(--brand)' }}>
+                {items.length}/{FREE_ITEM_LIMIT} مجاني
+              </span>
+            )}
+          </p>
         </div>
-        <button onClick={openAdd} className="btn-primary">
+        <button onClick={openAdd} className="btn-primary" disabled={atLimit}
+          style={atLimit ? { opacity: 0.5, cursor: 'not-allowed' } : {}}>
           <Plus size={16} /> إضافة صنف
         </button>
       </div>

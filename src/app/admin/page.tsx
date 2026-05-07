@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { Store, Users, BarChart3, Star, AlertCircle, CheckCircle } from 'lucide-react'
+import { Store, BarChart3, Star, AlertCircle, CheckCircle, CreditCard, FlaskConical } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function AdminOverviewPage() {
@@ -9,6 +9,8 @@ export default async function AdminOverviewPage() {
     { count: totalVendors },
     { count: activeVendors },
     { count: disabledVendors },
+    { count: payingVendors },
+    { count: trialVendors },
     { count: totalScans },
     { count: totalReviews },
     { data: recentVendors },
@@ -16,18 +18,22 @@ export default async function AdminOverviewPage() {
     supabase.from('vendors').select('*', { count: 'exact', head: true }),
     supabase.from('vendors').select('*', { count: 'exact', head: true }).eq('is_active', true),
     supabase.from('vendors').select('*', { count: 'exact', head: true }).eq('is_active', false),
+    supabase.from('vendors').select('*', { count: 'exact', head: true }).eq('subscription_status', 'active'),
+    supabase.from('vendors').select('*', { count: 'exact', head: true }).eq('subscription_status', 'trial'),
     supabase.from('scans').select('*', { count: 'exact', head: true }),
     supabase.from('reviews').select('*', { count: 'exact', head: true }),
-    supabase.from('vendors').select('id, name, slug, category, is_active, reviews_enabled, created_at')
+    supabase.from('vendors').select('id, name, slug, category, is_active, subscription_status, subscription_expires_at, created_at')
       .order('created_at', { ascending: false }).limit(5),
   ])
 
   const stats = [
-    { label: 'Total Vendors', value: totalVendors ?? 0, icon: Store, color: '#6366f1' },
-    { label: 'Active', value: activeVendors ?? 0, icon: CheckCircle, color: '#16a34a' },
-    { label: 'Disabled', value: disabledVendors ?? 0, icon: AlertCircle, color: '#dc2626' },
-    { label: 'Total Scans', value: totalScans ?? 0, icon: BarChart3, color: '#f59e0b' },
-    { label: 'Total Reviews', value: totalReviews ?? 0, icon: Star, color: '#ec4899' },
+    { label: 'Total Vendors', value: totalVendors ?? 0, icon: Store,         color: '#6366f1' },
+    { label: 'Active',        value: activeVendors ?? 0, icon: CheckCircle,   color: '#16a34a' },
+    { label: 'Disabled',      value: disabledVendors ?? 0, icon: AlertCircle, color: '#dc2626' },
+    { label: '💳 Paying',     value: payingVendors ?? 0, icon: CreditCard,    color: '#0ea5e9' },
+    { label: '🔬 Trial',      value: trialVendors ?? 0, icon: FlaskConical,   color: '#8b5cf6' },
+    { label: 'Total Scans',   value: totalScans ?? 0, icon: BarChart3,        color: '#f59e0b' },
+    { label: 'Total Reviews', value: totalReviews ?? 0, icon: Star,           color: '#ec4899' },
   ]
 
   return (
@@ -81,6 +87,14 @@ export default async function AdminOverviewPage() {
                   }}>
                   {v.is_active ? 'Active' : 'Disabled'}
                 </span>
+                {v.subscription_status === 'active' && (
+                  <span className="text-xs px-2 py-0.5 rounded-full font-medium"
+                    style={{ background: '#dcfce7', color: '#16a34a' }}>💳 Paying</span>
+                )}
+                {v.subscription_status === 'trial' && (
+                  <span className="text-xs px-2 py-0.5 rounded-full font-medium"
+                    style={{ background: '#eff6ff', color: '#2563eb' }}>Trial</span>
+                )}
               </div>
             </div>
           ))}
