@@ -1,7 +1,28 @@
 import Link from 'next/link'
 import { QrCode, UtensilsCrossed, BarChart3, Smartphone, Star, Check } from 'lucide-react'
+import { getTranslations, getLocale } from 'next-intl/server'
+import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const t      = await getTranslations('landing')
+  const tn     = await getTranslations('nav')
+  const locale = await getLocale()
+
+  const steps = [
+    { n: locale === 'ar' ? '١' : '1', icon: UtensilsCrossed, title: t('step1Title'), desc: t('step1Desc') },
+    { n: locale === 'ar' ? '٢' : '2', icon: QrCode,          title: t('step2Title'), desc: t('step2Desc') },
+    { n: locale === 'ar' ? '٣' : '3', icon: Smartphone,      title: t('step3Title'), desc: t('step3Desc') },
+  ]
+
+  const features = [
+    { icon: QrCode,          title: t('feature1Title'), desc: t('feature1Desc') },
+    { icon: Smartphone,      title: t('feature2Title'), desc: t('feature2Desc') },
+    { icon: BarChart3,       title: t('feature3Title'), desc: t('feature3Desc') },
+    { icon: Star,            title: t('feature4Title'), desc: t('feature4Desc') },
+    { icon: UtensilsCrossed, title: t('feature5Title'), desc: t('feature5Desc') },
+    { icon: QrCode,          title: t('feature6Title'), desc: t('feature6Desc') },
+  ]
+
   return (
     <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
 
@@ -15,14 +36,15 @@ export default function HomePage() {
             </div>
             <span className="font-bold text-base" style={{ fontFamily: 'var(--font-display)' }}>StreetMenu</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+            <LanguageSwitcher variant="nav" />
             <Link href="/login"
               className="text-sm font-medium px-3 py-1.5 rounded-lg transition-colors"
               style={{ color: 'var(--text-secondary)' }}>
-              تسجيل الدخول
+              {tn('login')}
             </Link>
             <Link href="/register" className="btn-primary text-sm px-4 py-2">
-              ابدأ مجاناً
+              {tn('register')}
             </Link>
           </div>
         </div>
@@ -32,11 +54,11 @@ export default function HomePage() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-16 pb-20 sm:pt-24 sm:pb-28">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
 
-          {/* Left: text */}
-          <div className="text-center lg:text-right">
+          {/* Text */}
+          <div className="text-center lg:text-start">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6"
               style={{ background: 'var(--brand-light)', color: 'var(--brand)' }}>
-              🔥 مجاني لأصحاب البسطات
+              {t('badge')}
             </div>
 
             <h1 className="font-black mb-5"
@@ -46,86 +68,74 @@ export default function HomePage() {
                 lineHeight: 1.25,
                 letterSpacing: '-0.01em',
               }}>
-              الزبائن يمسحون.{' '}
-              <span style={{ color: 'var(--brand)' }}>أنتَ تبيع أكثر.</span>
+              {t('heroTitle')}{' '}
+              <span style={{ color: 'var(--brand)' }}>{t('heroTitleHighlight')}</span>
             </h1>
 
             <p className="text-base sm:text-lg mb-8 max-w-md mx-auto lg:mx-0"
               style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>
-              قائمة رقمية لبسطتك أو شاحنة الطعام أو مطبخك المنزلي — في دقائق.
-              رمز QR واحد، لا تطبيق مطلوب.
+              {t('heroDesc')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               <Link href="/register" className="btn-primary text-base px-6 py-3">
-                أنشئ قائمتك — مجاناً
+                {t('ctaPrimary')}
               </Link>
               <Link href="/demo" className="btn-secondary text-base px-6 py-3">
-                شاهد مثالاً ←
+                {t('ctaDemo')}
               </Link>
             </div>
 
             {/* Trust strip */}
             <div className="flex items-center justify-center lg:justify-start gap-5 mt-8 flex-wrap">
-              {['بدون بطاقة ائتمان', 'إعداد في 5 دقائق', 'مجاني للبدء'].map(t => (
-                <span key={t} className="flex items-center gap-1.5 text-xs"
+              {[t('trustNoCard'), t('trustSetup'), t('trustFree')].map(item => (
+                <span key={item} className="flex items-center gap-1.5 text-xs"
                   style={{ color: 'var(--text-secondary)' }}>
                   <Check size={12} style={{ color: 'var(--brand)' }} strokeWidth={3} />
-                  {t}
+                  {item}
                 </span>
               ))}
             </div>
           </div>
 
-          {/* Right: phone mockup */}
-          <div className="flex justify-center lg:justify-end">
-            <div className="relative">
-              {/* Phone shell */}
-              <div className="w-56 sm:w-64 rounded-[2.5rem] p-2 shadow-2xl"
-                style={{ background: '#1a1814', boxShadow: '0 32px 64px rgba(0,0,0,0.25)' }}>
-                <div className="rounded-[2rem] overflow-hidden" style={{ background: 'var(--bg)' }}>
-                  {/* Status bar */}
-                  <div className="h-8 flex items-center justify-center" style={{ background: '#1a1814' }}>
-                    <div className="w-20 h-4 rounded-full" style={{ background: '#2a2520' }} />
+          {/* Phone mockup */}
+          <div className="relative flex justify-center lg:justify-end">
+            <div className="relative w-64 sm:w-72">
+              <div className="rounded-3xl overflow-hidden shadow-2xl"
+                style={{ background: 'var(--surface)', border: '8px solid #1a1a1a' }}>
+                <div className="h-6" style={{ background: '#1a1a1a' }} />
+                <div className="p-4 space-y-3" style={{ background: 'var(--bg)' }}>
+                  <div className="flex items-center gap-2">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-bold"
+                      style={{ background: 'var(--brand)' }}>بس</div>
+                    <div>
+                      <p className="font-bold text-xs" style={{ fontFamily: 'var(--font-display)' }}>بسطة أم خالد</p>
+                      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>مأكولات بحرينية 🇧🇭</p>
+                    </div>
                   </div>
-                  {/* Menu preview */}
-                  <div className="p-4 space-y-3 min-h-[420px]">
-                    {/* Vendor header */}
-                    <div className="flex items-center gap-2 pb-3 border-b" style={{ borderColor: 'var(--border)' }}>
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-bold"
-                        style={{ background: 'var(--brand)' }}>بس</div>
-                      <div>
-                        <p className="font-bold text-xs" style={{ fontFamily: 'var(--font-display)' }}>بسطة أم خالد</p>
-                        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>مأكولات بحرينية 🇧🇭</p>
+                  <p className="text-xs font-bold" style={{ color: 'var(--brand)', fontFamily: 'var(--font-display)' }}>مشويات</p>
+                  {[
+                    { name: 'مشاوي مشكلة', price: '٢.٥ د.ب', img: '🥩' },
+                    { name: 'دجاج مشوي',   price: '١.٨ د.ب', img: '🍗' },
+                    { name: 'حمص بالطحينة', price: '٠.٨ د.ب', img: '🫘' },
+                  ].map(item => (
+                    <div key={item.name} className="flex items-center gap-2 p-2 rounded-xl"
+                      style={{ background: 'var(--surface-2)' }}>
+                      <span className="text-xl">{item.img}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-semibold truncate">{item.name}</p>
+                        <p className="text-xs font-bold" style={{ color: 'var(--brand)' }}>{item.price}</p>
                       </div>
                     </div>
-                    {/* Category */}
-                    <p className="text-xs font-bold" style={{ color: 'var(--brand)', fontFamily: 'var(--font-display)' }}>مشويات</p>
-                    {/* Menu items */}
-                    {[
-                      { name: 'مشاوي مشكلة', price: '٢.٥ د.ب', img: '🥩' },
-                      { name: 'دجاج مشوي', price: '١.٨ د.ب', img: '🍗' },
-                      { name: 'حمص بالطحينة', price: '٠.٨ د.ب', img: '🫘' },
-                    ].map(item => (
-                      <div key={item.name} className="flex items-center gap-2 p-2 rounded-xl"
-                        style={{ background: 'var(--surface-2)' }}>
-                        <span className="text-xl">{item.img}</span>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold truncate">{item.name}</p>
-                          <p className="text-xs font-bold" style={{ color: 'var(--brand)' }}>{item.price}</p>
-                        </div>
-                      </div>
-                    ))}
-                    {/* Stars */}
-                    <div className="flex items-center gap-1 pt-1">
-                      {[1,2,3,4,5].map(s => <Star key={s} size={10} fill="var(--brand)" style={{ color: 'var(--brand)' }} />)}
-                      <span className="text-xs mr-1" style={{ color: 'var(--text-muted)' }}>٤.٩ (٣٢ تقييم)</span>
-                    </div>
+                  ))}
+                  <div className="flex items-center gap-1 pt-1">
+                    {[1,2,3,4,5].map(s => <Star key={s} size={10} fill="var(--brand)" style={{ color: 'var(--brand)' }} />)}
+                    <span className="text-xs ms-1" style={{ color: 'var(--text-muted)' }}>٤.٩ (٣٢ تقييم)</span>
                   </div>
                 </div>
               </div>
               {/* QR badge */}
-              <div className="absolute -bottom-4 -right-4 w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+              <div className="absolute -bottom-4 ltr:-left-4 rtl:-right-4 w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
                 style={{ background: 'white', border: '2px solid var(--border)' }}>
                 <QrCode size={32} style={{ color: 'var(--brand)' }} />
               </div>
@@ -139,20 +149,16 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
           <h2 className="text-2xl sm:text-3xl font-black text-center mb-12"
             style={{ fontFamily: 'var(--font-display)' }}>
-            جاهز في 3 خطوات
+            {t('stepsTitle')}
           </h2>
           <div className="grid sm:grid-cols-3 gap-6 sm:gap-8">
-            {[
-              { n: '١', icon: UtensilsCrossed, title: 'أنشئ قائمتك', desc: 'أضف أطباقك مع الصور والأسعار. لا خبرة تقنية مطلوبة.' },
-              { n: '٢', icon: QrCode,          title: 'احصل على رمز QR', desc: 'رمز QR جاهز فوراً. حمّله واطبعه وضعه بجانب بسطتك.' },
-              { n: '٣', icon: Smartphone,      title: 'الزبائن يطلبون', desc: 'يمسحون ويشاهدون قائمتك مباشرة. لا تطبيق، لا تعقيد.' },
-            ].map(({ n, icon: Icon, title, desc }) => (
-              <div key={n} className="relative text-center sm:text-right">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 mx-auto sm:mx-0"
+            {steps.map(({ n, icon: Icon, title, desc }) => (
+              <div key={n} className="relative text-center">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 mx-auto"
                   style={{ background: 'var(--brand-light)' }}>
                   <Icon size={22} style={{ color: 'var(--brand)' }} />
                 </div>
-                <div className="absolute top-0 left-0 text-6xl font-black select-none pointer-events-none"
+                <div className="absolute top-0 ltr:left-0 rtl:right-0 text-6xl font-black select-none pointer-events-none"
                   style={{ color: 'var(--brand)', opacity: 0.06, fontFamily: 'var(--font-display)', lineHeight: 1 }}>
                   {n}
                 </div>
@@ -168,17 +174,10 @@ export default function HomePage() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <h2 className="text-2xl sm:text-3xl font-black text-center mb-10"
           style={{ fontFamily: 'var(--font-display)' }}>
-          كل ما تحتاجه
+          {t('featuresTitle')}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {[
-            { icon: QrCode,          title: 'رمز QR فوري',        desc: 'يُولَّد تلقائياً، قابل للتحميل والطباعة.' },
-            { icon: Smartphone,      title: 'تصميم للهاتف أولاً', desc: 'قائمتك جميلة على أي هاتف دون تطبيق.' },
-            { icon: BarChart3,       title: 'إحصائيات المسح',     desc: 'تعرّف كم شخصاً يزور قائمتك يومياً.' },
-            { icon: Star,            title: 'تقييمات الزبائن',    desc: 'يترك الزبائن تقييمات تبني سمعتك.' },
-            { icon: UtensilsCrossed, title: 'إدارة التوفر',       desc: 'علّم الأصناف غير المتوفرة فورياً.' },
-            { icon: QrCode,          title: 'شعار ولوغو مخصص',    desc: 'أضف شعار بسطتك لقائمتك العامة.' },
-          ].map(({ icon: Icon, title, desc }) => (
+          {features.map(({ icon: Icon, title, desc }) => (
             <div key={title} className="flex gap-3 p-4 rounded-2xl items-start"
               style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
               <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
@@ -198,75 +197,75 @@ export default function HomePage() {
       <section style={{ background: 'var(--surface-2)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20 text-center">
           <h2 className="text-2xl sm:text-3xl font-black mb-3" style={{ fontFamily: 'var(--font-display)' }}>
-            سعر واضح، بدون مفاجآت
+            {t('pricingTitle')}
           </h2>
           <p className="text-sm mb-10" style={{ color: 'var(--text-secondary)' }}>
-            ابدأ مجاناً. ادفع فقط عندما تنمو.
+            {t('pricingDesc')}
           </p>
 
           <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
             {/* Free */}
-            <div className="rounded-2xl p-6 text-right" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-              <p className="font-bold text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>مجاني</p>
-              <p className="text-4xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>٠ د.ب</p>
-              <p className="text-xs mb-5" style={{ color: 'var(--text-muted)' }}>للأبد</p>
-              <ul className="space-y-2.5 text-sm text-right mb-6">
-                {['حتى ١٠ أصناف', 'رمز QR للتحميل', 'تقييمات الزبائن', 'قائمة عامة للهاتف'].map(f => (
-                  <li key={f} className="flex items-center gap-2 justify-end">
-                    <span>{f}</span>
+            <div className="rounded-2xl p-6 text-start" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+              <p className="font-bold text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>{t('freePlanName')}</p>
+              <p className="text-4xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>{t('freePlanPrice')}</p>
+              <p className="text-xs mb-5" style={{ color: 'var(--text-muted)' }}>{t('freePlanPeriod')}</p>
+              <ul className="space-y-2.5 text-sm mb-6">
+                {[t('freeFeature1'), t('freeFeature2'), t('freeFeature3'), t('freeFeature4')].map(f => (
+                  <li key={f} className="flex items-center gap-2">
                     <Check size={14} style={{ color: '#16a34a' }} strokeWidth={3} className="flex-shrink-0" />
+                    <span>{f}</span>
                   </li>
                 ))}
               </ul>
               <Link href="/register" className="btn-secondary w-full py-2.5 text-sm">
-                ابدأ مجاناً
+                {t('freeCta')}
               </Link>
             </div>
 
             {/* Pro */}
-            <div className="rounded-2xl p-6 text-right relative overflow-hidden"
+            <div className="rounded-2xl p-6 text-start relative overflow-hidden"
               style={{ background: 'var(--brand)', border: '1px solid var(--brand-dark)' }}>
-              <div className="absolute top-3 left-3 text-xs font-bold px-2 py-0.5 rounded-full bg-white"
+              <div className="absolute top-3 ltr:right-3 rtl:left-3 text-xs font-bold px-2 py-0.5 rounded-full bg-white"
                 style={{ color: 'var(--brand)' }}>
-                الأكثر طلباً
+                {t('proPlanBadge')}
               </div>
-              <p className="font-bold text-sm mb-1 text-white opacity-80">مدفوع</p>
-              <p className="text-4xl font-black mb-1 text-white" style={{ fontFamily: 'var(--font-display)' }}>٣ د.ب</p>
-              <p className="text-xs mb-5 text-white opacity-60">شهرياً</p>
-              <ul className="space-y-2.5 text-sm text-right mb-6 text-white">
-                {['أصناف غير محدودة', 'إحصائيات المسح', 'شعار مخصص', 'كل ميزات الخطة المجانية'].map(f => (
-                  <li key={f} className="flex items-center gap-2 justify-end">
-                    <span>{f}</span>
+              <p className="font-bold text-sm mb-1 text-white opacity-80">{t('proPlanName')}</p>
+              <p className="text-4xl font-black mb-1 text-white" style={{ fontFamily: 'var(--font-display)' }}>{t('proPlanPrice')}</p>
+              <p className="text-xs mb-5 text-white opacity-60">{t('proPlanPeriod')}</p>
+              <ul className="space-y-2.5 text-sm mb-6 text-white">
+                {[t('proFeature1'), t('proFeature2'), t('proFeature3'), t('proFeature4')].map(f => (
+                  <li key={f} className="flex items-center gap-2">
                     <Check size={14} color="white" strokeWidth={3} className="flex-shrink-0" />
+                    <span>{f}</span>
                   </li>
                 ))}
               </ul>
               <Link href="/register"
                 className="w-full py-2.5 text-sm font-semibold rounded-xl flex items-center justify-center transition-all"
                 style={{ background: 'white', color: 'var(--brand)' }}>
-                ابدأ مجاناً — ثم اشترك
+                {t('proCta')}
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── CTA ── */}
+      {/* ── CTA Banner ── */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <div className="rounded-3xl p-8 sm:p-14 text-center"
           style={{ background: 'var(--brand)' }}>
           <div className="text-4xl mb-4">🚀</div>
           <h2 className="text-2xl sm:text-4xl font-black text-white mb-3"
             style={{ fontFamily: 'var(--font-display)', lineHeight: 1.3 }}>
-            ابدأ البيع بذكاء اليوم
+            {t('ctaBannerTitle')}
           </h2>
           <p className="text-base text-white mb-8" style={{ opacity: 0.85 }}>
-            مجاني للبدء. لا بطاقة ائتمان. الإعداد يستغرق 5 دقائق.
+            {t('ctaBannerDesc')}
           </p>
           <Link href="/register"
             className="inline-flex items-center gap-2 font-bold px-8 py-3.5 rounded-xl text-sm transition-all hover:-translate-y-0.5"
             style={{ background: 'white', color: 'var(--brand)', boxShadow: '0 4px 16px rgba(0,0,0,0.15)' }}>
-            أنشئ قائمتك المجانية ←
+            {t('ctaBannerBtn')}
           </Link>
         </div>
       </section>
@@ -282,9 +281,9 @@ export default function HomePage() {
             <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>StreetMenu</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/contact" className="hover:underline" style={{ color: 'var(--brand)' }}>تواصل معنا</Link>
+            <Link href="/contact" className="hover:underline" style={{ color: 'var(--brand)' }}>{t('footerContact')}</Link>
             <span>•</span>
-            <span>© 2025 StreetMenu</span>
+            <span>{t('footerCopyright')}</span>
           </div>
         </div>
       </footer>

@@ -6,6 +6,7 @@ import { formatPrice } from '@/lib/utils'
 import ReviewForm from '@/components/menu/ReviewForm'
 import ShareButton from '@/components/menu/ShareButton'
 import type { Metadata } from 'next'
+import { getTranslations, getLocale } from 'next-intl/server'
 
 interface Props {
   params: { slug: string }
@@ -45,6 +46,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PublicMenuPage({ params }: Props) {
   const supabase = await createClient()
+  const t        = await getTranslations('publicMenu')
+  const locale   = await getLocale()
 
   const { data: vendor } = await supabase
     .from('vendors')
@@ -61,11 +64,9 @@ export default async function PublicMenuPage({ params }: Props) {
         <div className="text-center max-w-sm">
           <p className="text-5xl mb-4">🔒</p>
           <h1 className="text-xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)' }}>
-            هذه البسطة غير متاحة حالياً
+            {t('inactiveTitle')}
           </h1>
-          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            تواصل مع صاحب البسطة لمزيد من المعلومات.
-          </p>
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('inactiveDesc')}</p>
         </div>
       </div>
     )
@@ -100,8 +101,8 @@ export default async function PublicMenuPage({ params }: Props) {
     return acc
   }, {})
 
-  const appUrl   = process.env.NEXT_PUBLIC_APP_URL ?? 'https://streetmenu-ten.vercel.app'
-  const menuUrl  = `${appUrl}/m/${vendor.slug}`
+  const appUrl  = process.env.NEXT_PUBLIC_APP_URL ?? 'https://streetmenu-ten.vercel.app'
+  const menuUrl = `${appUrl}/m/${vendor.slug}`
 
   return (
     <div className="min-h-screen pb-20" style={{ background: 'var(--bg)' }}>
@@ -132,9 +133,9 @@ export default async function PublicMenuPage({ params }: Props) {
               <span className="text-xs px-2 py-0.5 rounded-full font-medium"
                 style={{
                   background: vendor.is_open ? '#dcfce7' : '#fee2e2',
-                  color: vendor.is_open ? '#15803d' : '#dc2626',
+                  color:      vendor.is_open ? '#15803d' : '#dc2626',
                 }}>
-                {vendor.is_open ? '● مفتوح الآن' : '○ مغلق'}
+                {vendor.is_open ? t('open') : t('closed')}
               </span>
               {avgRating && (
                 <span className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
@@ -167,14 +168,13 @@ export default async function PublicMenuPage({ params }: Props) {
               href={`https://wa.me/${
                 (() => {
                   const digits = vendor.phone.replace(/\D/g, '')
-                  // Prepend Bahrain country code if not already present
                   return digits.startsWith('973') ? digits : `973${digits}`
                 })()
               }`}
               target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm font-medium"
               style={{ color: 'var(--brand)' }}>
-              <Phone size={13} /> {vendor.phone} (واتساب)
+              <Phone size={13} /> {vendor.phone} ({t('whatsapp')})
             </a>
           )}
         </div>
@@ -185,8 +185,8 @@ export default async function PublicMenuPage({ params }: Props) {
         {!items?.length ? (
           <div className="card text-center py-12">
             <ShoppingBag size={32} className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
-            <p className="font-semibold">القائمة قريباً</p>
-            <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>تفقد لاحقاً!</p>
+            <p className="font-semibold">{t('comingSoon')}</p>
+            <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>{t('comingSoonDesc')}</p>
           </div>
         ) : (
           Object.entries(grouped).map(([category, catItems]) => (
@@ -205,7 +205,7 @@ export default async function PublicMenuPage({ params }: Props) {
                         {!item.available && (
                           <div className="absolute inset-0 flex items-center justify-center rounded-xl"
                             style={{ background: 'rgba(0,0,0,0.5)' }}>
-                            <span className="text-white text-xs font-bold">نفد</span>
+                            <span className="text-white text-xs font-bold">{t('soldOut')}</span>
                           </div>
                         )}
                       </div>
@@ -222,7 +222,9 @@ export default async function PublicMenuPage({ params }: Props) {
                         {formatPrice(item.price)}
                       </p>
                       {!item.available && (
-                        <span className="text-xs mt-1 inline-block" style={{ color: 'var(--text-muted)' }}>غير متوفر حالياً</span>
+                        <span className="text-xs mt-1 inline-block" style={{ color: 'var(--text-muted)' }}>
+                          {t('unavailable')}
+                        </span>
                       )}
                     </div>
                   </div>
@@ -237,7 +239,7 @@ export default async function PublicMenuPage({ params }: Props) {
       {vendor.reviews_enabled !== false && (
         <div className="max-w-lg mx-auto px-4 mt-8">
           <h2 className="font-bold text-lg mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-            التقييمات {reviews?.length ? `(${reviews.length})` : ''}
+            {t('reviewsTitle')} {reviews?.length ? `(${reviews.length})` : ''}
           </h2>
 
           {reviews?.length ? (
@@ -252,14 +254,14 @@ export default async function PublicMenuPage({ params }: Props) {
                           stroke={s <= r.rating ? '#f59e0b' : '#d1d5db'} />
                       ))}
                     </div>
-                    <span className="text-sm font-medium">{r.reviewer_name || 'زبون'}</span>
+                    <span className="text-sm font-medium">{r.reviewer_name || t('anonymous')}</span>
                   </div>
                   {r.comment && <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{r.comment}</p>}
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>لا توجد تقييمات بعد. كن الأول!</p>
+            <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>{t('noReviews')}</p>
           )}
 
           <ReviewForm vendorId={vendor.id} />
@@ -268,7 +270,7 @@ export default async function PublicMenuPage({ params }: Props) {
 
       {/* Footer */}
       <div className="text-center mt-12 text-xs" style={{ color: 'var(--text-muted)' }}>
-        مدعوم من <a href="/" className="font-semibold hover:underline" style={{ color: 'var(--brand)' }}>StreetMenu</a>
+        {t('poweredBy')} <a href="/" className="font-semibold hover:underline" style={{ color: 'var(--brand)' }}>StreetMenu</a>
       </div>
     </div>
   )

@@ -3,10 +3,12 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import toast from 'react-hot-toast'
+import { useTranslations } from 'next-intl'
 
 export default function IsOpenToggle({ vendorId, initialIsOpen }: { vendorId: string; initialIsOpen: boolean }) {
-  const [isOpen, setIsOpen] = useState(initialIsOpen)
+  const [isOpen,  setIsOpen]  = useState(initialIsOpen)
   const [loading, setLoading] = useState(false)
+  const t = useTranslations('isOpenToggle')
 
   async function toggle() {
     setLoading(true)
@@ -17,10 +19,10 @@ export default function IsOpenToggle({ vendorId, initialIsOpen }: { vendorId: st
       .eq('id', vendorId)
 
     if (error) {
-      toast.error('فشل التحديث')
+      toast.error(t('updateFailed'))
     } else {
       setIsOpen(next)
-      toast.success(next ? '🟢 بسطتك الآن مفتوحة' : '🔴 بسطتك الآن مغلقة')
+      toast.success(next ? `🟢 ${t('open')}` : `🔴 ${t('closed')}`)
     }
     setLoading(false)
   }
@@ -40,13 +42,13 @@ export default function IsOpenToggle({ vendorId, initialIsOpen }: { vendorId: st
         <span className="absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-all duration-200"
           style={{ right: isOpen ? '2px' : '18px' }} />
       </div>
-      <div className="text-right">
+      <div className="text-start">
         <p className="text-sm font-bold leading-none"
           style={{ color: isOpen ? '#15803d' : '#991b1b' }}>
-          {isOpen ? 'مفتوح الآن' : 'مغلق الآن'}
+          {isOpen ? t('open') : t('closed')}
         </p>
         <p className="text-xs mt-0.5" style={{ color: isOpen ? '#16a34a' : '#dc2626', opacity: 0.8 }}>
-          {isOpen ? 'انقر للإغلاق' : 'انقر للفتح'}
+          {t('statusLabel')}
         </p>
       </div>
     </button>

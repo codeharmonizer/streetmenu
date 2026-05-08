@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { UtensilsCrossed, QrCode, BarChart3, Star, ChevronRight, TrendingUp } from 'lucide-react'
 import { isPaid } from '@/types'
 import IsOpenToggle from '@/components/dashboard/IsOpenToggle'
+import { getTranslations, getLocale } from 'next-intl/server'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -28,37 +29,44 @@ export default async function DashboardPage() {
     ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1)
     : null
 
+  const t      = await getTranslations('dashboard')
+  const locale = await getLocale()
+
   const stats = [
-    { label: 'أصناف القائمة', value: itemCount ?? 0, icon: UtensilsCrossed, href: '/dashboard/menu', cta: 'إضافة أصناف' },
-    { label: 'إجمالي المسح', value: scanCount ?? 0, icon: BarChart3, href: '/dashboard/analytics', cta: 'عرض الإحصائيات' },
-    { label: 'التقييمات', value: reviews?.length ?? 0, icon: Star, href: `/m/${vendor.slug}`, cta: 'عرض التقييمات' },
+    { label: t('menuItems'),    value: itemCount ?? 0, icon: UtensilsCrossed, href: '/dashboard/menu',      cta: t('addItems')      },
+    { label: t('totalScans'),   value: scanCount ?? 0, icon: BarChart3,       href: '/dashboard/analytics', cta: t('viewAnalytics') },
+    { label: t('reviews'),      value: reviews?.length ?? 0, icon: Star,      href: `/m/${vendor.slug}`,    cta: t('viewReviews')   },
   ]
 
-  const isNew     = (itemCount ?? 0) === 0
+  const isNew = (itemCount ?? 0) === 0
 
-  // Profile completion checklist
   const profileSteps = [
-    { done: !!vendor.phone,    label: 'رقم الجوال / واتساب', href: '/dashboard/settings' },
-    { done: !!vendor.address,  label: 'الموقع / العنوان',    href: '/dashboard/settings' },
-    { done: !!vendor.hours,    label: 'ساعات العمل',          href: '/dashboard/settings' },
-    { done: !!vendor.logo_url, label: 'شعار البسطة',          href: '/dashboard/settings' },
-    { done: !isNew,            label: 'إضافة أول صنف',        href: '/dashboard/menu' },
+    { done: !!vendor.phone,    label: t('profilePhone'),     href: '/dashboard/settings' },
+    { done: !!vendor.address,  label: t('profileAddress'),   href: '/dashboard/settings' },
+    { done: !!vendor.hours,    label: t('profileHours'),     href: '/dashboard/settings' },
+    { done: !!vendor.logo_url, label: t('profileLogo'),      href: '/dashboard/settings' },
+    { done: !isNew,            label: t('profileFirstItem'), href: '/dashboard/menu'     },
   ]
-  const profileDone    = profileSteps.filter(s => s.done).length
+  const profileDone     = profileSteps.filter(s => s.done).length
   const profileComplete = profileDone === profileSteps.length
   const paid      = isPaid(vendor)
   const subStatus = vendor.subscription_status
   const expiresAt = vendor.subscription_expires_at ? new Date(vendor.subscription_expires_at) : null
   const daysLeft  = expiresAt ? Math.ceil((expiresAt.getTime() - Date.now()) / 86_400_000) : null
 
+  function daysLabel(n: number) {
+    if (locale === 'ar') return n === 1 ? t('day') : t('days')
+    return n === 1 ? t('day') : t('days')
+  }
+
   return (
     <div className="max-w-4xl">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>
-          أهلاً 👋
+          {t('welcomeTitle')}
         </h1>
-        <p style={{ color: 'var(--text-secondary)' }}>إليك أداء <strong>{vendor.name}</strong>.</p>
+        <p style={{ color: 'var(--text-secondary)' }}>{t('welcomeDesc')} <strong>{vendor.name}</strong>.</p>
       </div>
 
       {/* ── Subscription banner ── */}
@@ -68,15 +76,14 @@ export default async function DashboardPage() {
           <span className="text-xl">⏳</span>
           <div className="flex-1">
             <p className="font-bold text-sm" style={{ color: '#92400e' }}>
-              {subStatus === 'trial' ? 'تجربتك المجانية' : 'اشتراكك'} ينتهي خلال {daysLeft} {daysLeft === 1 ? 'يوم' : 'أيام'}
+              {subStatus === 'trial' ? t('trialExpiringSoon') : t('subExpiringSoon')}{' '}
+              {t('expiresSoon', { days: daysLeft, unit: daysLabel(daysLeft) })}
             </p>
-            <p className="text-xs" style={{ color: '#b45309' }}>
-              تواصل معنا للتجديد والاستمرار في الاستفادة من جميع الميزات.
-            </p>
+            <p className="text-xs" style={{ color: '#b45309' }}>{t('renewContact')}</p>
           </div>
           <Link href="/dashboard/upgrade" className="text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap"
             style={{ background: '#f59e0b', color: 'white' }}>
-            تجديد الآن
+            {t('renewNow')}
           </Link>
         </div>
       )}
@@ -86,31 +93,27 @@ export default async function DashboardPage() {
           style={{ background: '#fef2f2', border: '1px solid #fca5a5' }}>
           <span className="text-xl">🔒</span>
           <div className="flex-1">
-            <p className="font-bold text-sm" style={{ color: '#991b1b' }}>انتهى اشتراكك</p>
-            <p className="text-xs" style={{ color: '#b91c1c' }}>
-              بعض الميزات مقيّدة. تواصل معنا لتجديد اشتراكك.
-            </p>
+            <p className="font-bold text-sm" style={{ color: '#991b1b' }}>{t('subExpiredTitle')}</p>
+            <p className="text-xs" style={{ color: '#b91c1c' }}>{t('subExpiredDesc')}</p>
           </div>
           <Link href="/dashboard/upgrade" className="text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap"
             style={{ background: '#dc2626', color: 'white' }}>
-            تجديد الاشتراك
+            {t('renewSub')}
           </Link>
         </div>
       )}
 
-      {(subStatus === 'free') && (
+      {subStatus === 'free' && (
         <div className="rounded-2xl p-4 mb-6 flex items-center gap-3"
           style={{ background: 'var(--brand-light)', border: '1px solid #ffd4a8' }}>
           <span className="text-xl">⭐</span>
           <div className="flex-1">
-            <p className="font-bold text-sm" style={{ color: 'var(--brand)' }}>أنت على الخطة المجانية</p>
-            <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-              حد 10 أصناف · بدون إحصائيات. اشترك للحصول على ميزات غير محدودة.
-            </p>
+            <p className="font-bold text-sm" style={{ color: 'var(--brand)' }}>{t('freePlanTitle')}</p>
+            <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{t('freePlanDesc')}</p>
           </div>
           <Link href="/dashboard/upgrade" className="text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap"
             style={{ background: 'var(--brand)', color: 'white' }}>
-            ترقية الحساب
+            {t('upgrade')}
           </Link>
         </div>
       )}
@@ -120,7 +123,7 @@ export default async function DashboardPage() {
           style={{ background: '#f0fdf4', border: '1px solid #86efac' }}>
           <span className="text-xl">✅</span>
           <p className="text-sm font-medium" style={{ color: '#15803d' }}>
-            اشتراكك نشط حتى {expiresAt!.toLocaleDateString('ar-BH', { day: 'numeric', month: 'long', year: 'numeric' })}
+            {t('activeSubTitle')} {expiresAt!.toLocaleDateString(locale === 'ar' ? 'ar-BH' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
           </p>
         </div>
       )}
@@ -130,14 +133,13 @@ export default async function DashboardPage() {
         <div className="card mb-6">
           <div className="flex items-center justify-between mb-3">
             <p className="font-bold" style={{ fontFamily: 'var(--font-display)' }}>
-              أكمل ملفك — {profileDone}/{profileSteps.length}
+              {t('profileTitle')} — {profileDone}/{profileSteps.length}
             </p>
             <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
               style={{ background: 'var(--brand-light)', color: 'var(--brand)' }}>
               {Math.round(profileDone / profileSteps.length * 100)}%
             </span>
           </div>
-          {/* Progress bar */}
           <div className="h-1.5 rounded-full mb-4" style={{ background: 'var(--surface-2)' }}>
             <div className="h-1.5 rounded-full transition-all duration-500"
               style={{ width: `${profileDone / profileSteps.length * 100}%`, background: 'var(--brand)' }} />
@@ -148,10 +150,7 @@ export default async function DashboardPage() {
                 className="flex items-center gap-2 text-sm px-3 py-2 rounded-xl transition-colors"
                 style={{ background: step.done ? '#f0fdf4' : 'var(--surface-2)' }}>
                 <span className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
-                  style={{
-                    background: step.done ? '#16a34a' : 'var(--border)',
-                    color: step.done ? 'white' : 'var(--text-muted)',
-                  }}>
+                  style={{ background: step.done ? '#16a34a' : 'var(--border)', color: step.done ? 'white' : 'var(--text-muted)' }}>
                   {step.done ? '✓' : '○'}
                 </span>
                 <span style={{ color: step.done ? '#15803d' : 'var(--text-secondary)', textDecoration: step.done ? 'line-through' : 'none' }}>
@@ -169,12 +168,10 @@ export default async function DashboardPage() {
           style={{ background: 'var(--brand-light)', border: '1px solid #ffd4a8' }}>
           <div className="text-2xl">🚀</div>
           <div className="flex-1">
-            <p className="font-bold mb-1" style={{ color: 'var(--brand)' }}>أنتَ على وشك الإطلاق!</p>
-            <p className="text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>
-              أضف أول صنف لتفعيل قائمتك العامة ورمز QR.
-            </p>
+            <p className="font-bold mb-1" style={{ color: 'var(--brand)' }}>{t('onboardingTitle')}</p>
+            <p className="text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>{t('onboardingDesc')}</p>
             <Link href="/dashboard/menu" className="btn-primary text-sm px-4 py-2">
-              أضف أول صنف ←
+              {t('onboardingBtn')}
             </Link>
           </div>
         </div>
@@ -195,7 +192,7 @@ export default async function DashboardPage() {
                 style={{ background: 'var(--brand-light)' }}>
                 <Icon size={16} style={{ color: 'var(--brand)' }} />
               </div>
-              <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity"
+              <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity rtl:rotate-180"
                 style={{ color: 'var(--text-muted)' }} />
             </div>
             <p className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>{value}</p>
@@ -205,13 +202,13 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick actions */}
-      <h2 className="font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>إجراءات سريعة</h2>
+      <h2 className="font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>{t('quickActions')}</h2>
       <div className="grid sm:grid-cols-2 gap-3">
         {[
-          { href: '/dashboard/menu', icon: UtensilsCrossed, title: 'إدارة القائمة', desc: 'إضافة أو تعديل أو حذف الأصناف' },
-          { href: '/dashboard/qr', icon: QrCode, title: 'تحميل رمز QR', desc: 'اطبعه وضعه في بسطتك' },
-          { href: `/m/${vendor.slug}`, icon: TrendingUp, title: 'معاينة القائمة العامة', desc: 'شاهد ما يراه الزبائن' },
-          { href: '/dashboard/analytics', icon: BarChart3, title: 'عرض الإحصائيات', desc: 'عدد عمليات المسح والاتجاهات' },
+          { href: '/dashboard/menu',       icon: UtensilsCrossed, title: t('manageMenu'),   desc: t('manageMenuDesc')   },
+          { href: '/dashboard/qr',         icon: QrCode,          title: t('downloadQr'),   desc: t('downloadQrDesc')   },
+          { href: `/m/${vendor.slug}`,     icon: TrendingUp,      title: t('previewMenu'),  desc: t('previewMenuDesc')  },
+          { href: '/dashboard/analytics',  icon: BarChart3,       title: t('viewStats'),    desc: t('viewStatsDesc')    },
         ].map(({ href, icon: Icon, title, desc }) => (
           <Link key={href} href={href}
             className="card flex items-center gap-4 group hover:-translate-y-0.5 transition-all duration-200">
@@ -223,7 +220,7 @@ export default async function DashboardPage() {
               <p className="font-semibold text-sm">{title}</p>
               <p className="text-xs truncate" style={{ color: 'var(--text-secondary)' }}>{desc}</p>
             </div>
-            <ChevronRight size={14} className="flex-shrink-0 opacity-0 group-hover:opacity-60 transition-opacity" />
+            <ChevronRight size={14} className="flex-shrink-0 opacity-0 group-hover:opacity-60 transition-opacity rtl:rotate-180" />
           </Link>
         ))}
       </div>

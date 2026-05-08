@@ -19,7 +19,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <div className="flex min-h-screen" style={{ background: 'var(--bg)' }}>
       <DashboardSidebar vendor={vendor} />
-      <main className="flex-1 mr-0 md:mr-64 p-6 md:p-8">
+      {/* rtl: sidebar is on right → margin-right; ltr: sidebar is on left → margin-left */}
+      <main className="flex-1 rtl:mr-0 rtl:md:mr-64 ltr:ml-0 ltr:md:ml-64 p-6 md:p-8">
         {children}
       </main>
     </div>

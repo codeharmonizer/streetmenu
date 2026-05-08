@@ -4,11 +4,14 @@ import { useState, useEffect } from 'react'
 import { Star } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import toast from 'react-hot-toast'
+import { useTranslations } from 'next-intl'
 
 const COOLDOWN_HOURS = 24
 const storageKey = (id: string) => `sm_review_${id}`
 
 export default function ReviewForm({ vendorId }: { vendorId: string }) {
+  const t = useTranslations('reviewForm')
+
   const [rating,     setRating]     = useState(0)
   const [hover,      setHover]      = useState(0)
   const [comment,    setComment]    = useState('')
@@ -25,13 +28,13 @@ export default function ReviewForm({ vendorId }: { vendorId: string }) {
     const hoursLeft = COOLDOWN_HOURS - diff / 3_600_000
     if (hoursLeft > 0) {
       const h = Math.ceil(hoursLeft)
-      setCooldown(`يمكنك التقييم مرة أخرى بعد ${h} ${h === 1 ? 'ساعة' : 'ساعات'}`)
+      setCooldown(t('cooldownMsg', { hours: h, unit: h === 1 ? t('hour') : t('hours') }))
     }
-  }, [vendorId])
+  }, [vendorId, t])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!rating) { toast.error('يرجى اختيار تقييم'); return }
+    if (!rating) { toast.error(t('ratingRequired')); return }
     setSubmitting(true)
 
     const supabase = createClient()
@@ -43,10 +46,10 @@ export default function ReviewForm({ vendorId }: { vendorId: string }) {
     })
 
     if (error) {
-      toast.error('فشل إرسال التقييم')
+      toast.error(t('submitFailed'))
     } else {
       localStorage.setItem(storageKey(vendorId), new Date().toISOString())
-      toast.success('شكراً على تقييمك!')
+      toast.success(t('thankYou'))
       setSubmitted(true)
     }
     setSubmitting(false)
@@ -56,7 +59,7 @@ export default function ReviewForm({ vendorId }: { vendorId: string }) {
     return (
       <div className="card text-center py-6">
         <p className="text-2xl mb-2">🙏</p>
-        <p className="font-semibold">شكراً على تقييمك!</p>
+        <p className="font-semibold">{t('thankYouTitle')}</p>
       </div>
     )
   }
@@ -65,7 +68,7 @@ export default function ReviewForm({ vendorId }: { vendorId: string }) {
     return (
       <div className="card text-center py-6">
         <p className="text-2xl mb-2">⏳</p>
-        <p className="font-semibold mb-1">قيّمت هذه البسطة مسبقاً</p>
+        <p className="font-semibold mb-1">{t('alreadyReviewed')}</p>
         <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{cooldown}</p>
       </div>
     )
@@ -73,10 +76,10 @@ export default function ReviewForm({ vendorId }: { vendorId: string }) {
 
   return (
     <div className="card">
-      <h3 className="font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>اكتب تقييماً</h3>
+      <h3 className="font-bold mb-4" style={{ fontFamily: 'var(--font-display)' }}>{t('title')}</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="label">التقييم *</label>
+          <label className="label">{t('ratingLabel')} *</label>
           <div className="flex gap-1">
             {[1,2,3,4,5].map(s => (
               <button key={s} type="button"
@@ -92,18 +95,18 @@ export default function ReviewForm({ vendorId }: { vendorId: string }) {
           </div>
         </div>
         <div>
-          <label className="label">اسمك (اختياري)</label>
-          <input className="input" placeholder="مثال: أحمد"
+          <label className="label">{t('nameLabel')}</label>
+          <input className="input" placeholder={t('namePlaceholder')}
             value={name} onChange={e => setName(e.target.value)} />
         </div>
         <div>
-          <label className="label">تعليق (اختياري)</label>
+          <label className="label">{t('commentLabel')}</label>
           <textarea className="input resize-none" rows={3}
-            placeholder="أخبر الآخرين عن تجربتك…"
+            placeholder={t('commentPlaceholder')}
             value={comment} onChange={e => setComment(e.target.value)} />
         </div>
         <button type="submit" disabled={submitting} className="btn-primary w-full">
-          {submitting ? 'جارٍ الإرسال…' : 'إرسال التقييم'}
+          {submitting ? t('sending') : t('submitBtn')}
         </button>
       </form>
     </div>

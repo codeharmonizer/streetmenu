@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 
 export const metadata: Metadata = {
   title: 'StreetMenu — امسح. شاهد. كل.',
@@ -11,24 +13,30 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale   = await getLocale()
+  const messages = await getMessages()
+  const dir      = locale === 'ar' ? 'rtl' : 'ltr'
+
   return (
-    <html lang="ar" dir="rtl">
+    <html lang={locale} dir={dir}>
       <body>
-        {children}
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            style: {
-              fontFamily: 'var(--font-body)',
-              fontSize: '14px',
-              borderRadius: '12px',
-              border: '1px solid var(--border)',
-              background: 'var(--surface)',
-              color: 'var(--text-primary)',
-            },
-          }}
-        />
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          {children}
+          <Toaster
+            position={locale === 'ar' ? 'top-right' : 'top-left'}
+            toastOptions={{
+              style: {
+                fontFamily: 'var(--font-body)',
+                fontSize: '14px',
+                borderRadius: '12px',
+                border: '1px solid var(--border)',
+                background: 'var(--surface)',
+                color: 'var(--text-primary)',
+              },
+            }}
+          />
+        </NextIntlClientProvider>
       </body>
     </html>
   )

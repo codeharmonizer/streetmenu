@@ -8,30 +8,35 @@ import { Vendor } from '@/types'
 import { getInitials, cn } from '@/lib/utils'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
-
-const navItems = [
-  { href: '/dashboard', icon: LayoutDashboard, label: 'نظرة عامة' },
-  { href: '/dashboard/menu', icon: UtensilsCrossed, label: 'القائمة' },
-  { href: '/dashboard/qr', icon: QrCodeIcon, label: 'رمز QR' },
-  { href: '/dashboard/analytics', icon: BarChart3, label: 'الإحصائيات' },
-  { href: '/dashboard/settings', icon: Settings, label: 'الإعدادات' },
-]
+import { useTranslations } from 'next-intl'
+import LanguageSwitcher from './LanguageSwitcher'
 
 export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
   const pathname = usePathname()
-  const router = useRouter()
+  const router   = useRouter()
+  const t        = useTranslations('sidebar')
+
+  const navItems = [
+    { href: '/dashboard',            icon: LayoutDashboard, label: t('overview')   },
+    { href: '/dashboard/menu',       icon: UtensilsCrossed, label: t('menu')       },
+    { href: '/dashboard/qr',         icon: QrCodeIcon,      label: t('qr')         },
+    { href: '/dashboard/analytics',  icon: BarChart3,       label: t('analytics')  },
+    { href: '/dashboard/settings',   icon: Settings,        label: t('settings')   },
+  ]
 
   async function handleLogout() {
     const supabase = createClient()
     await supabase.auth.signOut()
-    toast.success('تم تسجيل الخروج')
+    toast.success(t('logout'))
     router.push('/login')
     router.refresh()
   }
 
   return (
-    <aside className="fixed right-0 top-0 h-full w-64 flex flex-col border-l hidden md:flex"
-      style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
+    <aside
+      className="fixed top-0 h-full w-64 flex flex-col hidden md:flex rtl:right-0 ltr:left-0 rtl:border-l ltr:border-r"
+      style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
+    >
       {/* Logo */}
       <div className="p-6 border-b" style={{ borderColor: 'var(--border)' }}>
         <Link href="/" className="flex items-center gap-2">
@@ -57,7 +62,9 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
           )}
           <div className="min-w-0">
             <p className="font-semibold text-sm truncate">{vendor.name}</p>
-            <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{vendor.category || 'طعام شعبي'}</p>
+            <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>
+              {vendor.category || t('defaultCategory')}
+            </p>
           </div>
         </div>
         <Link
@@ -66,7 +73,7 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
           className="flex items-center gap-1.5 mt-3 text-xs font-medium transition-colors hover:opacity-70"
           style={{ color: 'var(--brand)' }}>
           <ExternalLink size={11} />
-          عرض القائمة العامة
+          {t('viewPublicMenu')}
         </Link>
       </div>
 
@@ -88,13 +95,14 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
         })}
       </nav>
 
-      {/* Logout */}
-      <div className="p-4 border-t" style={{ borderColor: 'var(--border)' }}>
+      {/* Bottom actions */}
+      <div className="p-4 border-t space-y-1" style={{ borderColor: 'var(--border)' }}>
+        <LanguageSwitcher variant="sidebar" />
         <button onClick={handleLogout}
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium w-full transition-all hover:bg-red-50"
           style={{ color: 'var(--text-secondary)' }}>
           <LogOut size={16} />
-          تسجيل الخروج
+          {t('logout')}
         </button>
       </div>
     </aside>
