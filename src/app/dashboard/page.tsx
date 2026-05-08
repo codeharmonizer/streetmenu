@@ -5,20 +5,13 @@ import { UtensilsCrossed, QrCode, BarChart3, Star, ChevronRight, TrendingUp } fr
 import { isPaid } from '@/types'
 import IsOpenToggle from '@/components/dashboard/IsOpenToggle'
 import { getTranslations, getLocale } from 'next-intl/server'
+import { getVendor } from '@/lib/data'
 
 export default async function DashboardPage() {
+  const vendor = await getVendor()
+  if (!vendor) redirect('/login')
+
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
-  const { data: vendor } = await supabase
-    .from('vendors')
-    .select('*')
-    .eq('user_id', user.id)
-    .single()
-
-  if (!vendor) redirect('/register')
-
   const [{ count: itemCount }, { count: scanCount }, { data: reviews }] = await Promise.all([
     supabase.from('menu_items').select('*', { count: 'exact', head: true }).eq('vendor_id', vendor.id),
     supabase.from('scans').select('*', { count: 'exact', head: true }).eq('vendor_id', vendor.id),

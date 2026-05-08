@@ -5,19 +5,13 @@ import { format, subDays } from 'date-fns'
 import { ar } from 'date-fns/locale'
 import { isPaid } from '@/types'
 import Link from 'next/link'
+import { getVendor } from '@/lib/data'
 
 export default async function AnalyticsPage() {
+  const vendor = await getVendor()
+  if (!vendor) redirect('/login')
+
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-
-  const { data: vendor } = await supabase
-    .from('vendors')
-    .select('id, name, subscription_status, subscription_expires_at')
-    .eq('user_id', user.id)
-    .single()
-
-  if (!vendor) redirect('/register')
 
   if (!isPaid(vendor)) {
     return (
