@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { MapPin, Clock, Phone, Star, ShoppingBag } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import ReviewForm from '@/components/menu/ReviewForm'
+import ShareButton from '@/components/menu/ShareButton'
 import type { Metadata } from 'next'
 
 interface Props {
@@ -20,9 +21,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!vendor) return { title: 'Menu not found' }
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://streetmenu-ten.vercel.app'
+  const desc   = vendor.description || `تصفح قائمة ${vendor.name} — ${vendor.category ?? 'طعام'} بالبحرين`
+
   return {
-    title: `${vendor.name} — Menu`,
-    description: vendor.description || `See the full menu for ${vendor.name}`,
+    title: `${vendor.name} — القائمة`,
+    description: desc,
+    openGraph: {
+      title: vendor.name,
+      description: desc,
+      url: `${appUrl}/m/${params.slug}`,
+      siteName: 'StreetMenu',
+      locale: 'ar_BH',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title: vendor.name,
+      description: desc,
+    },
   }
 }
 
@@ -83,6 +100,9 @@ export default async function PublicMenuPage({ params }: Props) {
     return acc
   }, {})
 
+  const appUrl   = process.env.NEXT_PUBLIC_APP_URL ?? 'https://streetmenu-ten.vercel.app'
+  const menuUrl  = `${appUrl}/m/${vendor.slug}`
+
   return (
     <div className="min-h-screen pb-20" style={{ background: 'var(--bg)' }}>
       {/* Header */}
@@ -122,6 +142,7 @@ export default async function PublicMenuPage({ params }: Props) {
                   {avgRating.toFixed(1)} ({reviews?.length})
                 </span>
               )}
+              <ShareButton url={menuUrl} name={vendor.name} />
             </div>
           </div>
         </div>
@@ -142,8 +163,17 @@ export default async function PublicMenuPage({ params }: Props) {
             </div>
           )}
           {vendor.phone && (
-            <a href={`https://wa.me/${vendor.phone.replace(/\D/g, '')}`}
-              className="flex items-center gap-2 text-sm" style={{ color: 'var(--brand)' }}>
+            <a
+              href={`https://wa.me/${
+                (() => {
+                  const digits = vendor.phone.replace(/\D/g, '')
+                  // Prepend Bahrain country code if not already present
+                  return digits.startsWith('973') ? digits : `973${digits}`
+                })()
+              }`}
+              target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm font-medium"
+              style={{ color: 'var(--brand)' }}>
               <Phone size={13} /> {vendor.phone} (واتساب)
             </a>
           )}

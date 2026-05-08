@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Pencil, Trash2, ToggleLeft, ToggleRight, ImageIcon, X, Check } from 'lucide-react'
+import { Plus, Pencil, Trash2, ToggleLeft, ToggleRight, ImageIcon, X, Check, ChevronUp, ChevronDown } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { MenuItem, Vendor, isPaid, FREE_ITEM_LIMIT } from '@/types'
 import { formatPrice } from '@/lib/utils'
@@ -129,6 +129,26 @@ export default function MenuManager({ vendor, initialItems }: Props) {
     toast.success('تم حذف الصنف')
   }
 
+  async function moveItem(index: number, direction: 'up' | 'down') {
+    const newItems = [...items]
+    const swapIdx  = direction === 'up' ? index - 1 : index + 1
+    if (swapIdx < 0 || swapIdx >= newItems.length) return
+
+    // Swap in local state
+    ;[newItems[index], newItems[swapIdx]] = [newItems[swapIdx], newItems[index]]
+
+    // Assign sequential sort_order values
+    const updates = newItems.map((item, i) => ({ id: item.id, sort_order: i }))
+    setItems(newItems)
+
+    // Persist to DB
+    await Promise.all(
+      updates.map(({ id, sort_order }) =>
+        supabase.from('menu_items').update({ sort_order }).eq('id', id)
+      )
+    )
+  }
+
   async function toggleAvailable(item: MenuItem) {
     const { error } = await supabase
       .from('menu_items')
@@ -242,7 +262,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
         </div>
       ) : (
         <div className="space-y-3">
-          {items.map(item => (
+          {items.map((item, index) => (
             <div key={item.id} className="card flex items-center gap-4 p-4">
               {item.photo_url ? (
                 <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 relative">
@@ -267,7 +287,18 @@ export default function MenuManager({ vendor, initialItems }: Props) {
                 )}
                 <p className="text-sm font-bold mt-1" style={{ color: 'var(--brand)' }}>{formatPrice(item.price)}</p>
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-1 flex-shrink-0">
+                {/* Reorder */}
+                <div className="flex flex-col gap-0.5">
+                  <button onClick={() => moveItem(index, 'up')} disabled={index === 0}
+                    className="p-1 rounded hover:bg-[var(--surface-2)] disabled:opacity-20 transition-colors">
+                    <ChevronUp size={13} style={{ color: 'var(--text-muted)' }} />
+                  </button>
+                  <button onClick={() => moveItem(index, 'down')} disabled={index === items.length - 1}
+                    className="p-1 rounded hover:bg-[var(--surface-2)] disabled:opacity-20 transition-colors">
+                    <ChevronDown size={13} style={{ color: 'var(--text-muted)' }} />
+                  </button>
+                </div>
                 <button onClick={() => toggleAvailable(item)} title={item.available ? 'علّم كنافد' : 'علّم كمتوفر'}>
                   {item.available
                     ? <ToggleRight size={22} style={{ color: 'var(--brand)' }} />

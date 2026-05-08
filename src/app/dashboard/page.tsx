@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { UtensilsCrossed, QrCode, BarChart3, Star, ChevronRight, TrendingUp } from 'lucide-react'
 import { isPaid } from '@/types'
+import IsOpenToggle from '@/components/dashboard/IsOpenToggle'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -34,6 +35,17 @@ export default async function DashboardPage() {
   ]
 
   const isNew     = (itemCount ?? 0) === 0
+
+  // Profile completion checklist
+  const profileSteps = [
+    { done: !!vendor.phone,    label: 'رقم الجوال / واتساب', href: '/dashboard/settings' },
+    { done: !!vendor.address,  label: 'الموقع / العنوان',    href: '/dashboard/settings' },
+    { done: !!vendor.hours,    label: 'ساعات العمل',          href: '/dashboard/settings' },
+    { done: !!vendor.logo_url, label: 'شعار البسطة',          href: '/dashboard/settings' },
+    { done: !isNew,            label: 'إضافة أول صنف',        href: '/dashboard/menu' },
+  ]
+  const profileDone    = profileSteps.filter(s => s.done).length
+  const profileComplete = profileDone === profileSteps.length
   const paid      = isPaid(vendor)
   const subStatus = vendor.subscription_status
   const expiresAt = vendor.subscription_expires_at ? new Date(vendor.subscription_expires_at) : null
@@ -113,6 +125,44 @@ export default async function DashboardPage() {
         </div>
       )}
 
+      {/* Profile completion */}
+      {!profileComplete && (
+        <div className="card mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <p className="font-bold" style={{ fontFamily: 'var(--font-display)' }}>
+              أكمل ملفك — {profileDone}/{profileSteps.length}
+            </p>
+            <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
+              style={{ background: 'var(--brand-light)', color: 'var(--brand)' }}>
+              {Math.round(profileDone / profileSteps.length * 100)}%
+            </span>
+          </div>
+          {/* Progress bar */}
+          <div className="h-1.5 rounded-full mb-4" style={{ background: 'var(--surface-2)' }}>
+            <div className="h-1.5 rounded-full transition-all duration-500"
+              style={{ width: `${profileDone / profileSteps.length * 100}%`, background: 'var(--brand)' }} />
+          </div>
+          <div className="grid sm:grid-cols-2 gap-2">
+            {profileSteps.map(step => (
+              <Link key={step.label} href={step.href}
+                className="flex items-center gap-2 text-sm px-3 py-2 rounded-xl transition-colors"
+                style={{ background: step.done ? '#f0fdf4' : 'var(--surface-2)' }}>
+                <span className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
+                  style={{
+                    background: step.done ? '#16a34a' : 'var(--border)',
+                    color: step.done ? 'white' : 'var(--text-muted)',
+                  }}>
+                  {step.done ? '✓' : '○'}
+                </span>
+                <span style={{ color: step.done ? '#15803d' : 'var(--text-secondary)', textDecoration: step.done ? 'line-through' : 'none' }}>
+                  {step.label}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Onboarding banner */}
       {isNew && (
         <div className="rounded-2xl p-6 mb-8 flex items-start gap-4"
@@ -129,6 +179,11 @@ export default async function DashboardPage() {
           </div>
         </div>
       )}
+
+      {/* is_open toggle */}
+      <div className="mb-6">
+        <IsOpenToggle vendorId={vendor.id} initialIsOpen={vendor.is_open} />
+      </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">

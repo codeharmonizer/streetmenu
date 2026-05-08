@@ -19,6 +19,7 @@ export default async function MenuPage() {
     .from('menu_items')
     .select('*')
     .eq('vendor_id', vendor.id)
+    .order('sort_order', { ascending: true })
     .order('created_at', { ascending: true })
 
   return <MenuManager vendor={vendor} initialItems={items || []} />
