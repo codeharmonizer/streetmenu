@@ -23,7 +23,7 @@ export async function sendUpgradeRequest(phone: string, note: string) {
     .eq('user_id', user.id)
     .single()
 
-  if (!vendor) return { error: 'لم يتم العثور على بيانات بسطتك' }
+  if (!vendor) return { error: 'لم يتم العثور على بيانات حسابك' }
 
   if (!process.env.RESEND_API_KEY) return { error: 'خدمة البريد غير مهيأة' }
 
@@ -39,7 +39,7 @@ export async function sendUpgradeRequest(phone: string, note: string) {
         <div style="font-family:sans-serif;max-width:560px;margin:0 auto">
           <h2 style="color:#ff6b00">🚀 طلب ترقية اشتراك جديد</h2>
           <table style="width:100%;border-collapse:collapse;margin-bottom:16px">
-            <tr><td style="padding:8px 0;color:#6b6760;width:120px">اسم البسطة</td>
+            <tr><td style="padding:8px 0;color:#6b6760;width:120px">اسم المطعم / البسطة</td>
                 <td style="padding:8px 0;font-weight:600">${vendor.name}</td></tr>
             <tr><td style="padding:8px 0;color:#6b6760">البريد الإلكتروني</td>
                 <td style="padding:8px 0"><a href="mailto:${user.email}">${user.email}</a></td></tr>

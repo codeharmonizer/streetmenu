@@ -95,8 +95,8 @@ export default function RegisterPage() {
     router.refresh()
   }
 
-  const categoriesAr = ['أكل شعبي', 'شاحنة طعام', 'مطبخ منزلي', 'مخبز', 'حلويات', 'مشروبات وعصائر', 'مشاوي', 'أخرى']
-  const categoriesEn = ['Street food', 'Food truck', 'Home kitchen', 'Bakery', 'Sweets', 'Drinks & Juices', 'Grills', 'Other']
+  const categoriesAr = ['مطعم', 'أكل شعبي', 'شاحنة طعام', 'مطبخ منزلي', 'مخبز', 'حلويات', 'مشروبات وعصائر', 'مشاوي', 'أخرى']
+  const categoriesEn = ['Restaurant', 'Street food', 'Food truck', 'Home kitchen', 'Bakery', 'Sweets', 'Drinks & Juices', 'Grills', 'Other']
   const categories   = locale === 'ar' ? categoriesAr : categoriesEn
 
   return (
@@ -113,12 +113,12 @@ export default function RegisterPage() {
             <span className="font-bold text-xl" style={{ fontFamily: 'var(--font-display)' }}>StreetMenu</span>
           </Link>
           <h1 className="text-2xl font-bold mt-6 mb-1" style={{ fontFamily: 'var(--font-display)' }}>
-            {step === 1 ? t('registerTitle') : (locale === 'ar' ? 'إعداد بسطتك' : 'Set up your stall')}
+            {step === 1 ? t('registerTitle') : (locale === 'ar' ? 'إعداد حسابك' : 'Set up your account')}
           </h1>
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
             {step === 1
               ? (locale === 'ar' ? 'مجاني دائماً. لا حاجة لبطاقة ائتمان.' : 'Always free. No credit card needed.')
-              : (locale === 'ar' ? 'أخبر الزبائن عن نفسك.' : 'Tell customers about your stall.')}
+              : (locale === 'ar' ? 'أخبر الزبائن عن مطعمك أو بسطتك.' : 'Tell customers about your restaurant or business.')}
           </p>
         </div>
 

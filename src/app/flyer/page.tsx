@@ -8,13 +8,13 @@ const AR_FEATURES = [
   'مجاني للبدء — بدون بطاقة ائتمان',
   'رمز QR جاهز فوراً للطباعة',
   'تقييمات الزبائن تبني سمعتك',
-  'إدارة القائمة من هاتفك',
+  'إدارة القائمة من هاتفك في أي وقت',
 ]
 const EN_FEATURES = [
   'Free to start — no credit card',
   'QR code ready instantly to print',
   'Customer reviews build your reputation',
-  'Manage your menu from your phone',
+  'Manage your menu from your phone anytime',
 ]
 
 export default function FlyerPage() {
@@ -54,8 +54,8 @@ export default function FlyerPage() {
             </svg>
             <span className="flyer-brand">StreetMenu</span>
           </div>
-          <p className="flyer-tagline-ar">قوائم رقمية ذكية للبسطات والمطابخ المنزلية</p>
-          <p className="flyer-tagline-en">Smart digital menus for street vendors &amp; home kitchens</p>
+          <p className="flyer-tagline-ar">قوائم رقمية ذكية للمطاعم والبسطات وكل مشاريع الطعام</p>
+          <p className="flyer-tagline-en">Smart digital menus for restaurants, stalls &amp; food businesses</p>
         </div>
 
         {/* ━━━ BODY ━━━ */}
@@ -66,7 +66,7 @@ export default function FlyerPage() {
             <div className="flyer-headline-ar">
               <span className="flyer-emoji">🍢</span>
               <div>
-                <p className="flyer-h1-ar">هل لديك بسطة أو مطبخ منزلي؟</p>
+                <p className="flyer-h1-ar">هل لديك مطعم أو بسطة أو مشروع طعام؟</p>
                 <p className="flyer-h2-ar">حوّل قائمتك رقمياً في <strong>5 دقائق!</strong></p>
               </div>
             </div>
@@ -96,7 +96,7 @@ export default function FlyerPage() {
             <div className="flyer-headline-en">
               <span className="flyer-emoji">🍢</span>
               <div>
-                <p className="flyer-h1-en">Street vendor or home kitchen?</p>
+                <p className="flyer-h1-en">Restaurant, stall, or food business?</p>
                 <p className="flyer-h2-en">Go digital in <strong>5 minutes!</strong></p>
               </div>
             </div>
