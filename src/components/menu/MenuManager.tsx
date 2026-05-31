@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { Plus, Pencil, Trash2, ImageIcon, X, Check, ChevronUp, ChevronDown, EyeOff, Eye } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { MenuItem, Vendor, isPaid, FREE_ITEM_LIMIT } from '@/types'
@@ -31,18 +31,6 @@ export default function MenuManager({ vendor, initialItems }: Props) {
   const supabase   = createClient()
   const subscribed = isPaid(vendor)
   const atLimit    = !subscribed && items.length >= FREE_ITEM_LIMIT
-
-  // Group items by category for the grid display
-  const grouped = useMemo(() => {
-    const uncategorised = isAr ? 'أخرى' : 'Other'
-    const map = new Map<string, MenuItem[]>()
-    for (const item of items) {
-      const key = item.category?.trim() || uncategorised
-      if (!map.has(key)) map.set(key, [])
-      map.get(key)!.push(item)
-    }
-    return map
-  }, [items, isAr])
 
   function openAdd() {
     if (atLimit) {
@@ -277,26 +265,9 @@ export default function MenuManager({ vendor, initialItems }: Props) {
           </button>
         </div>
       ) : (
-        <div className="space-y-8">
-          {Array.from(grouped.entries()).map(([category, catItems]) => (
-            <section key={category}>
-              {/* Category header — only shown when there's more than one category */}
-              {grouped.size > 1 && (
-                <div className="flex items-center gap-3 mb-4">
-                  <h2 className="font-bold text-sm tracking-wide uppercase"
-                    style={{ color: 'var(--text-secondary)' }}>{category}</h2>
-                  <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
-                  <span className="text-xs font-medium px-2 py-0.5 rounded-full"
-                    style={{ background: 'var(--surface-2)', color: 'var(--text-muted)' }}>
-                    {catItems.length}
-                  </span>
-                </div>
-              )}
-
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                {catItems.map((item) => {
-                  const index = items.findIndex(i => i.id === item.id)
-                  return (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          {items.map((item, index) => {
+            return (
                     <div key={item.id} className="card overflow-hidden p-0 group"
                       style={{ borderRadius: 16, display: 'block' }}>
 
@@ -402,11 +373,8 @@ export default function MenuManager({ vendor, initialItems }: Props) {
                         </div>
                       </div>
                     </div>
-                  )
-                })}
-              </div>
-            </section>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>
