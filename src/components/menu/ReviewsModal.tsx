@@ -30,41 +30,43 @@ export default function ReviewsModal({ vendorId, reviews, avgRating }: Props) {
     <>
       {/* ── Sticky bottom bar ── */}
       <div
-        className="fixed bottom-0 inset-x-0 z-40 flex gap-2 px-4 py-3"
+        className="fixed bottom-0 inset-x-0 z-40"
         style={{
-          background:   'var(--surface)',
-          borderTop:    '1px solid var(--border)',
-          boxShadow:    '0 -4px 24px rgba(0,0,0,0.08)',
+          background: 'var(--surface)',
+          borderTop:  '1px solid var(--border)',
+          boxShadow:  '0 -4px 24px rgba(0,0,0,0.08)',
         }}
       >
-        {/* Reviews button */}
-        <button
-          onClick={() => setOpen('reviews')}
-          className="btn-secondary flex-1"
-          style={{ justifyContent: 'center' }}
-        >
-          <Star size={14} fill="#f59e0b" stroke="#f59e0b" />
-          {avgRating ? (
-            <span>{avgRating.toFixed(1)}&nbsp;·&nbsp;</span>
-          ) : null}
-          {t('reviewsTitle')}
-          {reviews.length > 0 && (
-            <span className="ms-1 text-xs px-1.5 py-0.5 rounded-full font-semibold"
-              style={{ background: 'var(--surface-2)', color: 'var(--text-secondary)' }}>
-              {reviews.length}
-            </span>
-          )}
-        </button>
+        <div className="max-w-lg mx-auto flex gap-2 px-4 py-3">
+          {/* Reviews button */}
+          <button
+            onClick={() => setOpen('reviews')}
+            className="btn-secondary flex-1"
+            style={{ justifyContent: 'center' }}
+          >
+            <Star size={14} fill="#f59e0b" stroke="#f59e0b" />
+            {avgRating ? (
+              <span>{avgRating.toFixed(1)}&nbsp;·&nbsp;</span>
+            ) : null}
+            {t('reviewsTitle')}
+            {reviews.length > 0 && (
+              <span className="ms-1 text-xs px-1.5 py-0.5 rounded-full font-semibold"
+                style={{ background: 'var(--surface-2)', color: 'var(--text-secondary)' }}>
+                {reviews.length}
+              </span>
+            )}
+          </button>
 
-        {/* Write a review button */}
-        <button
-          onClick={() => setOpen('write')}
-          className="btn-primary flex-1"
-          style={{ justifyContent: 'center' }}
-        >
-          <Pencil size={14} />
-          {tr('title')}
-        </button>
+          {/* Write a review button */}
+          <button
+            onClick={() => setOpen('write')}
+            className="btn-primary flex-1"
+            style={{ justifyContent: 'center' }}
+          >
+            <Pencil size={14} />
+            {tr('title')}
+          </button>
+        </div>
       </div>
 
       {/* ── Bottom sheet ── */}
@@ -79,12 +81,12 @@ export default function ReviewsModal({ vendorId, reviews, avgRating }: Props) {
 
           {/* Sheet */}
           <div
-            className="fixed inset-x-0 bottom-0 z-50 flex flex-col"
+            className="fixed inset-x-0 bottom-0 z-50 flex flex-col max-w-lg mx-auto"
             style={{
-              background:     'var(--surface)',
-              borderRadius:   '20px 20px 0 0',
-              maxHeight:      '82vh',
-              animation:      'slideUp 0.22s ease-out',
+              background:   'var(--surface)',
+              borderRadius: '20px 20px 0 0',
+              maxHeight:    '82vh',
+              animation:    'slideUp 0.22s ease-out',
             }}
           >
             {/* Drag handle */}
