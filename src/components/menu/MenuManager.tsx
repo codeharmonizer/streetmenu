@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { Plus, Pencil, Trash2, ToggleLeft, ToggleRight, ImageIcon, X, Check, ChevronUp, ChevronDown } from 'lucide-react'
+import { useState, useMemo } from 'react'
+import { Plus, Pencil, Trash2, ImageIcon, X, Check, ChevronUp, ChevronDown, EyeOff, Eye } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { MenuItem, Vendor, isPaid, FREE_ITEM_LIMIT } from '@/types'
 import { formatPrice } from '@/lib/utils'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 
 interface Props {
   vendor: Vendor
@@ -26,9 +26,23 @@ export default function MenuManager({ vendor, initialItems }: Props) {
   const [saving,       setSaving]       = useState(false)
 
   const t          = useTranslations('menu')
+  const locale     = useLocale()
+  const isAr       = locale === 'ar'
   const supabase   = createClient()
   const subscribed = isPaid(vendor)
   const atLimit    = !subscribed && items.length >= FREE_ITEM_LIMIT
+
+  // Group items by category for the grid display
+  const grouped = useMemo(() => {
+    const uncategorised = isAr ? 'أخرى' : 'Other'
+    const map = new Map<string, MenuItem[]>()
+    for (const item of items) {
+      const key = item.category?.trim() || uncategorised
+      if (!map.has(key)) map.set(key, [])
+      map.get(key)!.push(item)
+    }
+    return map
+  }, [items, isAr])
 
   function openAdd() {
     if (atLimit) {
@@ -252,68 +266,130 @@ export default function MenuManager({ vendor, initialItems }: Props) {
         </div>
       )}
 
-      {/* Items list */}
+      {/* Items grid */}
       {items.length === 0 && !showForm ? (
         <div className="card text-center py-16">
-          <div className="text-4xl mb-3">🍽️</div>
+          <div className="text-5xl mb-3">🍽️</div>
           <p className="font-semibold mb-1">{t('emptyTitle')}</p>
-          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>{t('emptyDesc')}</p>
+          <p className="text-sm mb-5" style={{ color: 'var(--text-secondary)' }}>{t('emptyDesc')}</p>
           <button onClick={openAdd} className="btn-primary mx-auto">
             <Plus size={15} /> {t('addFirst')}
           </button>
         </div>
       ) : (
-        <div className="space-y-3">
-          {items.map((item, index) => (
-            <div key={item.id} className="card flex items-center gap-4 p-4">
-              {item.photo_url ? (
-                <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 relative">
-                  <Image src={item.photo_url} alt={item.name} fill className="object-cover" />
+        <div className="space-y-8">
+          {Array.from(grouped.entries()).map(([category, catItems]) => (
+            <section key={category}>
+              {/* Category header — only shown when there's more than one category */}
+              {grouped.size > 1 && (
+                <div className="flex items-center gap-3 mb-4">
+                  <h2 className="font-bold text-sm tracking-wide uppercase"
+                    style={{ color: 'var(--text-secondary)' }}>{category}</h2>
+                  <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-full"
+                    style={{ background: 'var(--surface-2)', color: 'var(--text-muted)' }}>
+                    {catItems.length}
+                  </span>
                 </div>
-              ) : (
-                <div className="w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0 text-2xl"
-                  style={{ background: 'var(--surface-2)' }}>🍽️</div>
               )}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <p className="font-semibold">{item.name}</p>
-                  {item.category && (
-                    <span className="badge text-xs px-2 py-0.5 rounded-full"
-                      style={{ background: 'var(--surface-2)', color: 'var(--text-secondary)' }}>
-                      {item.category}
-                    </span>
-                  )}
-                </div>
-                {item.description && (
-                  <p className="text-sm truncate mt-0.5" style={{ color: 'var(--text-secondary)' }}>{item.description}</p>
-                )}
-                <p className="text-sm font-bold mt-1" style={{ color: 'var(--brand)' }}>{formatPrice(item.price)}</p>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                {catItems.map((item) => {
+                  const index = items.findIndex(i => i.id === item.id)
+                  return (
+                    <div key={item.id} className="card flex flex-col overflow-hidden p-0 group"
+                      style={{ borderRadius: 16 }}>
+
+                      {/* ── Photo ── */}
+                      <div className="relative" style={{ aspectRatio: '1 / 1' }}>
+                        {item.photo_url ? (
+                          <Image src={item.photo_url} alt={item.name} fill className="object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-3xl"
+                            style={{ background: 'var(--surface-2)' }}>🍽️</div>
+                        )}
+
+                        {/* Dim overlay when unavailable */}
+                        {!item.available && (
+                          <div className="absolute inset-0 flex items-center justify-center"
+                            style={{ background: 'rgba(0,0,0,0.45)' }}>
+                            <span className="text-white text-xs font-bold px-2 py-1 rounded-lg"
+                              style={{ background: 'rgba(0,0,0,0.55)' }}>
+                              {isAr ? 'نفد' : 'Sold out'}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Availability toggle — top-end corner */}
+                        <button
+                          onClick={() => toggleAvailable(item)}
+                          title={item.available ? t('markUnavailable') : t('markAvailable')}
+                          className="absolute top-2 end-2 w-7 h-7 rounded-full flex items-center justify-center shadow-md transition-all opacity-0 group-hover:opacity-100"
+                          style={{ background: item.available ? 'var(--brand)' : '#6b7280', color: 'white' }}>
+                          {item.available
+                            ? <Eye size={13} />
+                            : <EyeOff size={13} />}
+                        </button>
+
+                        {/* Reorder arrows — top-start corner */}
+                        <div className="absolute top-2 start-2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-all">
+                          <button onClick={() => moveItem(index, 'up')} disabled={index === 0}
+                            className="w-6 h-6 rounded-full flex items-center justify-center shadow-md disabled:opacity-30"
+                            style={{ background: 'rgba(255,255,255,0.9)' }}>
+                            <ChevronUp size={11} style={{ color: 'var(--text-primary)' }} />
+                          </button>
+                          <button onClick={() => moveItem(index, 'down')} disabled={index === items.length - 1}
+                            className="w-6 h-6 rounded-full flex items-center justify-center shadow-md disabled:opacity-30"
+                            style={{ background: 'rgba(255,255,255,0.9)' }}>
+                            <ChevronDown size={11} style={{ color: 'var(--text-primary)' }} />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* ── Card body ── */}
+                      <div className="p-3 flex flex-col flex-1">
+                        <div className="flex items-start justify-between gap-1 mb-1">
+                          <p className="font-bold text-sm leading-snug line-clamp-2 flex-1">{item.name}</p>
+                          <p className="font-black text-sm flex-shrink-0 ms-1" style={{ color: 'var(--brand)' }}>
+                            {formatPrice(item.price)}
+                          </p>
+                        </div>
+
+                        {item.description && (
+                          <p className="text-xs line-clamp-2 mt-0.5 flex-1"
+                            style={{ color: 'var(--text-secondary)' }}>{item.description}</p>
+                        )}
+
+                        {/* ── Actions bar ── */}
+                        <div className="flex items-center justify-between mt-3 pt-2.5"
+                          style={{ borderTop: '1px solid var(--border)' }}>
+                          {/* status pill */}
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
+                            style={{
+                              background: item.available ? 'var(--brand-light)' : 'var(--surface-2)',
+                              color: item.available ? 'var(--brand)' : 'var(--text-muted)',
+                            }}>
+                            {item.available ? (isAr ? '● متوفر' : '● In stock') : (isAr ? '○ نفد' : '○ Sold out')}
+                          </span>
+
+                          {/* edit / delete */}
+                          <div className="flex gap-1">
+                            <button onClick={() => openEdit(item)}
+                              className="p-1.5 rounded-lg transition-colors hover:bg-[var(--surface-2)]">
+                              <Pencil size={13} style={{ color: 'var(--text-secondary)' }} />
+                            </button>
+                            <button onClick={() => handleDelete(item.id)}
+                              className="p-1.5 rounded-lg transition-colors hover:bg-red-50">
+                              <Trash2 size={13} className="text-red-400" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
-              <div className="flex items-center gap-1 flex-shrink-0">
-                {/* Reorder */}
-                <div className="flex flex-col gap-0.5">
-                  <button onClick={() => moveItem(index, 'up')} disabled={index === 0}
-                    className="p-1 rounded hover:bg-[var(--surface-2)] disabled:opacity-20 transition-colors">
-                    <ChevronUp size={13} style={{ color: 'var(--text-muted)' }} />
-                  </button>
-                  <button onClick={() => moveItem(index, 'down')} disabled={index === items.length - 1}
-                    className="p-1 rounded hover:bg-[var(--surface-2)] disabled:opacity-20 transition-colors">
-                    <ChevronDown size={13} style={{ color: 'var(--text-muted)' }} />
-                  </button>
-                </div>
-                <button onClick={() => toggleAvailable(item)} title={item.available ? t('markUnavailable') : t('markAvailable')}>
-                  {item.available
-                    ? <ToggleRight size={22} style={{ color: 'var(--brand)' }} />
-                    : <ToggleLeft  size={22} style={{ color: 'var(--text-muted)' }} />}
-                </button>
-                <button onClick={() => openEdit(item)} className="p-1.5 rounded-lg hover:bg-[var(--surface-2)] transition-colors">
-                  <Pencil size={14} style={{ color: 'var(--text-secondary)' }} />
-                </button>
-                <button onClick={() => handleDelete(item.id)} className="p-1.5 rounded-lg hover:bg-red-50 transition-colors">
-                  <Trash2 size={14} className="text-red-400" />
-                </button>
-              </div>
-            </div>
+            </section>
           ))}
         </div>
       )}
