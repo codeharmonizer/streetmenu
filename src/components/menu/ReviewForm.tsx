@@ -9,7 +9,12 @@ import { useTranslations } from 'next-intl'
 const COOLDOWN_HOURS = 24
 const storageKey = (id: string) => `sm_review_${id}`
 
-export default function ReviewForm({ vendorId }: { vendorId: string }) {
+interface ReviewFormProps {
+  vendorId: string
+  onSuccess?: () => void
+}
+
+export default function ReviewForm({ vendorId, onSuccess }: ReviewFormProps) {
   const t = useTranslations('reviewForm')
 
   const [rating,     setRating]     = useState(0)
@@ -51,6 +56,7 @@ export default function ReviewForm({ vendorId }: { vendorId: string }) {
       localStorage.setItem(storageKey(vendorId), new Date().toISOString())
       toast.success(t('thankYou'))
       setSubmitted(true)
+      setTimeout(() => onSuccess?.(), 1200)
     }
     setSubmitting(false)
   }
