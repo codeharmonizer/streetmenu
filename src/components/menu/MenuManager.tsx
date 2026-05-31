@@ -297,71 +297,87 @@ export default function MenuManager({ vendor, initialItems }: Props) {
                 {catItems.map((item) => {
                   const index = items.findIndex(i => i.id === item.id)
                   return (
-                    <div key={item.id} className="card flex flex-col overflow-hidden p-0 group"
-                      style={{ borderRadius: 16 }}>
+                    <div key={item.id} className="card overflow-hidden p-0 group"
+                      style={{ borderRadius: 16, display: 'block' }}>
 
-                      {/* ── Photo ── */}
-                      <div className="relative" style={{ aspectRatio: '1 / 1' }}>
-                        {item.photo_url ? (
-                          <Image src={item.photo_url} alt={item.name} fill className="object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-3xl"
-                            style={{ background: 'var(--surface-2)' }}>🍽️</div>
-                        )}
+                      {/* ── Photo — padding-top trick for a reliable square ── */}
+                      <div className="relative w-full" style={{ paddingTop: '100%' }}>
+                        <div className="absolute inset-0">
+                          {item.photo_url ? (
+                            <Image
+                              src={item.photo_url}
+                              alt={item.name}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-3xl"
+                              style={{ background: 'var(--surface-2)' }}>🍽️</div>
+                          )}
 
-                        {/* Dim overlay when unavailable */}
-                        {!item.available && (
-                          <div className="absolute inset-0 flex items-center justify-center"
-                            style={{ background: 'rgba(0,0,0,0.45)' }}>
-                            <span className="text-white text-xs font-bold px-2 py-1 rounded-lg"
-                              style={{ background: 'rgba(0,0,0,0.55)' }}>
-                              {isAr ? 'نفد' : 'Sold out'}
-                            </span>
+                          {/* Dim overlay when unavailable */}
+                          {!item.available && (
+                            <div className="absolute inset-0 flex items-center justify-center"
+                              style={{ background: 'rgba(0,0,0,0.45)' }}>
+                              <span className="text-white text-xs font-bold px-2 py-1 rounded-lg"
+                                style={{ background: 'rgba(0,0,0,0.55)' }}>
+                                {isAr ? 'نفد' : 'Sold out'}
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Availability toggle — top-end corner */}
+                          <button
+                            onClick={() => toggleAvailable(item)}
+                            title={item.available ? t('markUnavailable') : t('markAvailable')}
+                            className="absolute top-2 end-2 w-7 h-7 rounded-full flex items-center justify-center shadow-md transition-all opacity-0 group-hover:opacity-100"
+                            style={{ background: item.available ? 'var(--brand)' : '#6b7280', color: 'white' }}>
+                            {item.available ? <Eye size={13} /> : <EyeOff size={13} />}
+                          </button>
+
+                          {/* Reorder arrows — top-start corner */}
+                          <div className="absolute top-2 start-2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-all">
+                            <button onClick={() => moveItem(index, 'up')} disabled={index === 0}
+                              className="w-6 h-6 rounded-full flex items-center justify-center shadow-md disabled:opacity-30"
+                              style={{ background: 'rgba(255,255,255,0.9)' }}>
+                              <ChevronUp size={11} style={{ color: 'var(--text-primary)' }} />
+                            </button>
+                            <button onClick={() => moveItem(index, 'down')} disabled={index === items.length - 1}
+                              className="w-6 h-6 rounded-full flex items-center justify-center shadow-md disabled:opacity-30"
+                              style={{ background: 'rgba(255,255,255,0.9)' }}>
+                              <ChevronDown size={11} style={{ color: 'var(--text-primary)' }} />
+                            </button>
                           </div>
-                        )}
-
-                        {/* Availability toggle — top-end corner */}
-                        <button
-                          onClick={() => toggleAvailable(item)}
-                          title={item.available ? t('markUnavailable') : t('markAvailable')}
-                          className="absolute top-2 end-2 w-7 h-7 rounded-full flex items-center justify-center shadow-md transition-all opacity-0 group-hover:opacity-100"
-                          style={{ background: item.available ? 'var(--brand)' : '#6b7280', color: 'white' }}>
-                          {item.available
-                            ? <Eye size={13} />
-                            : <EyeOff size={13} />}
-                        </button>
-
-                        {/* Reorder arrows — top-start corner */}
-                        <div className="absolute top-2 start-2 flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-all">
-                          <button onClick={() => moveItem(index, 'up')} disabled={index === 0}
-                            className="w-6 h-6 rounded-full flex items-center justify-center shadow-md disabled:opacity-30"
-                            style={{ background: 'rgba(255,255,255,0.9)' }}>
-                            <ChevronUp size={11} style={{ color: 'var(--text-primary)' }} />
-                          </button>
-                          <button onClick={() => moveItem(index, 'down')} disabled={index === items.length - 1}
-                            className="w-6 h-6 rounded-full flex items-center justify-center shadow-md disabled:opacity-30"
-                            style={{ background: 'rgba(255,255,255,0.9)' }}>
-                            <ChevronDown size={11} style={{ color: 'var(--text-primary)' }} />
-                          </button>
                         </div>
                       </div>
 
                       {/* ── Card body ── */}
-                      <div className="p-3 flex flex-col flex-1">
+                      <div className="p-3">
                         <div className="flex items-start justify-between gap-1 mb-1">
-                          <p className="font-bold text-sm leading-snug line-clamp-2 flex-1">{item.name}</p>
+                          <p className="font-bold text-sm leading-snug" style={{
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                          }}>{item.name}</p>
                           <p className="font-black text-sm flex-shrink-0 ms-1" style={{ color: 'var(--brand)' }}>
                             {formatPrice(item.price)}
                           </p>
                         </div>
 
                         {item.description && (
-                          <p className="text-xs line-clamp-2 mt-0.5 flex-1"
-                            style={{ color: 'var(--text-secondary)' }}>{item.description}</p>
+                          <p className="text-xs mt-0.5 mb-2" style={{
+                            color: 'var(--text-secondary)',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                          }}>{item.description}</p>
                         )}
 
                         {/* ── Actions bar ── */}
-                        <div className="flex items-center justify-between mt-3 pt-2.5"
+                        <div className="flex items-center justify-between mt-2 pt-2"
                           style={{ borderTop: '1px solid var(--border)' }}>
                           {/* status pill */}
                           <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
