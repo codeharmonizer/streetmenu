@@ -333,7 +333,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
                             overflow: 'hidden',
                           }}>{item.name}</p>
                           <p className="font-black text-sm flex-shrink-0 ms-1" style={{ color: 'var(--brand)' }}>
-                            {formatPrice(item.price)}
+                            {formatPrice(item.price, locale)}
                           </p>
                         </div>
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Phone, Clock } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import { updateOrderStatus } from '@/lib/orders'
@@ -35,6 +35,7 @@ interface Props {
 
 export default function OrdersManager({ initialOrders }: Props) {
   const t      = useTranslations('orders')
+  const locale = useLocale()
   const router = useRouter()
 
   const [orders,     setOrders]     = useState<Order[]>(initialOrders)
@@ -158,7 +159,7 @@ export default function OrdersManager({ initialOrders }: Props) {
                   </div>
                 </div>
                 <p className="font-bold text-lg flex-shrink-0" style={{ color: 'var(--brand)' }}>
-                  {formatPrice(order.total)}
+                  {formatPrice(order.total, locale)}
                 </p>
               </div>
 
@@ -183,7 +184,7 @@ export default function OrdersManager({ initialOrders }: Props) {
                   {order.order_items.map(item => (
                     <div key={item.id} className="flex items-center justify-between text-sm">
                       <span>{item.name} <span style={{ color: 'var(--text-muted)' }}>×{item.quantity}</span></span>
-                      <span className="font-semibold">{formatPrice(item.price * item.quantity)}</span>
+                      <span className="font-semibold">{formatPrice(item.price * item.quantity, locale)}</span>
                     </div>
                   ))}
                 </div>

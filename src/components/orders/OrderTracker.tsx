@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { formatPrice } from '@/lib/utils'
 import { getOrderByNumber } from '@/lib/orders'
 import type { Order, OrderStatus } from '@/types'
@@ -17,7 +17,8 @@ interface Props {
 }
 
 export default function OrderTracker({ initialOrder }: Props) {
-  const t = useTranslations('track')
+  const t      = useTranslations('track')
+  const locale = useLocale()
   const [order, setOrder] = useState<TrackOrder>(initialOrder)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
@@ -137,14 +138,14 @@ export default function OrderTracker({ initialOrder }: Props) {
           {order.order_items?.map(item => (
             <div key={item.id} className="flex items-center justify-between text-sm">
               <span className="flex-1">{item.name} <span style={{ color: 'var(--text-muted)' }}>×{item.quantity}</span></span>
-              <span className="font-semibold" style={{ color: 'var(--brand)' }}>{formatPrice(item.price * item.quantity)}</span>
+              <span className="font-semibold" style={{ color: 'var(--brand)' }}>{formatPrice(item.price * item.quantity, locale)}</span>
             </div>
           ))}
         </div>
         <div className="border-t mt-3 pt-3 flex items-center justify-between font-bold"
           style={{ borderColor: 'var(--border)' }}>
           <span>{t('total')}</span>
-          <span style={{ color: 'var(--brand)' }}>{formatPrice(order.total)}</span>
+          <span style={{ color: 'var(--brand)' }}>{formatPrice(order.total, locale)}</span>
         </div>
       </div>
 

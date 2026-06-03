@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Star, X, Pencil, ShoppingBag, Plus, Minus, Trash2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { formatPrice } from '@/lib/utils'
 import { placeOrder } from '@/lib/orders'
 import ReviewForm from './ReviewForm'
@@ -48,9 +48,10 @@ type SheetType = 'cart' | 'reviews' | 'write' | null
 const SM_ORDERS_KEY = 'sm_orders'
 
 export default function PublicMenuClient({ vendor, items, reviews, avgRating, ordersEnabled }: Props) {
-  const t  = useTranslations('publicMenu')
-  const tc = useTranslations('cart')
-  const tr = useTranslations('reviewForm')
+  const t      = useTranslations('publicMenu')
+  const tc     = useTranslations('cart')
+  const tr     = useTranslations('reviewForm')
+  const locale = useLocale()
 
   const [cart,        setCart]        = useState<Map<string, number>>(new Map())
   const [sheet,       setSheet]       = useState<SheetType>(null)
@@ -191,7 +192,7 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
                           <p className="text-sm mt-0.5" style={{ color: 'var(--text-secondary)' }}>{item.description}</p>
                         )}
                         <p className="font-bold mt-2" style={{ color: 'var(--brand)' }}>
-                          {formatPrice(item.price)}
+                          {formatPrice(item.price, locale)}
                         </p>
                         {!item.available && (
                           <span className="text-xs mt-1 inline-block" style={{ color: 'var(--text-muted)' }}>
@@ -278,7 +279,7 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
               style={{ justifyContent: 'center' }}
             >
               <ShoppingBag size={14} />
-              {tc('placeOrderBar', { count: cartCount, total: formatPrice(cartTotal) })}
+              {tc('placeOrderBar', { count: cartCount, total: formatPrice(cartTotal, locale) })}
             </button>
           )}
 
@@ -396,7 +397,7 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
                             <div className="flex-1 min-w-0">
                               <p className="font-semibold text-sm truncate">{item.name}</p>
                               <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-                                {formatPrice(item.price)} × {qty} = {formatPrice(item.price * qty)}
+                                {formatPrice(item.price, locale)} × {qty} = {formatPrice(item.price * qty, locale)}
                               </p>
                             </div>
                             <div className="flex items-center gap-1.5">
@@ -425,7 +426,7 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
                       <div className="flex items-center justify-between px-2 py-2 rounded-xl font-semibold"
                         style={{ background: 'var(--surface-2)' }}>
                         <span>{tc('total')}</span>
-                        <span style={{ color: 'var(--brand)' }}>{formatPrice(cartTotal)}</span>
+                        <span style={{ color: 'var(--brand)' }}>{formatPrice(cartTotal, locale)}</span>
                       </div>
                     )}
 
