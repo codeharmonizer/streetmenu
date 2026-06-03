@@ -8,13 +8,13 @@ const AR_FEATURES = [
   'مجاني للبدء — بدون بطاقة ائتمان',
   'رمز QR جاهز فوراً للطباعة',
   'تقييمات الزبائن تبني سمعتك',
-  'إدارة القائمة من هاتفك في أي وقت',
+  'استقبل طلبات الزبائن مباشرة',
 ]
 const EN_FEATURES = [
   'Free to start — no credit card',
   'QR code ready instantly to print',
   'Customer reviews build your reputation',
-  'Manage your menu from your phone anytime',
+  'Online ordering with live tracking',
 ]
 
 export default function FlyerPage() {
@@ -54,8 +54,8 @@ export default function FlyerPage() {
             </svg>
             <span className="flyer-brand">StreetMenu</span>
           </div>
-          <p className="flyer-tagline-ar">قوائم رقمية ذكية للمطاعم والبسطات وكل مشاريع الطعام</p>
-          <p className="flyer-tagline-en">Smart digital menus for restaurants, stalls &amp; food businesses</p>
+          <p className="flyer-tagline-ar">قوائم رقمية وطلبات أونلاين للمطاعم والبسطات</p>
+          <p className="flyer-tagline-en">Digital menus &amp; online ordering for restaurants &amp; stalls</p>
         </div>
 
         {/* ━━━ BODY ━━━ */}
