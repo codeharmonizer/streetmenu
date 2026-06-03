@@ -381,7 +381,10 @@
     "readyHint": "طلبك جاهز للاستلام!",
     "completedHint": "تم تسليم الطلب بنجاح",
     "rejectedHint": "نعتذر، لم نتمكن من تنفيذ طلبك",
-    "vendor": "المطعم"
+    "vendor": "المطعم",
+    "checkStatus": "تحقق من الحالة",
+    "checking": "جارٍ التحقق…",
+    "lastChecked": "آخر تحديث"
   },
   "isOpenToggle": {
     "open": "● مفتوح",

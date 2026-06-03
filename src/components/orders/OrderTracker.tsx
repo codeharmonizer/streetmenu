@@ -1,14 +1,14 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
+import { RefreshCw } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import { getOrderByNumber } from '@/lib/orders'
+import { createClient } from '@/lib/supabase/client'
 import type { Order, OrderStatus } from '@/types'
 
 type TrackOrder = Order & { vendor_name: string; vendor_slug: string }
-
-const POLL_INTERVAL = 12_000 // 12 s
 
 const TERMINAL: OrderStatus[] = ['completed', 'rejected']
 
@@ -19,22 +19,43 @@ interface Props {
 export default function OrderTracker({ initialOrder }: Props) {
   const t      = useTranslations('track')
   const locale = useLocale()
-  const [order, setOrder] = useState<TrackOrder>(initialOrder)
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [order,      setOrder]      = useState<TrackOrder>(initialOrder)
+  const [checking,   setChecking]   = useState(false)
+  const [lastChecked, setLastChecked] = useState<Date | null>(null)
+  const isTerminal = TERMINAL.includes(order.status)
 
-  // Poll unless terminal
+  // ── Supabase Realtime: push status updates instantly ──────────────────────
   useEffect(() => {
-    if (TERMINAL.includes(order.status)) return
+    if (isTerminal) return
 
-    timerRef.current = setInterval(async () => {
+    const supabase = createClient()
+    const channel  = supabase
+      .channel(`order-status-${order.id}`)
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'orders', filter: `id=eq.${order.id}` },
+        (payload) => {
+          setOrder(prev => ({ ...prev, ...(payload.new as Partial<TrackOrder>) }))
+          setLastChecked(new Date())
+        }
+      )
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
+  }, [order.id, isTerminal])
+
+  // ── Manual "Check Status" button ──────────────────────────────────────────
+  async function checkStatus() {
+    if (checking) return
+    setChecking(true)
+    try {
       const fresh = await getOrderByNumber(order.order_number)
       if (fresh) setOrder(fresh)
-    }, POLL_INTERVAL)
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current)
+      setLastChecked(new Date())
+    } finally {
+      setChecking(false)
     }
-  }, [order.status, order.order_number])
+  }
 
   const steps: { status: OrderStatus; label: string; hint: string }[] = [
     { status: 'pending',   label: t('statusPending'),   hint: t('pendingHint')   },
@@ -150,9 +171,38 @@ export default function OrderTracker({ initialOrder }: Props) {
       </div>
 
       {/* Placed at */}
-      <p className="text-center text-xs" style={{ color: 'var(--text-muted)' }}>
-        {t('placedAt')}: {new Date(order.created_at).toLocaleString('ar-BH')}
+      <p className="text-center text-xs mb-6" style={{ color: 'var(--text-muted)' }}>
+        {t('placedAt')}: {new Date(order.created_at).toLocaleString(
+          locale === 'ar' ? 'ar-BH-u-nu-latn' : 'en-GB',
+          { dateStyle: 'medium', timeStyle: 'short' }
+        )}
       </p>
+
+      {/* Check Status button — visible while order is active */}
+      {!isTerminal && (
+        <div className="flex flex-col items-center gap-2">
+          <button
+            onClick={checkStatus}
+            disabled={checking}
+            className="btn-secondary flex items-center gap-2 px-6"
+            style={{ borderRadius: 14 }}>
+            <RefreshCw
+              size={15}
+              className={checking ? 'animate-spin' : ''}
+              style={{ color: 'var(--brand)' }}
+            />
+            {checking ? t('checking') : t('checkStatus')}
+          </button>
+          {lastChecked && (
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+              {t('lastChecked')}: {lastChecked.toLocaleTimeString(
+                locale === 'ar' ? 'ar-BH-u-nu-latn' : 'en-GB',
+                { timeStyle: 'short' }
+              )}
+            </p>
+          )}
+        </div>
+      )}
     </div>
   )
 }

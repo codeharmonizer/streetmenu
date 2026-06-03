@@ -381,7 +381,10 @@
     "readyHint": "Your order is ready for pickup!",
     "completedHint": "Order delivered successfully",
     "rejectedHint": "Sorry, we couldn't fulfill your order",
-    "vendor": "From"
+    "vendor": "From",
+    "checkStatus": "Check Status",
+    "checking": "Checking…",
+    "lastChecked": "Last updated"
   },
   "isOpenToggle": {
     "open": "● Open",
