@@ -18,6 +18,7 @@ export interface Vendor {
   is_open: boolean
   is_active: boolean
   reviews_enabled: boolean
+  orders_enabled: boolean
   subscription_status: SubscriptionStatus
   subscription_starts_at: string | null
   subscription_expires_at: string | null
@@ -53,6 +54,31 @@ export interface Review {
   comment: string | null
   reviewer_name: string | null
   created_at: string
+}
+
+export type OrderStatus = 'pending' | 'accepted' | 'ready' | 'completed' | 'rejected'
+
+export interface OrderItem {
+  id: string
+  order_id: string
+  menu_item_id: string | null
+  name: string
+  price: number
+  quantity: number
+  created_at: string
+}
+
+export interface Order {
+  id: string
+  vendor_id: string
+  order_number: string
+  status: OrderStatus
+  customer_name: string | null
+  customer_phone: string | null
+  note: string | null
+  total: number
+  created_at: string
+  order_items?: OrderItem[]
 }
 
 export interface ScanEvent {

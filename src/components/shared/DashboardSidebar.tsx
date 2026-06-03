@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { QrCode, LayoutDashboard, UtensilsCrossed, QrCodeIcon, BarChart3, LogOut, ExternalLink, Settings } from 'lucide-react'
+import { QrCode, LayoutDashboard, UtensilsCrossed, QrCodeIcon, BarChart3, LogOut, ExternalLink, Settings, ShoppingBag } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { Vendor } from '@/types'
 import { getInitials, cn } from '@/lib/utils'
@@ -11,17 +11,18 @@ import toast from 'react-hot-toast'
 import { useTranslations } from 'next-intl'
 import LanguageSwitcher from './LanguageSwitcher'
 
-export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
+export default function DashboardSidebar({ vendor, pendingOrders }: { vendor: Vendor; pendingOrders?: number }) {
   const pathname = usePathname()
   const router   = useRouter()
   const t        = useTranslations('sidebar')
 
   const navItems = [
-    { href: '/dashboard',            icon: LayoutDashboard, label: t('overview')   },
-    { href: '/dashboard/menu',       icon: UtensilsCrossed, label: t('menu')       },
-    { href: '/dashboard/qr',         icon: QrCodeIcon,      label: t('qr')         },
-    { href: '/dashboard/analytics',  icon: BarChart3,       label: t('analytics')  },
-    { href: '/dashboard/settings',   icon: Settings,        label: t('settings')   },
+    { href: '/dashboard',            icon: LayoutDashboard, label: t('overview'),  badge: undefined                                       },
+    { href: '/dashboard/menu',       icon: UtensilsCrossed, label: t('menu'),      badge: undefined                                       },
+    { href: '/dashboard/orders',     icon: ShoppingBag,     label: t('orders'),    badge: (pendingOrders ?? 0) > 0 ? pendingOrders : undefined },
+    { href: '/dashboard/qr',         icon: QrCodeIcon,      label: t('qr'),        badge: undefined                                       },
+    { href: '/dashboard/analytics',  icon: BarChart3,       label: t('analytics'), badge: undefined                                       },
+    { href: '/dashboard/settings',   icon: Settings,        label: t('settings'),  badge: undefined                                       },
   ]
 
   async function handleLogout() {
@@ -79,7 +80,7 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
 
       {/* Nav */}
       <nav className="flex-1 px-4 space-y-1">
-        {navItems.map(({ href, icon: Icon, label }) => {
+        {navItems.map(({ href, icon: Icon, label, badge }) => {
           const active = pathname === href
           return (
             <Link key={href} href={href}
@@ -89,7 +90,16 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
               )}
               style={active ? { background: 'var(--brand)', color: 'white' } : { color: 'var(--text-secondary)' }}>
               <Icon size={16} />
-              {label}
+              <span className="flex-1">{label}</span>
+              {badge !== undefined && (
+                <span className="text-xs font-bold px-1.5 py-0.5 rounded-full"
+                  style={{
+                    background: active ? 'rgba(255,255,255,0.25)' : 'var(--brand)',
+                    color:      active ? 'white' : 'white',
+                  }}>
+                  {badge}
+                </span>
+              )}
             </Link>
           )
         })}

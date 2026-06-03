@@ -1,11 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { MapPin, Clock, Phone, Star, ShoppingBag } from 'lucide-react'
-// Star kept for avgRating display in header
-import { formatPrice } from '@/lib/utils'
-import ReviewsModal from '@/components/menu/ReviewsModal'
+import { MapPin, Clock, Phone, Star } from 'lucide-react'
 import ShareButton from '@/components/menu/ShareButton'
+import PublicMenuClient from '@/components/menu/PublicMenuClient'
 import type { Metadata } from 'next'
 import { getTranslations, getLocale } from 'next-intl/server'
 
@@ -94,20 +92,17 @@ export default async function PublicMenuPage({ params }: Props) {
     ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
     : null
 
-  // Group items by category
-  type MenuItem = NonNullable<typeof items>[number]
-  const categories = [...new Set(items?.map(i => i.category || 'Other') ?? [])]
-  const grouped = categories.reduce<Record<string, MenuItem[]>>((acc, cat) => {
-    acc[cat] = items?.filter(i => (i.category || 'Other') === cat) ?? []
-    return acc
-  }, {})
-
   const appUrl  = process.env.NEXT_PUBLIC_APP_URL ?? 'https://streetmenu-ten.vercel.app'
   const menuUrl = `${appUrl}/m/${vendor.slug}`
 
+  const ordersEnabled =
+    vendor.orders_enabled === true &&
+    vendor.is_open === true &&
+    vendor.is_active !== false
+
   return (
-    <div className="min-h-screen pb-20" style={{ background: 'var(--bg)' }}>
-      {/* Header */}
+    <div className="min-h-screen pb-24" style={{ background: 'var(--bg)' }}>
+      {/* Header — server-rendered */}
       <div className="px-4 pt-8 pb-6 max-w-lg mx-auto">
         <div className="flex items-start gap-4 mb-4">
           {vendor.logo_url ? (
@@ -181,74 +176,19 @@ export default async function PublicMenuPage({ params }: Props) {
         </div>
       </div>
 
-      {/* Menu */}
-      <div className="max-w-lg mx-auto px-4">
-        {!items?.length ? (
-          <div className="card text-center py-12">
-            <ShoppingBag size={32} className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
-            <p className="font-semibold">{t('comingSoon')}</p>
-            <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>{t('comingSoonDesc')}</p>
-          </div>
-        ) : (
-          Object.entries(grouped).map(([category, catItems]) => (
-            <div key={category} className="mb-6">
-              <h2 className="font-bold text-sm uppercase tracking-wider mb-3"
-                style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-display)' }}>
-                {category}
-              </h2>
-              <div className="space-y-3">
-                {catItems?.map(item => (
-                  <div key={item.id} className="card flex gap-4 p-4"
-                    style={{ opacity: item.available ? 1 : 0.5 }}>
-                    {item.photo_url ? (
-                      <div className="w-20 h-20 rounded-xl overflow-hidden relative flex-shrink-0">
-                        <Image src={item.photo_url} alt={item.name} fill className="object-cover" />
-                        {!item.available && (
-                          <div className="absolute inset-0 flex items-center justify-center rounded-xl"
-                            style={{ background: 'rgba(0,0,0,0.5)' }}>
-                            <span className="text-white text-xs font-bold">{t('soldOut')}</span>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="w-20 h-20 rounded-xl flex items-center justify-center text-3xl flex-shrink-0"
-                        style={{ background: 'var(--surface-2)' }}>🍽️</div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold">{item.name}</p>
-                      {item.description && (
-                        <p className="text-sm mt-0.5" style={{ color: 'var(--text-secondary)' }}>{item.description}</p>
-                      )}
-                      <p className="font-bold mt-2" style={{ color: 'var(--brand)' }}>
-                        {formatPrice(item.price)}
-                      </p>
-                      {!item.available && (
-                        <span className="text-xs mt-1 inline-block" style={{ color: 'var(--text-muted)' }}>
-                          {t('unavailable')}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-
-      {/* Reviews — sticky bottom bar + modals */}
-      {vendor.reviews_enabled !== false && (
-        <ReviewsModal
-          vendorId={vendor.id}
-          reviews={reviews ?? []}
-          avgRating={avgRating}
-        />
-      )}
-
-      {/* Footer */}
-      <div className="text-center mt-12 text-xs" style={{ color: 'var(--text-muted)' }}>
-        {t('poweredBy')} <a href="/" className="font-semibold hover:underline" style={{ color: 'var(--brand)' }}>StreetMenu</a>
-      </div>
+      {/* Client island: menu grid + cart + reviews bottom bar */}
+      <PublicMenuClient
+        vendor={{
+          id:              vendor.id,
+          name:            vendor.name,
+          slug:            vendor.slug,
+          reviews_enabled: vendor.reviews_enabled !== false,
+        }}
+        items={items ?? []}
+        reviews={reviews ?? []}
+        avgRating={avgRating}
+        ordersEnabled={ordersEnabled}
+      />
     </div>
   )
 }
