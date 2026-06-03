@@ -2,14 +2,19 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { BarChart3, Eye, TrendingUp, Calendar, Lock } from 'lucide-react'
 import { format, subDays } from 'date-fns'
-import { ar } from 'date-fns/locale'
+import { ar, enUS } from 'date-fns/locale'
 import { isPaid } from '@/types'
 import Link from 'next/link'
 import { getVendor } from '@/lib/data'
+import { getTranslations, getLocale } from 'next-intl/server'
 
 export default async function AnalyticsPage() {
   const vendor = await getVendor()
   if (!vendor) redirect('/login')
+
+  const t      = await getTranslations('analytics')
+  const locale = await getLocale()
+  const dateLocale = locale === 'ar' ? ar : enUS
 
   const supabase = await createClient()
 
@@ -17,8 +22,8 @@ export default async function AnalyticsPage() {
     return (
       <div className="max-w-3xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>الإحصائيات</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>عدد الأشخاص الذين مسحوا رمز QR الخاص بك.</p>
+          <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>{t('title')}</h1>
+          <p style={{ color: 'var(--text-secondary)' }}>{t('desc')}</p>
         </div>
         <div className="card text-center py-16">
           <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
@@ -26,13 +31,13 @@ export default async function AnalyticsPage() {
             <Lock size={28} style={{ color: 'var(--text-muted)' }} />
           </div>
           <h2 className="text-xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)' }}>
-            ميزة مدفوعة
+            {t('lockedTitle')}
           </h2>
           <p className="text-sm mb-6 max-w-xs mx-auto" style={{ color: 'var(--text-secondary)' }}>
-            الإحصائيات متاحة للمشتركين المدفوعين فقط. اشترك لتعرف كم شخصاً يزور قائمتك يومياً.
+            {t('lockedDesc')}
           </p>
           <Link href="/dashboard/upgrade" className="btn-primary mx-auto">
-            اشترك الآن
+            {t('subscribeNow')}
           </Link>
         </div>
       </div>
@@ -40,8 +45,8 @@ export default async function AnalyticsPage() {
   }
 
   const thirtyDaysAgo = subDays(new Date(), 30).toISOString()
-  const sevenDaysAgo = subDays(new Date(), 7).toISOString()
-  const today = new Date().toISOString().slice(0, 10)
+  const sevenDaysAgo  = subDays(new Date(), 7).toISOString()
+  const today         = new Date().toISOString().slice(0, 10)
 
   const { data: allScans } = await supabase
     .from('scans')
@@ -54,7 +59,7 @@ export default async function AnalyticsPage() {
 
   const totalScans = scans.length
   const todayScans = scans.filter(s => s.scanned_at.slice(0, 10) === today).length
-  const weekScans = scans.filter(s => s.scanned_at >= sevenDaysAgo).length
+  const weekScans  = scans.filter(s => s.scanned_at >= sevenDaysAgo).length
 
   // Group by day for the chart
   const byDay: Record<string, number> = {}
@@ -68,19 +73,19 @@ export default async function AnalyticsPage() {
   })
 
   const chartData = Object.entries(byDay).map(([date, count]) => ({ date, count }))
-  const maxCount = Math.max(...chartData.map(d => d.count), 1)
+  const maxCount  = Math.max(...chartData.map(d => d.count), 1)
 
   const stats = [
-    { label: 'إجمالي المسح (30 يوم)', value: totalScans, icon: Eye },
-    { label: 'هذا الأسبوع', value: weekScans, icon: TrendingUp },
-    { label: 'اليوم', value: todayScans, icon: Calendar },
+    { label: `${t('totalScans')} (${t('last30Days')})`, value: totalScans, icon: Eye      },
+    { label: t('last7Days'),                             value: weekScans,  icon: TrendingUp },
+    { label: t('today'),                                 value: todayScans, icon: Calendar   },
   ]
 
   return (
     <div className="max-w-3xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>الإحصائيات</h1>
-        <p style={{ color: 'var(--text-secondary)' }}>عدد الأشخاص الذين مسحوا رمز QR الخاص بك.</p>
+        <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>{t('title')}</h1>
+        <p style={{ color: 'var(--text-secondary)' }}>{t('desc')}</p>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-8">
@@ -96,21 +101,24 @@ export default async function AnalyticsPage() {
       {/* Bar chart */}
       <div className="card">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-bold" style={{ fontFamily: 'var(--font-display)' }}>عمليات المسح — آخر 30 يوم</h2>
+          <h2 className="font-bold" style={{ fontFamily: 'var(--font-display)' }}>
+            {t('scanActivity')} — {t('last30Days')}
+          </h2>
           <BarChart3 size={16} style={{ color: 'var(--text-muted)' }} />
         </div>
         {totalScans === 0 ? (
           <div className="text-center py-12">
             <p className="text-3xl mb-2">📊</p>
-            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>لا توجد عمليات مسح بعد. شارك رمز QR الخاص بك للبدء!</p>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('noScans')}</p>
           </div>
         ) : (
           <div className="flex items-end gap-1 h-32">
             {chartData.map(({ date, count }) => (
-              <div key={date} className="flex-1 flex flex-col items-center gap-1 group" title={`${format(new Date(date), 'd MMM', { locale: ar })}: ${count} مسح`}>
+              <div key={date} className="flex-1 flex flex-col items-center gap-1 group"
+                title={`${format(new Date(date), 'd MMM', { locale: dateLocale })}: ${count}`}>
                 <div className="w-full rounded-t-sm transition-all duration-200 group-hover:opacity-80"
                   style={{
-                    height: `${(count / maxCount) * 100}%`,
+                    height:    `${(count / maxCount) * 100}%`,
                     minHeight: count > 0 ? '4px' : '2px',
                     background: count > 0 ? 'var(--brand)' : 'var(--border)',
                   }} />
@@ -119,8 +127,8 @@ export default async function AnalyticsPage() {
           </div>
         )}
         <div className="flex justify-between mt-2">
-          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>منذ 30 يوم</span>
-          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>اليوم</span>
+          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{t('last30Days')}</span>
+          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{t('today')}</span>
         </div>
       </div>
     </div>
