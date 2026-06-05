@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { QrCode, UtensilsCrossed, BarChart3, Smartphone, Star, Check } from 'lucide-react'
 import { getTranslations, getLocale } from 'next-intl/server'
 import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
+import ScanBiteLogo from '@/components/shared/ScanBiteLogo'
 
 export default async function HomePage() {
   const t      = await getTranslations('landing')
@@ -28,13 +29,13 @@ export default async function HomePage() {
 
       {/* ── Nav ── */}
       <nav className="sticky top-0 z-50 border-b backdrop-blur-sm"
-        style={{ borderColor: 'var(--border)', background: 'rgba(250,250,248,0.9)' }}>
+        style={{ borderColor: 'var(--border)', background: 'rgba(245,240,232,0.92)' }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'var(--brand)' }}>
-              <QrCode size={14} color="white" />
-            </div>
-            <span className="font-bold text-base" style={{ fontFamily: 'var(--font-display)' }}>StreetMenu</span>
+            <ScanBiteLogo size={26} />
+            <span className="font-bold text-base tracking-wide" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.03em' }}>
+              Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+            </span>
           </div>
           <div className="flex items-center gap-1">
             <LanguageSwitcher variant="nav" />
@@ -275,10 +276,10 @@ export default async function HomePage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm"
           style={{ color: 'var(--text-muted)' }}>
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: 'var(--brand)' }}>
-              <QrCode size={12} color="white" />
-            </div>
-            <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>StreetMenu</span>
+            <ScanBiteLogo size={22} />
+            <span className="font-semibold tracking-wide" style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-display)', letterSpacing: '0.03em' }}>
+              Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+            </span>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/contact" className="hover:underline" style={{ color: 'var(--brand)' }}>{t('footerContact')}</Link>

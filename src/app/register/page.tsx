@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { QrCode, Mail, Lock, Store } from 'lucide-react'
+import { Mail, Lock, Store } from 'lucide-react'
+import ScanBiteLogo from '@/components/shared/ScanBiteLogo'
 import { createClient } from '@/lib/supabase/client'
 import { slugify } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -90,7 +91,7 @@ export default function RegisterPage() {
       return
     }
 
-    toast.success(locale === 'ar' ? 'مرحباً بك في StreetMenu!' : 'Welcome to StreetMenu!')
+    toast.success(locale === 'ar' ? 'مرحباً بك في ScanBite!' : 'Welcome to ScanBite!')
     router.push('/dashboard')
     router.refresh()
   }
@@ -107,10 +108,10 @@ export default function RegisterPage() {
             <LanguageSwitcher variant="compact" />
           </div>
           <Link href="/" className="inline-flex items-center gap-2 justify-center">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'var(--brand)' }}>
-              <QrCode size={20} color="white" />
-            </div>
-            <span className="font-bold text-xl" style={{ fontFamily: 'var(--font-display)' }}>StreetMenu</span>
+            <ScanBiteLogo size={36} />
+            <span className="font-bold text-xl tracking-wide" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.03em' }}>
+              Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+            </span>
           </Link>
           <h1 className="text-2xl font-bold mt-6 mb-1" style={{ fontFamily: 'var(--font-display)' }}>
             {step === 1 ? t('registerTitle') : (locale === 'ar' ? 'إعداد حسابك' : 'Set up your account')}

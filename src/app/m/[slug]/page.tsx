@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: vendor.name,
       description: desc,
       url: `${appUrl}/m/${params.slug}`,
-      siteName: 'StreetMenu',
+      siteName: 'ScanBite',
       locale: 'ar_BH',
       type: 'website',
     },

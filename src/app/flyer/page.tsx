@@ -52,10 +52,10 @@ export default function FlyerPage() {
               <rect x="18" y="23" width="2" height="2" rx="0.5" fill="white"/>
               <rect x="22" y="22" width="3" height="3" rx="0.5" fill="white"/>
             </svg>
-            <span className="flyer-brand">StreetMenu</span>
+            <span className="flyer-brand">ScanBite</span>
           </div>
-          <p className="flyer-tagline-ar">قوائم رقمية وطلبات أونلاين للمطاعم والبسطات</p>
-          <p className="flyer-tagline-en">Digital menus &amp; online ordering for restaurants &amp; stalls</p>
+          <p className="flyer-tagline-ar">امسح. شاهد. كل. — قوائم رقمية وطلبات أونلاين</p>
+          <p className="flyer-tagline-en">Scan it. See it. Eat it. — Digital menus &amp; ordering</p>
         </div>
 
         {/* ━━━ BODY ━━━ */}
@@ -129,7 +129,7 @@ export default function FlyerPage() {
         {/* ━━━ FOOTER ━━━ */}
         <div className="flyer-footer">
           <p>
-            <span>البحرين 🇧🇭 Bahrain</span>
+            <span>ScanBite 🇧🇭 Bahrain</span>
             <span className="footer-sep">·</span>
             <span>{APP_URL.replace('https://', '')}</span>
           </p>
