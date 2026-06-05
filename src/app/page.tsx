@@ -113,28 +113,32 @@ export default async function HomePage() {
       </nav>
 
       {/* ══════════════ HERO ══════════════ */}
-      <section style={{
-        minHeight: '100vh', display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        paddingTop: 88, position: 'relative', overflow: 'hidden',
-      }}>
-        {/* Grid background */}
+      <section style={{ minHeight: '100vh', paddingTop: 88, position: 'relative', overflow: 'hidden' }}>
+        {/* Grid background — full-width */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
           backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
           backgroundSize: '48px 48px',
         }} />
-        {/* Red glow */}
+        {/* Red glow — full-width */}
         <div style={{
           position: 'absolute', top: -200, insetInlineStart: -200,
           width: 600, height: 600, pointerEvents: 'none',
           background: 'radial-gradient(circle, rgba(232,75,26,0.15) 0%, transparent 70%)',
         }} />
 
+        {/* Content constrained to 1280px */}
+        <div style={{
+          maxWidth: 1280, margin: '0 auto',
+          minHeight: 'calc(100vh - 88px)',
+          display: 'grid', gridTemplateColumns: '1fr 1fr',
+          position: 'relative', zIndex: 2,
+        }}>
+
         {/* Left — text */}
         <div style={{
           display: 'flex', flexDirection: 'column', justifyContent: 'center',
-          padding: '80px 48px 80px 64px', position: 'relative', zIndex: 2,
+          padding: '80px 48px 80px 48px',
         }}>
           {/* Badge */}
           <div style={{
@@ -200,7 +204,7 @@ export default async function HomePage() {
         {/* Right — phone mockup */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: '80px 64px 80px 32px', position: 'relative', zIndex: 2,
+          padding: '80px 48px 80px 32px',
         }}>
           <div style={{ position: 'relative' }}>
             {/* Floating badge 1 */}
@@ -297,6 +301,8 @@ export default async function HomePage() {
             <div style={{ position: 'absolute', bottom: -40, left: '50%', transform: 'translateX(-50%)', width: 180, height: 40, background: 'rgba(232,75,26,0.3)', filter: 'blur(20px)', borderRadius: '50%' }} />
           </div>
         </div>
+
+        </div>{/* /content max-width wrapper */}
       </section>
 
       {/* ══════════════ LOGOS STRIP ══════════════ */}
@@ -408,13 +414,12 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Small feature cards */}
+            {/* Small feature cards — 4 cards so large(span2)+f1 = row1, f2+f3+f4 = row2, no orphan */}
             {[
               { title: t('feature2Title'), desc: t('feature2Desc'), icon: <path d="M3 17V5a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#E84B1A" strokeWidth="1.5"/> },
               { title: t('feature3Title'), desc: t('feature3Desc'), icon: <><path d="M3 17l4-4 3 3 4-5 4 5" stroke="#E84B1A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><rect x="3" y="3" width="16" height="16" rx="2" stroke="#E84B1A" strokeWidth="1.5"/></> },
               { title: t('feature4Title'), desc: t('feature4Desc'), icon: <path d="M11 2l2.2 4.4 4.8.7-3.5 3.4.8 4.8L11 13l-4.3 2.3.8-4.8L4 7.1l4.8-.7L11 2z" stroke="#E84B1A" strokeWidth="1.5" strokeLinejoin="round"/> },
               { title: t('feature5Title'), desc: t('feature5Desc'), icon: <><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="#E84B1A" strokeWidth="1.5"/><path d="M12 15.5h7M15.5 12v7" stroke="#E84B1A" strokeWidth="1.5" strokeLinecap="round"/></> },
-              { title: t('feature6Title'), desc: t('feature6Desc'), icon: <><circle cx="11" cy="11" r="8" stroke="#E84B1A" strokeWidth="1.5"/><path d="M11 7v4l3 3" stroke="#E84B1A" strokeWidth="1.5" strokeLinecap="round"/></> },
             ].map((f, i) => (
               <div key={i} style={{ background: C.white, borderRadius: 16, padding: '32px 28px', border: '0.5px solid rgba(0,0,0,0.07)' }}>
                 <div style={{ width: 44, height: 44, background: '#FFF0EB', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
