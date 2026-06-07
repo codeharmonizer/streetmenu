@@ -1,7 +1,7 @@
 import FlyerQR from '@/components/flyer/FlyerQR'
 import PrintButton from './PrintButton'
 
-const APP_URL     = process.env.NEXT_PUBLIC_APP_URL ?? 'https://streetmenu-ten.vercel.app'
+const APP_URL     = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite-menu.vercel.app'
 const REGISTER_URL = `${APP_URL}/register`
 
 const AR_FEATURES = [
