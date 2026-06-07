@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { QrCode, Lock, Eye, EyeOff, CheckCircle } from 'lucide-react'
+import { Lock, Eye, EyeOff, CheckCircle } from 'lucide-react'
+import ScanBiteLogo from '@/components/shared/ScanBiteLogo'
 import { createClient } from '@/lib/supabase/client'
 import toast from 'react-hot-toast'
 
@@ -48,10 +49,10 @@ export default function ResetPasswordPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 justify-center">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'var(--brand)' }}>
-              <QrCode size={20} color="white" />
-            </div>
-            <span className="font-bold text-xl" style={{ fontFamily: 'var(--font-display)' }}>StreetMenu</span>
+            <ScanBiteLogo size={36} />
+            <span className="font-bold text-xl tracking-wide" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.03em' }}>
+              Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+            </span>
           </Link>
           <h1 className="text-2xl font-bold mt-6 mb-1" style={{ fontFamily: 'var(--font-display)' }}>
             تعيين كلمة مرور جديدة

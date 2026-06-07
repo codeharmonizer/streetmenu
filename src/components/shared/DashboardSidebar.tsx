@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { QrCode, LayoutDashboard, UtensilsCrossed, QrCodeIcon, BarChart3, LogOut, ExternalLink, Settings, ShoppingBag } from 'lucide-react'
+import { LayoutDashboard, UtensilsCrossed, QrCodeIcon, BarChart3, LogOut, ExternalLink, Settings, ShoppingBag } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { Vendor } from '@/types'
 import { getInitials, cn } from '@/lib/utils'
@@ -10,6 +10,7 @@ import Image from 'next/image'
 import toast from 'react-hot-toast'
 import { useTranslations } from 'next-intl'
 import LanguageSwitcher from './LanguageSwitcher'
+import ScanBiteLogo from './ScanBiteLogo'
 
 export default function DashboardSidebar({ vendor, pendingOrders }: { vendor: Vendor; pendingOrders?: number }) {
   const pathname = usePathname()
@@ -41,10 +42,10 @@ export default function DashboardSidebar({ vendor, pendingOrders }: { vendor: Ve
       {/* Logo */}
       <div className="p-6 border-b" style={{ borderColor: 'var(--border)' }}>
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'var(--brand)' }}>
-            <QrCode size={15} color="white" />
-          </div>
-          <span className="font-bold" style={{ fontFamily: 'var(--font-display)' }}>StreetMenu</span>
+          <ScanBiteLogo size={28} />
+          <span className="font-bold tracking-wide" style={{ fontFamily: 'var(--font-display)', fontSize: 18, letterSpacing: '0.03em' }}>
+            Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+          </span>
         </Link>
       </div>
 

@@ -5,11 +5,11 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 
 export const metadata: Metadata = {
-  title: 'StreetMenu — امسح. شاهد. كل.',
-  description: 'قوائم طعام رقمية بالرمز QR للمطاعم والبسطات وكل مشاريع الطعام.',
+  title: 'ScanBite — Scan it. See it. Eat it.',
+  description: 'قوائم طعام رقمية وطلبات أونلاين للمطاعم والبسطات. امسح. شاهد. كل.',
   openGraph: {
-    title: 'StreetMenu',
-    description: 'امسح رمز QR لترى ما يُطبخ قريباً.',
+    title: 'ScanBite',
+    description: 'Scan it. See it. Eat it. — Digital menus & online ordering for food businesses.',
   },
 }
 

@@ -239,7 +239,7 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
 
       {/* Footer */}
       <div className="text-center mt-12 mb-4 text-xs" style={{ color: 'var(--text-muted)' }}>
-        {t('poweredBy')} <a href="/" className="font-semibold hover:underline" style={{ color: 'var(--brand)' }}>StreetMenu</a>
+        {t('poweredBy')} <a href="/" className="font-semibold hover:underline" style={{ color: 'var(--brand)' }}>ScanBite</a>
       </div>
 
       {/* ── Sticky bottom bar ── */}

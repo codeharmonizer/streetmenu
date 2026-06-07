@@ -1,25 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&family=Cairo:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-display: 'Cairo', sans-serif;
-  --font-body: 'Cairo', sans-serif;
+  /* Bebas Neue for display headlines (EN); DM Sans for body (EN);
+     Cairo as Arabic fallback for both */
+  --font-display: 'Bebas Neue', 'Cairo', sans-serif;
+  --font-body:    'DM Sans', 'Cairo', sans-serif;
+  --font-mono:    'DM Mono', monospace;
 
-  --brand: #ff6b00;
-  --brand-light: #fff8f0;
-  --brand-dark: #c44d00;
+  --brand:       #E84B1A;
+  --brand-light: #fdf1eb;
+  --brand-dark:  #c43d15;
 
-  --bg: #fafaf8;
-  --surface: #ffffff;
-  --surface-2: #f5f4f0;
-  --border: #e8e6e0;
+  --bg:        #F5F0E8;
+  --surface:   #ffffff;
+  --surface-2: #ede8df;
+  --border:    #ddd8ce;
 
-  --text-primary: #1a1814;
-  --text-secondary: #6b6760;
-  --text-muted: #a8a5a0;
+  --text-primary:   #1A1A1A;
+  --text-secondary: #666660;
+  --text-muted:     #999990;
 }
 
 * {
@@ -64,7 +67,7 @@ a {
   .btn-primary:hover {
     background: var(--brand-dark);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(232, 75, 26, 0.3);
   }
   .btn-primary:active { transform: translateY(0); }
 
@@ -94,7 +97,7 @@ a {
   .input:focus {
     outline: none;
     border-color: var(--brand);
-    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+    box-shadow: 0 0 0 3px rgba(232, 75, 26, 0.1);
   }
   .input::placeholder { color: var(--text-muted); }
 

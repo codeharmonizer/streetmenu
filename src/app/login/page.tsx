@@ -3,11 +3,12 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { QrCode, Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import toast from 'react-hot-toast'
 import { useTranslations } from 'next-intl'
 import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
+import ScanBiteLogo from '@/components/shared/ScanBiteLogo'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -40,10 +41,10 @@ export default function LoginPage() {
             <LanguageSwitcher variant="compact" />
           </div>
           <Link href="/" className="inline-flex items-center gap-2 justify-center">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'var(--brand)' }}>
-              <QrCode size={20} color="white" />
-            </div>
-            <span className="font-bold text-xl" style={{ fontFamily: 'var(--font-display)' }}>StreetMenu</span>
+            <ScanBiteLogo size={36} />
+            <span className="font-bold text-xl tracking-wide" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.03em' }}>
+              Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+            </span>
           </Link>
           <h1 className="text-2xl font-bold mt-6 mb-1" style={{ fontFamily: 'var(--font-display)' }}>{t('loginTitle')}</h1>
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('loginDesc')}</p>
