@@ -1,7 +1,7 @@
 import FlyerQR from '@/components/flyer/FlyerQR'
 import PrintButton from './PrintButton'
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://streetmenu-ten.vercel.app'
+const APP_URL     = process.env.NEXT_PUBLIC_APP_URL ?? 'https://streetmenu-ten.vercel.app'
 const REGISTER_URL = `${APP_URL}/register`
 
 const AR_FEATURES = [
@@ -22,11 +22,11 @@ export default function FlyerPage() {
     <>
       {/* ── Screen controls (hidden when printing) ── */}
       <div className="no-print screen-controls">
-        <div style={{ textAlign: 'center', padding: '24px 16px 8px', background: '#f5f4f0' }}>
-          <p style={{ fontSize: 13, color: '#6b6760', marginBottom: 12 }}>
+        <div style={{ textAlign: 'center', padding: '24px 16px 8px', background: '#1A1A1A' }}>
+          <p style={{ fontSize: 13, color: '#888880', marginBottom: 12 }}>
             اضغط "طباعة" لتصدير الفلاير كـ PDF أو طباعته مباشرة
             &nbsp;·&nbsp;
-            Press "Print" to export as PDF or print directly
+            Press &quot;Print&quot; to export as PDF or print directly
           </p>
           <PrintButton />
         </div>
@@ -37,25 +37,38 @@ export default function FlyerPage() {
 
         {/* ━━━ HEADER ━━━ */}
         <div className="flyer-header">
-          <div className="flyer-logo-row">
-            {/* QR icon */}
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-              <rect width="32" height="32" rx="8" fill="white" fillOpacity="0.2"/>
-              <rect x="7" y="7" width="7" height="7" rx="1.5" fill="white"/>
-              <rect x="8.5" y="8.5" width="4" height="4" rx="0.5" fill="#ff6b00"/>
-              <rect x="18" y="7" width="7" height="7" rx="1.5" fill="white"/>
-              <rect x="19.5" y="8.5" width="4" height="4" rx="0.5" fill="#ff6b00"/>
-              <rect x="7" y="18" width="7" height="7" rx="1.5" fill="white"/>
-              <rect x="8.5" y="19.5" width="4" height="4" rx="0.5" fill="#ff6b00"/>
-              <rect x="18" y="18" width="3" height="3" rx="0.5" fill="white"/>
-              <rect x="23" y="18" width="2" height="2" rx="0.5" fill="white"/>
-              <rect x="18" y="23" width="2" height="2" rx="0.5" fill="white"/>
-              <rect x="22" y="22" width="3" height="3" rx="0.5" fill="white"/>
-            </svg>
-            <span className="flyer-brand">ScanBite</span>
+          {/* dot-grid overlay */}
+          <div className="flyer-grid-bg" />
+          {/* red glow */}
+          <div className="flyer-glow" />
+
+          <div className="flyer-header-inner">
+            {/* Logo row */}
+            <div className="flyer-logo-row">
+              {/* QR-pattern SVG from brand kit */}
+              <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                <rect width="32" height="32" rx="7" fill="#E84B1A" fillOpacity="0.18"/>
+                <rect x="7" y="7" width="7" height="7" rx="1.5" fill="white"/>
+                <rect x="8.5" y="8.5" width="4" height="4" rx="0.5" fill="#E84B1A"/>
+                <rect x="18" y="7" width="7" height="7" rx="1.5" fill="white"/>
+                <rect x="19.5" y="8.5" width="4" height="4" rx="0.5" fill="#E84B1A"/>
+                <rect x="7" y="18" width="7" height="7" rx="1.5" fill="white"/>
+                <rect x="8.5" y="19.5" width="4" height="4" rx="0.5" fill="#E84B1A"/>
+                <rect x="18" y="18" width="3" height="3" rx="0.5" fill="white"/>
+                <rect x="23" y="18" width="2" height="2" rx="0.5" fill="white"/>
+                <rect x="18" y="23" width="2" height="2" rx="0.5" fill="white"/>
+                <rect x="22" y="22" width="3" height="3" rx="0.5" fill="white"/>
+              </svg>
+              <span className="flyer-brand">
+                Scan<span className="flyer-brand-accent">Bite</span>
+              </span>
+            </div>
+
+            {/* Headline */}
+            <p className="flyer-headline-ar">امسح. شاهد. كُل.</p>
+            <p className="flyer-headline-en">SCAN IT. SEE IT. EAT IT.</p>
+            <p className="flyer-sub">قوائم رقمية وطلبات أونلاين &nbsp;·&nbsp; Digital menus &amp; online ordering</p>
           </div>
-          <p className="flyer-tagline-ar">امسح. شاهد. كل. — قوائم رقمية وطلبات أونلاين</p>
-          <p className="flyer-tagline-en">Scan it. See it. Eat it. — Digital menus &amp; ordering</p>
         </div>
 
         {/* ━━━ BODY ━━━ */}
@@ -63,14 +76,10 @@ export default function FlyerPage() {
 
           {/* ── Arabic section ── */}
           <div className="flyer-section ar-section" dir="rtl">
-            <div className="flyer-headline-ar">
-              <span className="flyer-emoji">🍢</span>
-              <div>
-                <p className="flyer-h1-ar">هل لديك مطعم أو بسطة أو مشروع طعام؟</p>
-                <p className="flyer-h2-ar">حوّل قائمتك رقمياً في <strong>5 دقائق!</strong></p>
-              </div>
-            </div>
-            <ul className="flyer-features-ar">
+            <div className="flyer-section-label">للأعمال الغذائية</div>
+            <p className="flyer-h1">هل لديك مطعم أو بسطة أو مشروع طعام؟</p>
+            <p className="flyer-h2">حوّل قائمتك رقمياً في <strong>5 دقائق!</strong></p>
+            <ul className="flyer-features">
               {AR_FEATURES.map(f => (
                 <li key={f}>
                   <span className="check">✓</span>
@@ -83,24 +92,16 @@ export default function FlyerPage() {
           {/* ── Divider ── */}
           <div className="flyer-divider">
             <div className="divider-line" />
-            <div className="divider-badge">
-              <span>AR</span>
-              <span className="dot">·</span>
-              <span>EN</span>
-            </div>
+            <div className="divider-badge">AR · EN</div>
             <div className="divider-line" />
           </div>
 
           {/* ── English section ── */}
           <div className="flyer-section en-section" dir="ltr">
-            <div className="flyer-headline-en">
-              <span className="flyer-emoji">🍢</span>
-              <div>
-                <p className="flyer-h1-en">Restaurant, stall, or food business?</p>
-                <p className="flyer-h2-en">Go digital in <strong>5 minutes!</strong></p>
-              </div>
-            </div>
-            <ul className="flyer-features-en">
+            <div className="flyer-section-label">For food businesses</div>
+            <p className="flyer-h1">Restaurant, stall, or food business?</p>
+            <p className="flyer-h2">Go digital in <strong>5 minutes!</strong></p>
+            <ul className="flyer-features">
               {EN_FEATURES.map(f => (
                 <li key={f}>
                   <span className="check">✓</span>
@@ -128,23 +129,26 @@ export default function FlyerPage() {
 
         {/* ━━━ FOOTER ━━━ */}
         <div className="flyer-footer">
-          <p>
-            <span>ScanBite 🇧🇭 Bahrain</span>
-            <span className="footer-sep">·</span>
-            <span>{APP_URL.replace('https://', '')}</span>
-          </p>
+          <span>Scan<span style={{ color: '#E84B1A' }}>Bite</span></span>
+          <span className="footer-sep">·</span>
+          <span>🇧🇭 Bahrain</span>
+          <span className="footer-sep">·</span>
+          <span>{APP_URL.replace('https://', '')}</span>
         </div>
 
       </div>
 
       {/* ━━━ STYLES ━━━ */}
       <style>{`
-        /* ── Reset & base ── */
+        /* ── Reset ── */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body { background: #e8e6e0; font-family: 'Cairo', 'Segoe UI', sans-serif; }
+        body {
+          background: #1A1A1A;
+          font-family: 'DM Sans', 'Cairo', 'Segoe UI', sans-serif;
+        }
 
-        /* ── Screen wrapper ── */
+        /* ── Screen controls ── */
         .screen-controls { position: sticky; top: 0; z-index: 10; }
 
         /* ── Flyer container ── */
@@ -152,44 +156,88 @@ export default function FlyerPage() {
           width: 148mm;
           min-height: 210mm;
           margin: 20px auto 40px;
-          background: white;
+          background: #F5F0E8;
           display: flex;
           flex-direction: column;
-          box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.5);
           overflow: hidden;
           position: relative;
         }
 
         /* ── Header ── */
         .flyer-header {
-          background: linear-gradient(135deg, #ff6b00 0%, #e85d00 100%);
-          padding: 18px 20px 16px;
+          background: #1A1A1A;
+          padding: 20px 22px 18px;
           text-align: center;
-          color: white;
+          position: relative;
+          overflow: hidden;
         }
+
+        /* dot-grid */
+        .flyer-grid-bg {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+          background-size: 20px 20px;
+        }
+
+        /* red glow */
+        .flyer-glow {
+          position: absolute;
+          top: -60px; left: -60px;
+          width: 220px; height: 220px;
+          background: radial-gradient(circle, rgba(232,75,26,0.22) 0%, transparent 70%);
+          pointer-events: none;
+        }
+
+        .flyer-header-inner {
+          position: relative;
+          z-index: 1;
+        }
+
         .flyer-logo-row {
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 8px;
-          margin-bottom: 8px;
+          margin-bottom: 10px;
         }
+
         .flyer-brand {
+          font-family: 'DM Sans', 'Cairo', sans-serif;
+          font-size: 26px;
+          font-weight: 800;
+          color: white;
+          letter-spacing: -0.5px;
+        }
+        .flyer-brand-accent { color: #E84B1A; }
+
+        .flyer-headline-ar {
+          font-family: 'Cairo', sans-serif;
           font-size: 22px;
           font-weight: 900;
-          letter-spacing: -0.5px;
           color: white;
-        }
-        .flyer-tagline-ar {
-          font-size: 11px;
-          opacity: 0.92;
+          letter-spacing: 0.02em;
           margin-bottom: 2px;
           direction: rtl;
         }
-        .flyer-tagline-en {
-          font-size: 10px;
-          opacity: 0.80;
-          direction: ltr;
+
+        .flyer-headline-en {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 16px;
+          font-weight: 800;
+          color: rgba(255,255,255,0.55);
+          letter-spacing: 0.08em;
+          margin-bottom: 8px;
+        }
+
+        .flyer-sub {
+          font-size: 9.5px;
+          color: rgba(255,255,255,0.45);
+          letter-spacing: 0.02em;
         }
 
         /* ── Body ── */
@@ -197,83 +245,68 @@ export default function FlyerPage() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          padding: 0;
+          background: #F5F0E8;
         }
 
         /* ── Section ── */
         .flyer-section {
-          padding: 16px 22px 14px;
+          padding: 14px 22px 12px;
         }
 
-        /* Arabic headline */
-        .flyer-headline-ar {
-          display: flex;
-          align-items: flex-start;
-          gap: 10px;
-          margin-bottom: 12px;
+        .flyer-section-label {
+          display: inline-block;
+          font-size: 8.5px;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: #E84B1A;
+          background: rgba(232,75,26,0.1);
+          border: 0.5px solid rgba(232,75,26,0.3);
+          border-radius: 20px;
+          padding: 2px 8px;
+          margin-bottom: 8px;
         }
-        .flyer-headline-en {
-          display: flex;
-          align-items: flex-start;
-          gap: 10px;
-          margin-bottom: 12px;
-        }
-        .flyer-emoji {
-          font-size: 24px;
-          flex-shrink: 0;
-          margin-top: 2px;
-        }
-        .flyer-h1-ar {
-          font-size: 15px;
-          font-weight: 800;
-          color: #1a1814;
-          line-height: 1.3;
-          margin-bottom: 2px;
-          direction: rtl;
-        }
-        .flyer-h2-ar {
-          font-size: 13px;
-          color: #6b6760;
-          direction: rtl;
-          line-height: 1.4;
-        }
-        .flyer-h2-ar strong { color: #ff6b00; }
 
-        .flyer-h1-en {
+        .flyer-h1 {
           font-size: 14px;
           font-weight: 800;
-          color: #1a1814;
+          color: #1A1A1A;
           line-height: 1.3;
-          margin-bottom: 2px;
+          margin-bottom: 3px;
         }
-        .flyer-h2-en {
-          font-size: 12px;
-          color: #6b6760;
-          line-height: 1.4;
-        }
-        .flyer-h2-en strong { color: #ff6b00; }
 
-        /* Feature lists */
-        .flyer-features-ar, .flyer-features-en {
+        .flyer-h2 {
+          font-size: 12px;
+          color: #666660;
+          line-height: 1.4;
+          margin-bottom: 10px;
+        }
+        .flyer-h2 strong { color: #E84B1A; }
+
+        /* Feature list */
+        .flyer-features {
           list-style: none;
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 6px 10px;
+          gap: 5px 10px;
         }
-        .flyer-features-ar li, .flyer-features-en li {
+
+        .flyer-features li {
           display: flex;
           align-items: flex-start;
           gap: 5px;
-          font-size: 10.5px;
+          font-size: 10px;
           color: #3d3d3a;
           line-height: 1.4;
         }
-        .flyer-features-ar li { direction: rtl; }
-        .flyer-features-en li { direction: ltr; }
+
+        .ar-section .flyer-features li { direction: rtl; }
+        .en-section .flyer-features li { direction: ltr; }
+
         .check {
-          color: #ff6b00;
+          color: #E84B1A;
           font-weight: 900;
-          font-size: 11px;
+          font-size: 10px;
           flex-shrink: 0;
           margin-top: 1px;
         }
@@ -284,87 +317,107 @@ export default function FlyerPage() {
           align-items: center;
           gap: 10px;
           padding: 0 22px;
-          margin: 4px 0;
+          margin: 2px 0;
         }
+
         .divider-line {
           flex: 1;
           height: 1px;
-          background: #e8e6e0;
+          background: rgba(26,26,26,0.12);
         }
+
         .divider-badge {
-          display: flex;
-          align-items: center;
-          gap: 5px;
-          font-size: 9px;
-          font-weight: 700;
-          color: #a8a5a0;
-          letter-spacing: 1px;
+          font-size: 8px;
+          font-weight: 800;
+          color: #888880;
+          letter-spacing: 0.15em;
           white-space: nowrap;
         }
-        .dot { font-size: 14px; line-height: 1; }
 
         /* ── QR section ── */
         .flyer-qr-section {
-          background: linear-gradient(to bottom, #fff8f0, #fff4e8);
-          border-top: 1px solid #ffd4a8;
+          background: #1A1A1A;
           padding: 16px 22px 14px;
           display: flex;
           justify-content: center;
+          position: relative;
+          overflow: hidden;
         }
+
+        /* subtle dot-grid on QR section too */
+        .flyer-qr-section::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+          background-size: 16px 16px;
+          pointer-events: none;
+        }
+
         .flyer-qr-card {
           display: flex;
           align-items: center;
           gap: 18px;
+          position: relative;
+          z-index: 1;
         }
+
         .qr-wrapper {
-          border: 3px solid #ff6b00;
-          border-radius: 12px;
+          border: 2px solid #E84B1A;
+          border-radius: 10px;
           padding: 6px;
           background: white;
           flex-shrink: 0;
         }
+
         .qr-labels {
           display: flex;
           flex-direction: column;
           gap: 3px;
         }
+
         .qr-cta-ar {
           font-size: 13px;
           font-weight: 800;
-          color: #ff6b00;
+          color: white;
           direction: rtl;
         }
+
         .qr-url {
-          font-size: 11px;
-          color: #1a1814;
+          font-size: 10px;
+          color: #E84B1A;
           font-weight: 600;
           letter-spacing: 0.3px;
           direction: ltr;
         }
+
         .qr-cta-en {
-          font-size: 11px;
-          font-weight: 700;
-          color: #6b6760;
+          font-size: 10px;
+          font-weight: 600;
+          color: rgba(255,255,255,0.5);
           direction: ltr;
         }
 
         /* ── Footer ── */
         .flyer-footer {
-          background: #1a1814;
-          padding: 8px 20px;
+          background: #111111;
+          padding: 7px 20px;
           text-align: center;
-        }
-        .flyer-footer p {
-          font-size: 10px;
-          color: #a8a5a0;
+          font-size: 9.5px;
+          color: #888880;
           display: flex;
           justify-content: center;
           align-items: center;
           gap: 8px;
+          font-weight: 600;
+          letter-spacing: 0.02em;
         }
-        .footer-sep { opacity: 0.4; }
 
-        /* ── Print styles ── */
+        .footer-sep { opacity: 0.3; }
+
+        /* ── Print ── */
         @media print {
           body { background: white; }
           .no-print { display: none !important; }
@@ -383,6 +436,7 @@ export default function FlyerPage() {
         /* ── Responsive screen preview ── */
         @media screen and (max-width: 600px) {
           .flyer-page { width: 95vw; }
+          body { background: #1A1A1A; }
         }
       `}</style>
     </>
