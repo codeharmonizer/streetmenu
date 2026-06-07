@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Plus, Pencil, Trash2, ImageIcon, X, Check, ChevronUp, ChevronDown, EyeOff, Eye } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { MenuItem, Vendor, isPaid, FREE_ITEM_LIMIT } from '@/types'
@@ -31,6 +31,12 @@ export default function MenuManager({ vendor, initialItems }: Props) {
   const supabase   = createClient()
   const subscribed = isPaid(vendor)
   const atLimit    = !subscribed && items.length >= FREE_ITEM_LIMIT
+
+  // Unique existing categories derived from current items
+  const existingCategories = useMemo(() => {
+    const cats = items.map(i => i.category).filter(Boolean) as string[]
+    return [...new Set(cats)]
+  }, [items])
 
   function openAdd() {
     if (atLimit) {
@@ -213,6 +219,25 @@ export default function MenuManager({ vendor, initialItems }: Props) {
               <label className="label">{t('category')}</label>
               <input className="input" placeholder={t('categoryPlaceholder')}
                 value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))} />
+              {existingCategories.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-2">
+                  {existingCategories.map(cat => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setForm(p => ({ ...p, category: cat }))}
+                      className="text-xs px-2.5 py-1 rounded-full transition-colors"
+                      style={{
+                        background: form.category === cat ? 'var(--brand)' : 'var(--surface-2)',
+                        color:      form.category === cat ? 'white'        : 'var(--text-secondary)',
+                        border:     `1px solid ${form.category === cat ? 'var(--brand)' : 'var(--border)'}`,
+                      }}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Photo upload */}
