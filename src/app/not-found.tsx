@@ -12,7 +12,7 @@ export default async function NotFound() {
           <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'var(--brand)' }}>
             <QrCode size={18} color="white" />
           </div>
-          <span className="font-bold text-lg" style={{ fontFamily: 'var(--font-display)' }}>StreetMenu</span>
+          <span className="font-bold text-lg" style={{ fontFamily: 'var(--font-display)' }}>ScanBite</span>
         </Link>
 
         <p className="text-7xl font-black mb-4" style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>
