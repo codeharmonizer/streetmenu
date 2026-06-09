@@ -81,7 +81,7 @@ export default async function HomePage() {
     <div style={{ background: C.charcoal, color: C.white, fontFamily: "'DM Sans','Cairo',sans-serif", overflowX: 'hidden' }}>
 
       {/* ══════════════ NAV ══════════════ */}
-      <nav style={{
+      <nav className="sb-nav" style={{
         position: 'fixed', top: 0, insetInline: 0, zIndex: 100,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '18px 48px',
@@ -98,7 +98,7 @@ export default async function HomePage() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <LanguageSwitcher variant="nav" />
-          <Link href="/login"
+          <Link href="/login" className="sb-nav-login"
             style={{ fontSize: 14, color: C.grayLight, textDecoration: 'none', fontWeight: 400, padding: '8px 12px' }}>
             {tn('login')}
           </Link>
@@ -128,7 +128,7 @@ export default async function HomePage() {
         }} />
 
         {/* Content constrained to 1280px */}
-        <div style={{
+        <div className="sb-hero-grid" style={{
           maxWidth: 1280, margin: '0 auto',
           minHeight: 'calc(100vh - 88px)',
           display: 'grid', gridTemplateColumns: '1fr 1fr',
@@ -136,7 +136,7 @@ export default async function HomePage() {
         }}>
 
         {/* Left — text */}
-        <div style={{
+        <div className="sb-hero-text" style={{
           display: 'flex', flexDirection: 'column', justifyContent: 'center',
           padding: '80px 48px 80px 48px',
         }}>
@@ -202,7 +202,7 @@ export default async function HomePage() {
         </div>
 
         {/* Right — phone mockup */}
-        <div style={{
+        <div className="sb-hero-phone" style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           padding: '80px 48px 80px 32px',
         }}>
@@ -314,12 +314,33 @@ export default async function HomePage() {
             </span>
           ))}
         </div>
-        <style>{`@keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
+        <style>{`
+          @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+          @media (max-width: 767px) {
+            .sb-nav { padding: 12px 16px !important; }
+            .sb-nav-login { display: none !important; }
+            .sb-hero-grid { grid-template-columns: 1fr !important; }
+            .sb-hero-phone { display: none !important; }
+            .sb-hero-text { padding: 40px 20px 60px !important; }
+            .sb-inner { padding-left: 20px !important; padding-right: 20px !important; }
+            .sb-steps-grid { grid-template-columns: 1fr !important; }
+            .sb-steps-grid > div { border-right: none !important; border-bottom: 0.5px solid rgba(255,255,255,0.06); }
+            .sb-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            .sb-stats-grid > div:nth-child(2) { border-right: none !important; }
+            .sb-stats-grid > div:nth-child(3), .sb-stats-grid > div:nth-child(4) { border-top: 0.5px solid rgba(255,255,255,0.06); }
+            .sb-features-grid { grid-template-columns: 1fr !important; }
+            .sb-feature-wide { grid-column: span 1 !important; flex-direction: column !important; align-items: flex-start !important; }
+            .sb-pricing-grid { grid-template-columns: 1fr !important; max-width: 100% !important; }
+            .sb-testi-grid { grid-template-columns: 1fr !important; }
+            .sb-cta-watermark { display: none !important; }
+            .sb-footer-top { flex-direction: column !important; gap: 28px !important; }
+          }
+        `}</style>
       </div>
 
       {/* ══════════════ HOW IT WORKS ══════════════ */}
       <section style={{ padding: '100px 0' }}>
-        <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px' }}>
+        <div className="sb-inner" style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px' }}>
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: "'DM Mono',monospace", fontSize: 11, color: '#FF6B35', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
               <span style={{ width: 20, height: 1, background: C.red, display: 'inline-block' }} />
@@ -334,7 +355,7 @@ export default async function HomePage() {
           </div>
 
           {/* 3-step grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, marginTop: 64, border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 20, overflow: 'hidden' }}>
+          <div className="sb-steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, marginTop: 64, border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 20, overflow: 'hidden' }}>
             {[
               { num: '01', title: t('step1Title'), desc: t('step1Desc') },
               { num: '02', title: t('step2Title'), desc: t('step2Desc') },
@@ -356,7 +377,7 @@ export default async function HomePage() {
           </div>
 
           {/* Stats */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', marginTop: 80, border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden' }}>
+          <div className="sb-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', marginTop: 80, border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden' }}>
             {[
               { n: '2', suffix: 'K+', label: t('statMenus') },
               { n: '50', suffix: 'K+', label: t('statScans') },
@@ -376,7 +397,7 @@ export default async function HomePage() {
 
       {/* ══════════════ FEATURES (cream bg) ══════════════ */}
       <section style={{ background: C.cream, padding: '100px 0' }}>
-        <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px' }}>
+        <div className="sb-inner" style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px' }}>
           <div style={{ marginBottom: 56 }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: "'DM Mono',monospace", fontSize: 11, color: C.red, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
               <span style={{ width: 20, height: 1, background: C.red, display: 'inline-block' }} />
@@ -388,9 +409,9 @@ export default async function HomePage() {
             <p style={{ fontSize: 17, fontWeight: 300, color: '#666', lineHeight: 1.65, maxWidth: 540 }}>{t('featuresSubtitle')}</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+          <div className="sb-features-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
             {/* Large QR card */}
-            <div style={{ gridColumn: 'span 2', background: C.white, borderRadius: 16, padding: '32px 28px', border: '0.5px solid rgba(0,0,0,0.07)', display: 'flex', gap: 32, alignItems: 'center' }}>
+            <div className="sb-feature-wide" style={{ gridColumn: 'span 2', background: C.white, borderRadius: 16, padding: '32px 28px', border: '0.5px solid rgba(0,0,0,0.07)', display: 'flex', gap: 32, alignItems: 'center' }}>
               <div>
                 <div style={{ width: 44, height: 44, background: '#FFF0EB', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
                   <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="#E84B1A" strokeWidth="1.5"/><rect x="12" y="3" width="7" height="7" rx="1.5" stroke="#E84B1A" strokeWidth="1.5"/><rect x="3" y="12" width="7" height="7" rx="1.5" stroke="#E84B1A" strokeWidth="1.5"/><rect x="12" y="12" width="7" height="7" rx="1.5" stroke="#E84B1A" strokeWidth="1.5"/></svg>
@@ -435,7 +456,7 @@ export default async function HomePage() {
 
       {/* ══════════════ PRICING ══════════════ */}
       <section style={{ padding: '100px 0' }}>
-        <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px', textAlign: 'center' }}>
+        <div className="sb-inner" style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px', textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: "'DM Mono',monospace", fontSize: 11, color: '#FF6B35', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16, justifyContent: 'center' }}>
             <span style={{ width: 20, height: 1, background: C.red, display: 'inline-block' }} />
             {t('sectionPricing')}
@@ -445,7 +466,7 @@ export default async function HomePage() {
           </h2>
           <p style={{ fontSize: 17, fontWeight: 300, color: C.grayLight, marginBottom: 56 }}>{t('pricingSubtitle')}</p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, maxWidth: 720, margin: '0 auto' }}>
+          <div className="sb-pricing-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, maxWidth: 720, margin: '0 auto' }}>
             {/* Free */}
             <div style={{ background: C.charcoal2, border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: '40px 36px', textAlign: 'start' }}>
               <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: C.gray, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>{t('freePlanName')}</div>
@@ -498,7 +519,7 @@ export default async function HomePage() {
 
       {/* ══════════════ TESTIMONIALS ══════════════ */}
       <section style={{ background: C.charcoal2, padding: '100px 0' }}>
-        <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px' }}>
+        <div className="sb-inner" style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: "'DM Mono',monospace", fontSize: 11, color: '#FF6B35', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
             <span style={{ width: 20, height: 1, background: C.red, display: 'inline-block' }} />
             {t('sectionTestimonials')}
@@ -506,7 +527,7 @@ export default async function HomePage() {
           <h2 style={{ fontFamily: isAr ? "'Cairo',sans-serif" : "'Bebas Neue',sans-serif", fontSize: 'clamp(48px, 5vw, 72px)', lineHeight: 0.95, color: C.white, marginBottom: 56, fontWeight: isAr ? 900 : 400 }}>
             {t('testimonialsHeadline1')}<br /><span style={{ color: C.red }}>{t('testimonialsHeadline2')}</span>
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+          <div className="sb-testi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
             {testimonials.map((tm, i) => (
               <div key={i} style={{ background: C.charcoal3, border: '0.5px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: 28 }}>
                 <div style={{ display: 'flex', gap: 3, marginBottom: 16 }}>
@@ -530,7 +551,7 @@ export default async function HomePage() {
 
       {/* ══════════════ CTA ══════════════ */}
       <div style={{ background: C.red, padding: '100px 0', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', fontFamily: "'Bebas Neue',sans-serif", fontSize: 240, color: 'rgba(255,255,255,0.05)', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', whiteSpace: 'nowrap', pointerEvents: 'none', letterSpacing: '0.1em' }}>
+        <div className="sb-cta-watermark" style={{ position: 'absolute', fontFamily: "'Bebas Neue',sans-serif", fontSize: 240, color: 'rgba(255,255,255,0.05)', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', whiteSpace: 'nowrap', pointerEvents: 'none', letterSpacing: '0.1em' }}>
           SCANBITE
         </div>
         <div style={{ position: 'relative', zIndex: 1 }}>
@@ -551,8 +572,8 @@ export default async function HomePage() {
 
       {/* ══════════════ FOOTER ══════════════ */}
       <footer style={{ background: '#111', padding: '56px 0 36px', borderTop: '0.5px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 48, flexWrap: 'wrap' }}>
+        <div className="sb-inner" style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px' }}>
+          <div className="sb-footer-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 48, flexWrap: 'wrap' }}>
             <div style={{ maxWidth: 280 }}>
               <div style={{ fontWeight: 700, fontSize: 18, color: C.white, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
                 <ScanBiteLogo size={24} />
