@@ -41,10 +41,17 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
     return acc
   }, {})
 
-  // Fetch emails from auth.users via admin client
-  const adminSupabase = createAdminClient()
-  const { data: { users } } = await adminSupabase.auth.admin.listUsers({ perPage: 1000 })
-  const emailByUserId = Object.fromEntries((users ?? []).map(u => [u.id, u.email ?? '']))
+  // Fetch emails from auth.users via admin client (requires SUPABASE_SERVICE_ROLE_KEY)
+  let emailByUserId: Record<string, string> = {}
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+      const adminSupabase = createAdminClient()
+      const { data } = await adminSupabase.auth.admin.listUsers({ perPage: 1000 })
+      emailByUserId = Object.fromEntries((data?.users ?? []).map(u => [u.id, u.email ?? '']))
+    } catch {
+      // silently skip — emails will show as blank
+    }
+  }
 
   const enriched = (vendors ?? [])
     .map(v => ({
