@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getUser, getVendor } from '@/lib/data'
+import { createClient } from '@/lib/supabase/server'
 import DashboardSidebar from '@/components/shared/DashboardSidebar'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -9,9 +10,16 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const vendor = await getVendor()
   if (!vendor) redirect('/register')
 
+  const supabase = await createClient()
+  const { count: pendingCount } = await supabase
+    .from('orders')
+    .select('*', { count: 'exact', head: true })
+    .eq('vendor_id', vendor.id)
+    .eq('status', 'pending')
+
   return (
     <div className="flex min-h-screen" style={{ background: 'var(--bg)' }}>
-      <DashboardSidebar vendor={vendor} />
+      <DashboardSidebar vendor={vendor} pendingOrders={pendingCount ?? 0} />
       <main className="flex-1 rtl:mr-0 rtl:md:mr-64 ltr:ml-0 ltr:md:ml-64 p-6 md:p-8">
         {children}
       </main>

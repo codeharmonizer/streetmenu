@@ -100,6 +100,20 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
     if (!error) setVendor(v => ({ ...v, is_open: !v.is_open }))
   }
 
+  async function toggleOrdersEnabled() {
+    const next = !vendor.orders_enabled
+    const { error } = await supabase
+      .from('vendors')
+      .update({ orders_enabled: next })
+      .eq('id', vendor.id)
+    if (!error) {
+      setVendor(v => ({ ...v, orders_enabled: next }))
+      toast.success(t('saveSuccess'))
+    } else {
+      toast.error(t('saveFailed'))
+    }
+  }
+
   function field(label: string, key: keyof Vendor, placeholder?: string, type = 'text') {
     return (
       <div>
@@ -123,12 +137,25 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
       </div>
 
       {/* Open/closed toggle */}
-      <div className="card flex items-center justify-between mb-6">
+      <div className="card flex items-center justify-between mb-4">
         <div>
           <p className="font-semibold">{t('isOpenLabel')}</p>
         </div>
         <button onClick={toggleOpen} className="flex items-center gap-2 text-sm font-medium">
           {vendor.is_open
+            ? <ToggleRight size={28} style={{ color: 'var(--brand)' }} />
+            : <ToggleLeft  size={28} style={{ color: 'var(--text-muted)' }} />}
+        </button>
+      </div>
+
+      {/* Online ordering toggle */}
+      <div className="card flex items-center justify-between mb-6">
+        <div>
+          <p className="font-semibold">{t('ordersEnabledLabel')}</p>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>{t('ordersEnabledDesc')}</p>
+        </div>
+        <button onClick={toggleOrdersEnabled} className="flex items-center gap-2 text-sm font-medium flex-shrink-0 ms-4">
+          {vendor.orders_enabled
             ? <ToggleRight size={28} style={{ color: 'var(--brand)' }} />
             : <ToggleLeft  size={28} style={{ color: 'var(--text-muted)' }} />}
         </button>

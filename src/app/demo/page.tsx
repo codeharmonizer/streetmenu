@@ -3,8 +3,8 @@ import { MapPin, Clock, Phone, Star } from 'lucide-react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'بسطة أم خالد — تجريبي | StreetMenu',
-  description: 'شاهد كيف تبدو قائمة StreetMenu الرقمية. هذه قائمة تجريبية.',
+  title: 'بسطة أم خالد — تجريبي | ScanBite',
+  description: 'شاهد كيف تبدو قائمة ScanBite الرقمية. هذه قائمة تجريبية.',
 }
 
 const ITEMS = [
@@ -168,7 +168,7 @@ export default function DemoPage() {
           </Link>
         </div>
         <p className="mt-6 text-xs" style={{ color: 'var(--text-muted)' }}>
-          مدعوم من <Link href="/" className="font-semibold hover:underline" style={{ color: 'var(--brand)' }}>StreetMenu</Link>
+          مدعوم من <Link href="/" className="font-semibold hover:underline" style={{ color: 'var(--brand)' }}>ScanBite</Link>
         </p>
       </div>
 

@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScanBite — Scan it. See it. Eat it.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #E84B1A;
+    --red-dark: #C23A10;
+    --red-light: #FF6B35;
+    --charcoal: #1A1A1A;
+    --charcoal-2: #242424;
+    --charcoal-3: #2E2E2E;
+    --cream: #F5F0E8;
+    --cream-2: #EDE8DF;
+    --white: #FFFFFF;
+    --gray: #888880;
+    --gray-light: #BFBDB5;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--charcoal);
+    color: var(--white);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(26,26,26,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .nav-logo-text {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--white);
+    letter-spacing: -0.3px;
+  }
+
+  .nav-logo-text span { color: var(--red); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--gray-light);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--red);
+    color: var(--white) !important;
+    padding: 9px 22px;
+    border-radius: 8px;
+    font-weight: 500 !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--red-dark) !important; color: var(--white) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding-top: 88px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  .hero-bg-glow {
+    position: absolute;
+    top: -200px;
+    left: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(232,75,26,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 48px 80px 64px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(232,75,26,0.12);
+    border: 0.5px solid rgba(232,75,26,0.3);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--red-light);
+    letter-spacing: 0.04em;
+    margin-bottom: 32px;
+    width: fit-content;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-tag-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .hero-headline {
+    font-family: var(--font-display);
+    font-size: clamp(72px, 8vw, 112px);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    color: var(--white);
+    animation: fadeUp 0.6s 0.1s ease both;
+    margin-bottom: 8px;
+  }
+
+  .hero-headline .accent { color: var(--red); }
+
+  .hero-subline {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--gray-light);
+    line-height: 1.6;
+    max-width: 460px;
+    margin: 28px 0 44px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-subline strong { color: var(--white); font-weight: 500; }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: fadeUp 0.6s 0.3s ease both;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--red);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .btn-primary:hover { background: var(--red-dark); transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    padding: 14px 24px;
+    border-radius: 10px;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .hero-trust {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 48px;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  .hero-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    color: var(--gray);
+  }
+
+  .hero-trust-item svg { color: var(--red); flex-shrink: 0; }
+
+  .hero-divider {
+    width: 1px;
+    height: 16px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .hero-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 64px 80px 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Phone mockup */
+  .phone-wrapper {
+    position: relative;
+    animation: floatUp 0.8s 0.2s ease both;
+  }
+
+  @keyframes floatUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .phone-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .phone-glow {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 40px;
+    background: rgba(232,75,26,0.3);
+    filter: blur(20px);
+    border-radius: 50%;
+  }
+
+  .phone-frame {
+    width: 260px;
+    background: #111;
+    border-radius: 40px;
+    padding: 12px;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    position: relative;
+  }
+
+  .phone-screen {
+    background: #F5F0E8;
+    border-radius: 30px;
+    overflow: hidden;
+  }
+
+  .phone-notch {
+    width: 80px;
+    height: 24px;
+    background: #111;
+    border-radius: 0 0 14px 14px;
+    margin: 0 auto;
+  }
+
+  .p-header {
+    background: #1A1A1A;
+    padding: 14px 16px 16px;
+  }
+
+  .p-restaurant { font-size: 15px; font-weight: 700; color: #fff; font-family: 'DM Sans', sans-serif; }
+  .p-meta { font-size: 10px; color: #888; margin-top: 2px; display: flex; gap: 8px; align-items: center; font-family: 'DM Sans', sans-serif; }
+  .p-rating { background: #E84B1A; color: #fff; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; }
+
+  .p-cats {
+    display: flex;
+    gap: 6px;
+    padding: 10px 14px 8px;
+    background: #F5F0E8;
+  }
+
+  .p-cat {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+  }
+
+  .p-cat.on { background: #E84B1A; color: #fff; }
+  .p-cat.off { background: #fff; color: #555; border: 0.5px solid #ddd; }
+
+  .p-body { padding: 0 14px 14px; background: #F5F0E8; }
+
+  .p-section { font-size: 10px; font-weight: 700; color: #1A1A1A; letter-spacing: 0.06em; text-transform: uppercase; margin: 10px 0 7px; font-family: 'DM Sans', sans-serif; }
+
+  .p-item {
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 6px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border: 0.5px solid #E8E4DC;
+  }
+
+  .p-thumb {
+    width: 44px;
+    height: 44px;
+    border-radius: 7px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .p-item-name { font-size: 11px; font-weight: 600; color: #1A1A1A; font-family: 'DM Sans', sans-serif; }
+  .p-item-desc { font-size: 9px; color: #888; margin-top: 1px; font-family: 'DM Sans', sans-serif; }
+
+  .p-item-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 5px; }
+  .p-price { font-size: 12px; font-weight: 700; color: #E84B1A; font-family: 'DM Sans', sans-serif; }
+
+  .p-add {
+    width: 22px;
+    height: 22px;
+    background: #E84B1A;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .p-popular {
+    background: #FFF0EB;
+    color: #993C1D;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    display: inline-block;
+    margin-bottom: 2px;
+  }
+
+  .p-cart {
+    background: #E84B1A;
+    margin: 0 14px 12px;
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .p-cart-text { font-size: 12px; font-weight: 600; color: #fff; }
+  .p-cart-count { background: #fff; color: #E84B1A; font-size: 10px; font-weight: 700; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+  /* ── BADGE floating ── */
+  .badge-float {
+    position: absolute;
+    background: var(--charcoal-2);
+    border: 0.5px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(8px);
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .badge-float.b1 {
+    top: 60px;
+    right: -20px;
+    animation-delay: -2s;
+  }
+
+  .badge-float.b2 {
+    bottom: 100px;
+    left: -30px;
+    animation-delay: -4s;
+  }
+
+  .badge-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(232,75,26,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .badge-label { font-size: 12px; font-weight: 500; color: var(--white); }
+  .badge-sub { font-size: 11px; color: var(--gray); margin-top: 1px; }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 100px 0; }
+
+  .container {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--red-light);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 5vw, 72px);
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+
+  .section-title .accent { color: var(--red); }
+
+  .section-body {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--gray-light);
+    line-height: 1.65;
+    max-width: 540px;
+  }
+
+  /* ── LOGOS STRIP ── */
+  .logos-strip {
+    background: var(--charcoal-2);
+    border-top: 0.5px solid rgba(255,255,255,0.06);
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+    padding: 28px 0;
+    overflow: hidden;
+  }
+
+  .logos-track {
+    display: flex;
+    gap: 56px;
+    align-items: center;
+    animation: scroll 24s linear infinite;
+    width: max-content;
+  }
+
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .logo-item {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.25);
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    margin-top: 64px;
+    border: 0.5px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .how-step {
+    background: var(--charcoal-2);
+    padding: 48px 40px;
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .how-step:hover { background: var(--charcoal-3); }
+
+  .how-step::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 20%; bottom: 20%;
+    width: 0.5px;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .how-step:last-child::after { display: none; }
+
+  .how-num {
+    font-family: var(--font-display);
+    font-size: 80px;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    position: absolute;
+    top: 20px;
+    right: 32px;
+  }
+
+  .how-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(232,75,26,0.12);
+    border: 0.5px solid rgba(232,75,26,0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .how-title {
+    font-family: var(--font-body);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+
+  .how-desc {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--gray-light);
+    line-height: 1.6;
+  }
+
+  /* ── FEATURES ── */
+  .features-section { background: var(--cream); }
+
+  .features-section .section-title,
+  .features-section .section-tag { color: var(--charcoal); }
+
+  .features-section .section-tag { color: var(--red); }
+
+  .features-section .section-body { color: #666; }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 56px;
+  }
+
+  .feature-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 32px 28px;
+    border: 0.5px solid rgba(0,0,0,0.07);
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(232,75,26,0.2);
+  }
+
+  .feature-card.large {
+    grid-column: span 2;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    background: #FFF0EB;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+  }
+
+  .feature-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+  }
+
+  .feature-desc {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ── PRICING ── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 56px;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .pricing-card {
+    background: var(--charcoal-2);
+    border: 0.5px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pricing-card.featured {
+    border-color: var(--red);
+    background: var(--charcoal-3);
+  }
+
+  .pricing-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--red);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
+  }
+
+  .pricing-plan {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .pricing-amount {
+    font-family: var(--font-display);
+    font-size: 64px;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .pricing-amount span {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--gray);
+  }
+
+  .pricing-period { font-size: 13px; color: var(--gray); margin-bottom: 32px; }
+
+  .pricing-features { list-style: none; margin-bottom: 36px; }
+
+  .pricing-features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--gray-light);
+    padding: 8px 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.04);
+    font-weight: 300;
+  }
+
+  .pricing-features li:last-child { border-bottom: none; }
+
+  .check-icon {
+    width: 18px;
+    height: 18px;
+    background: rgba(232,75,26,0.12);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-section { background: var(--charcoal-2); }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 56px;
+  }
+
+  .testimonial-card {
+    background: var(--charcoal-3);
+    border: 0.5px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+
+  .testimonial-card:hover { border-color: rgba(232,75,26,0.3); }
+
+  .testimonial-stars {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 16px;
+  }
+
+  .star { color: var(--red); font-size: 14px; }
+
+  .testimonial-text {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--gray-light);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .author-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(232,75,26,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--red-light);
+  }
+
+  .author-name { font-size: 13px; font-weight: 500; color: var(--white); }
+  .author-role { font-size: 12px; color: var(--gray); margin-top: 1px; }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: var(--red);
+    padding: 100px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: 'SCANBITE';
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 240px;
+    color: rgba(255,255,255,0.05);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: 0.1em;
+  }
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(56px, 7vw, 96px);
+    color: var(--white);
+    line-height: 0.95;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-sub {
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 44px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-white {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--white);
+    color: var(--red);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 700;
+    padding: 16px 36px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.15s;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-white:hover { transform: translateY(-2px); }
+
+  .cta-note {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #111;
+    padding: 56px 0 36px;
+    border-top: 0.5px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+
+  .footer-brand { max-width: 280px; }
+
+  .footer-brand-name {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--white);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-brand-name span { color: var(--red); }
+
+  .footer-tagline {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .footer-col h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .footer-col a {
+    display: block;
+    font-size: 13px;
+    color: var(--gray);
+    text-decoration: none;
+    margin-bottom: 9px;
+    transition: color 0.2s;
+    font-weight: 300;
+  }
+
+  .footer-col a:hover { color: var(--white); }
+
+  .footer-bottom {
+    border-top: 0.5px solid rgba(255,255,255,0.06);
+    margin-top: 48px;
+    padding-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-copy {
+    font-size: 12px;
+    color: var(--gray);
+    font-weight: 300;
+  }
+
+  .footer-copy span { color: var(--red); }
+
+  /* ── STATS ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 80px;
+    border: 0.5px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .stat-item {
+    padding: 36px 32px;
+    border-right: 0.5px solid rgba(255,255,255,0.06);
+    background: var(--charcoal-2);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 52px;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-number .accent { color: var(--red); }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--gray);
+    font-weight: 300;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding-top: 80px; }
+    .hero-left { padding: 60px 24px 40px; }
+    .hero-right { padding: 0 24px 60px; }
+    .how-grid { grid-template-columns: 1fr; }
+    .how-step::after { display: none; }
+    .features-grid { grid-template-columns: 1fr; }
+    .feature-card.large { grid-column: span 1; flex-direction: column; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .footer-inner { flex-direction: column; }
+    .container { padding: 0 24px; }
+    .badge-float { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg class="nav-logo-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <rect width="32" height="32" rx="7" fill="#E84B1A"/>
+      <rect x="5" y="5" width="9" height="9" rx="2" fill="#FFFFFF"/>
+      <rect x="7" y="7" width="4" height="4" rx="0.5" fill="#E84B1A"/>
+      <rect x="5" y="18" width="4" height="4" rx="0.5" fill="#FFFFFF"/>
+      <rect x="10" y="18" width="4" height="4" rx="0.5" fill="#FFFFFF"/>
+      <rect x="5" y="23" width="4" height="4" rx="0.5" fill="#FFFFFF"/>
+      <rect x="10" y="23" width="4" height="4" rx="0.5" fill="#FFFFFF"/>
+      <rect x="18" y="5" width="4" height="4" rx="0.5" fill="#FFFFFF"/>
+      <rect x="23" y="5" width="4" height="4" rx="0.5" fill="#FFFFFF"/>
+      <rect x="18" y="10" width="4" height="4" rx="0.5" fill="#FFFFFF"/>
+      <rect x="18" y="15" width="4" height="4" rx="0.5" fill="#FFFFFF"/>
+      <rect x="23" y="15" width="4" height="4" rx="0.5" fill="#FFFFFF"/>
+      <rect x="18" y="20" width="4" height="4" rx="0.5" fill="#FFFFFF"/>
+      <rect x="23" y="20" width="4" height="4" rx="0.5" fill="#FFFFFF"/>
+      <rect x="18" y="25" width="4" height="4" rx="0.5" fill="#FFFFFF"/>
+    </svg>
+    <span class="nav-logo-text">Scan<span>Bite</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#" class="nav-cta">Start free</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">
+      <div class="hero-tag-dot"></div>
+      Free for all food businesses
+    </div>
+
+    <h1 class="hero-headline">
+      SCAN IT.<br>
+      SEE IT.<br>
+      <span class="accent">EAT IT.</span>
+    </h1>
+
+    <p class="hero-subline">
+      A <strong>digital menu</strong> for your restaurant, street stall, or food business —
+      ready in 5 minutes. One QR code. No app needed.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">
+        Create your menu free
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="btn-secondary">
+        See demo
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l5 4-5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <div class="hero-trust">
+      <div class="hero-trust-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="#E84B1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        No credit card
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-trust-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="#E84B1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Setup in 5 minutes
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-trust-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="#E84B1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Free to start
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="phone-wrapper">
+      <div class="phone-float">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="p-header">
+              <div class="p-restaurant">Mashawi Al Noor</div>
+              <div class="p-meta">
+                <span class="p-rating">4.8</span>
+                <span>Grills · Manama</span>
+              </div>
+            </div>
+            <div class="p-cats">
+              <div class="p-cat on">All</div>
+              <div class="p-cat off">Grills</div>
+              <div class="p-cat off">Mezze</div>
+              <div class="p-cat off">Drinks</div>
+            </div>
+            <div class="p-body">
+              <div class="p-section">Grills</div>
+              <div class="p-item">
+                <div class="p-thumb" style="background:#FFF0EB;">
+                  <svg width="28" height="28" viewBox="0 0 36 36"><rect x="8" y="14" width="20" height="8" rx="3" fill="#E84B1A"/><rect x="12" y="10" width="3" height="6" rx="1.5" fill="#993C1D"/><rect x="17" y="10" width="3" height="6" rx="1.5" fill="#993C1D"/><rect x="22" y="10" width="3" height="6" rx="1.5" fill="#993C1D"/><rect x="12" y="22" width="3" height="6" rx="1.5" fill="#993C1D"/><rect x="17" y="22" width="3" height="6" rx="1.5" fill="#993C1D"/><rect x="22" y="22" width="3" height="6" rx="1.5" fill="#993C1D"/></svg>
+                </div>
+                <div style="flex:1; min-width:0;">
+                  <div class="p-popular">Popular</div>
+                  <div class="p-item-name">Mashawi mix platter</div>
+                  <div class="p-item-desc">Lamb kofta, chicken tikka, shish tawook</div>
+                  <div class="p-item-footer">
+                    <div class="p-price">3.800 BD</div>
+                    <div class="p-add"><svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-item">
+                <div class="p-thumb" style="background:#FFF8EE;">
+                  <svg width="28" height="28" viewBox="0 0 36 36"><ellipse cx="18" cy="20" rx="11" ry="7" fill="#EF9F27"/><ellipse cx="18" cy="18" rx="9" ry="5" fill="#BA7517"/><rect x="16" y="8" width="4" height="12" rx="2" fill="#854F0B"/></svg>
+                </div>
+                <div style="flex:1; min-width:0;">
+                  <div class="p-item-name">Lamb chops</div>
+                  <div class="p-item-desc">Marinated overnight, grilled to order</div>
+                  <div class="p-item-footer">
+                    <div class="p-price">4.500 BD</div>
+                    <div class="p-add"><svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-cart">
+              <div class="p-cart-text">View cart</div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="color:#fff;font-size:11px;font-weight:500;font-family:'DM Sans',sans-serif;">3.800 BD</span>
+                <div class="p-cart-count">1</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-glow"></div>
+      </div>
+
+      <!-- Floating badges -->
+      <div class="badge-float b1">
+        <div class="badge-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2l1.8 3.6L15 6.3l-3 2.9.7 4.1L9 11.4l-3.7 1.9.7-4.1L3 6.3l4.2-.7L9 2z" fill="#E84B1A"/></svg>
+        </div>
+        <div>
+          <div class="badge-label">4.9 rating</div>
+          <div class="badge-sub">32 reviews today</div>
+        </div>
+      </div>
+
+      <div class="badge-float b2">
+        <div class="badge-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9a6 6 0 1012 0A6 6 0 003 9zm6-3v3l2 2" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="badge-label">128 scans</div>
+          <div class="badge-sub">Last 24 hours</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS STRIP -->
+<div class="logos-strip">
+  <div class="logos-track">
+    <span class="logo-item">Basta Umm Khalid</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Mashawi Al Noor</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Café Zafran</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Gulf Grill House</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Al Waha Kitchen</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Burger District</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Saffron Bistro</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Kabab Street</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Basta Umm Khalid</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Mashawi Al Noor</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Café Zafran</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Gulf Grill House</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Al Waha Kitchen</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Burger District</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Saffron Bistro</span>
+    <span class="logo-item">•</span>
+    <span class="logo-item">Kabab Street</span>
+    <span class="logo-item">•</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">
+        <span style="width:20px;height:1px;background:var(--red);display:inline-block;"></span>
+        How it works
+      </div>
+      <h2 class="section-title">THREE STEPS<br>TO <span class="accent">DIGITAL.</span></h2>
+      <p class="section-body">No technical skills needed. If you can take a photo, you can build your ScanBite menu.</p>
+    </div>
+
+    <div class="how-grid reveal">
+      <div class="how-step">
+        <div class="how-num">01</div>
+        <div class="how-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="#E84B1A" stroke-width="1.5"/><rect x="12" y="3" width="7" height="7" rx="1.5" stroke="#E84B1A" stroke-width="1.5"/><rect x="3" y="12" width="7" height="7" rx="1.5" stroke="#E84B1A" stroke-width="1.5"/><path d="M12 15.5h7M15.5 12v7" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="how-title">Build your menu</div>
+        <div class="how-desc">Add your dishes with photos, names, descriptions, and prices. Takes less than 5 minutes for a full menu.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">02</div>
+        <div class="how-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 4h4v4H4zM14 4h4v4h-4zM4 14h4v4H4z" stroke="#E84B1A" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 6v0M16 6v0M6 16v0" stroke="#E84B1A" stroke-width="2" stroke-linecap="round"/><path d="M14 14h2v2h-2zM16 16h2v2h-2zM14 16v2" stroke="#E84B1A" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="how-title">Get your QR code</div>
+        <div class="how-desc">Your unique QR code is generated instantly. Download, print, and place it on your tables or counter.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">03</div>
+        <div class="how-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3C7 3 3.5 6.5 3.5 11S7 19 11 19s7.5-3.5 7.5-8-3.5-8-7.5-8z" stroke="#E84B1A" stroke-width="1.5"/><path d="M8 11l2 2 4-4" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="how-title">Customers scan & order</div>
+        <div class="how-desc">Customers point their camera at the QR. Your full menu opens instantly — no app download required.</div>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="stats-row reveal">
+      <div class="stat-item">
+        <div class="stat-number">2<span class="accent">K+</span></div>
+        <div class="stat-label">Active menus</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">50<span class="accent">K+</span></div>
+        <div class="stat-label">Daily scans</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">4.9<span class="accent">★</span></div>
+        <div class="stat-label">Average rating</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">5<span class="accent">min</span></div>
+        <div class="stat-label">Avg. setup time</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="features-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag" style="color:var(--red);">
+        <span style="width:20px;height:1px;background:var(--red);display:inline-block;"></span>
+        Everything you need
+      </div>
+      <h2 class="section-title" style="color:var(--charcoal);">BUILT FOR<br><span class="accent">FOOD PEOPLE.</span></h2>
+      <p class="section-body" style="color:#666;">Not for developers. Not for tech teams. For the person who wakes up at 5am and starts the grill.</p>
+    </div>
+
+    <div class="features-grid reveal">
+      <div class="feature-card large">
+        <div>
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="#E84B1A" stroke-width="1.5"/><rect x="12" y="3" width="7" height="7" rx="1.5" stroke="#E84B1A" stroke-width="1.5"/><rect x="3" y="12" width="7" height="7" rx="1.5" stroke="#E84B1A" stroke-width="1.5"/><rect x="12" y="12" width="7" height="7" rx="1.5" stroke="#E84B1A" stroke-width="1.5"/></svg>
+          </div>
+          <div class="feature-title">Instant QR code</div>
+          <div class="feature-desc">Generated automatically the moment you create your menu. Download as PNG, print at any size. Works on every phone camera — iOS, Android, any brand.</div>
+        </div>
+        <div style="background:#F5F0E8; border-radius:16px; padding:24px; min-width:160px; text-align:center; flex-shrink:0;">
+          <svg width="100" height="100" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+            <rect width="140" height="140" fill="#FFFFFF" rx="8"/>
+            <rect x="8" y="8" width="40" height="40" rx="4" fill="#1A1A1A"/>
+            <rect x="14" y="14" width="28" height="28" rx="2" fill="#FFFFFF"/>
+            <rect x="18" y="18" width="16" height="16" rx="1" fill="#1A1A1A"/>
+            <rect x="92" y="8" width="40" height="40" rx="4" fill="#1A1A1A"/>
+            <rect x="98" y="14" width="28" height="28" rx="2" fill="#FFFFFF"/>
+            <rect x="102" y="18" width="16" height="16" rx="1" fill="#1A1A1A"/>
+            <rect x="8" y="92" width="40" height="40" rx="4" fill="#1A1A1A"/>
+            <rect x="14" y="98" width="28" height="28" rx="2" fill="#FFFFFF"/>
+            <rect x="18" y="102" width="16" height="16" rx="1" fill="#1A1A1A"/>
+            <rect x="56" y="8" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="68" y="8" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="56" y="20" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="56" y="32" width="16" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="8" y="56" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="20" y="56" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="32" y="56" width="16" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="8" y="68" width="16" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="28" y="68" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="8" y="80" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="20" y="80" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="56" y="56" width="8" height="8" rx="1" fill="#E84B1A"/>
+            <rect x="68" y="56" width="8" height="8" rx="1" fill="#E84B1A"/>
+            <rect x="80" y="56" width="8" height="8" rx="1" fill="#E84B1A"/>
+            <rect x="56" y="68" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="80" y="68" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="56" y="80" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="68" y="80" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="80" y="80" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="92" y="56" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="104" y="56" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="116" y="56" width="16" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="92" y="68" width="16" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="112" y="68" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="92" y="80" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="56" y="92" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="68" y="92" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="80" y="92" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="56" y="104" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="68" y="104" width="16" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="56" y="116" width="16" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="76" y="116" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="92" y="92" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="104" y="92" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="116" y="92" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="92" y="104" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="116" y="104" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="92" y="116" width="8" height="8" rx="1" fill="#1A1A1A"/>
+            <rect x="104" y="116" width="20" height="8" rx="1" fill="#1A1A1A"/>
+          </svg>
+          <div style="font-size:11px; color:#888; margin-top:8px; font-family:'DM Sans',sans-serif;">Your unique code</div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 17V5a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#E84B1A" stroke-width="1.5"/><path d="M8 10h6M8 14h4" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="7" r="1" fill="#E84B1A"/></svg>
+        </div>
+        <div class="feature-title">Mobile-first menus</div>
+        <div class="feature-desc">Beautiful on every phone. Auto-formatted for the screen, no pinching or zooming needed.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 3h7v7H3zM12 3h7v7h-7zM3 12h7v7H3z" stroke="#E84B1A" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 15.5h7M15.5 12v7" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="feature-title">Real-time updates</div>
+        <div class="feature-desc">Mark items as sold out instantly. Update prices on the fly. Your menu is always current.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2l2.2 4.4 4.8.7-3.5 3.4.8 4.8L11 13l-4.3 2.3.8-4.8L4 7.1l4.8-.7L11 2z" stroke="#E84B1A" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="feature-title">Customer ratings</div>
+        <div class="feature-desc">Customers leave ratings after their meal. Build a reputation that brings people back.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 17l4-4 3 3 4-5 4 5" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="3" width="16" height="16" rx="2" stroke="#E84B1A" stroke-width="1.5"/></svg>
+        </div>
+        <div class="feature-title">Scan analytics</div>
+        <div class="feature-desc">Know how many people view your menu daily. See peak hours and most-viewed dishes.</div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#E84B1A" stroke-width="1.5"/><path d="M11 7v4l3 3" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="feature-title">Custom logo & brand</div>
+        <div class="feature-desc">Add your restaurant's logo and colors to your public menu page. Your brand, powered by ScanBite.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <div class="section-tag" style="justify-content:center;">
+        <span style="width:20px;height:1px;background:var(--red);display:inline-block;"></span>
+        Pricing
+      </div>
+      <h2 class="section-title" style="text-align:center;">CLEAR PRICE.<br><span class="accent">ZERO SURPRISES.</span></h2>
+      <p class="section-body" style="text-align:center; margin:0 auto;">Start free. Pay only when you grow.</p>
+    </div>
+
+    <div class="pricing-grid reveal">
+      <div class="pricing-card">
+        <div class="pricing-plan">Free</div>
+        <div class="pricing-amount">0<span> BD</span></div>
+        <div class="pricing-period">Forever</div>
+        <ul class="pricing-features">
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round"/></svg></div>Up to 10 items</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round"/></svg></div>QR code download</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round"/></svg></div>Customer ratings</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round"/></svg></div>Mobile menu page</li>
+        </ul>
+        <a href="#" class="btn-secondary" style="width:100%; justify-content:center;">Get started free</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most popular</div>
+        <div class="pricing-plan">Pro</div>
+        <div class="pricing-amount">3<span> BD / mo</span></div>
+        <div class="pricing-period">Everything in Free, plus:</div>
+        <ul class="pricing-features">
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round"/></svg></div>Unlimited items</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round"/></svg></div>Scan analytics</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round"/></svg></div>Custom logo & branding</li>
+          <li><div class="check-icon"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#E84B1A" stroke-width="1.5" stroke-linecap="round"/></svg></div>Priority support</li>
+        </ul>
+        <a href="#" class="btn-primary" style="width:100%; justify-content:center;">Start free — then upgrade</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-tag">
+        <span style="width:20px;height:1px;background:var(--red);display:inline-block;"></span>
+        What they say
+      </div>
+      <h2 class="section-title">REAL PEOPLE.<br><span class="accent">REAL RESULTS.</span></h2>
+    </div>
+
+    <div class="testimonials-grid reveal">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testimonial-text">"Set it up in 10 minutes between the lunch rush. Now customers just scan and my order mistakes dropped by half."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AK</div>
+          <div>
+            <div class="author-name">Abu Khalid</div>
+            <div class="author-role">Basta owner, Manama</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testimonial-text">"My menu looks more professional than restaurants 10x my size. Customers trust a restaurant they can read about before they sit."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">SH</div>
+          <div>
+            <div class="author-name">Sara H.</div>
+            <div class="author-role">Café owner, Riffa</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testimonial-text">"I updated my prices during a busy Friday. Took 30 seconds. Printed menus would've cost me 3 days and 40 dinars."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">MN</div>
+          <div>
+            <div class="author-name">Mohammed N.</div>
+            <div class="author-role">Mashawi restaurant, Muharraq</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="container">
+    <h2 class="cta-title">YOUR MENU.<br>ONE SCAN AWAY.</h2>
+    <p class="cta-sub">Free to start. Ready in 5 minutes. No app needed.</p>
+    <a href="#" class="btn-white">
+      Create your free menu
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <p class="cta-note">No credit card · Free forever · Upgrade anytime</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-brand-name">
+          <svg width="24" height="24" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#E84B1A"/><rect x="5" y="5" width="9" height="9" rx="2" fill="#FFFFFF"/><rect x="7" y="7" width="4" height="4" rx="0.5" fill="#E84B1A"/><rect x="5" y="18" width="4" height="4" rx="0.5" fill="#FFFFFF"/><rect x="10" y="18" width="4" height="4" rx="0.5" fill="#FFFFFF"/><rect x="5" y="23" width="4" height="4" rx="0.5" fill="#FFFFFF"/><rect x="10" y="23" width="4" height="4" rx="0.5" fill="#FFFFFF"/><rect x="18" y="5" width="4" height="4" rx="0.5" fill="#FFFFFF"/><rect x="23" y="5" width="4" height="4" rx="0.5" fill="#FFFFFF"/><rect x="18" y="10" width="4" height="4" rx="0.5" fill="#FFFFFF"/><rect x="18" y="15" width="4" height="4" rx="0.5" fill="#FFFFFF"/><rect x="23" y="15" width="4" height="4" rx="0.5" fill="#FFFFFF"/><rect x="18" y="20" width="4" height="4" rx="0.5" fill="#FFFFFF"/><rect x="23" y="20" width="4" height="4" rx="0.5" fill="#FFFFFF"/><rect x="18" y="25" width="4" height="4" rx="0.5" fill="#FFFFFF"/></svg>
+          Scan<span>Bite</span>
+        </div>
+        <p class="footer-tagline">Digital menus for every restaurant, stall, and food business. Scan it. See it. Eat it.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#">How it works</a>
+        <a href="#">Features</a>
+        <a href="#">Pricing</a>
+        <a href="#">Demo</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Business</h4>
+        <a href="#">Restaurants</a>
+        <a href="#">Street vendors</a>
+        <a href="#">Cafés</a>
+        <a href="#">Food trucks</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 <span>ScanBite</span>. All rights reserved.</p>
+      <p class="footer-copy">Made with love for food people everywhere.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, entry.target.dataset.delay || 0);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.dataset.delay = i * 60;
+    observer.observe(el);
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>

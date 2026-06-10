@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScanBite — Brand Identity</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --red: #E84B1A;
+    --charcoal: #1A1A1A;
+    --cream: #F5F0E8;
+    --white: #FFFFFF;
+    --gray: #888880;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: #F5F0E8; color: #1A1A1A; padding: 48px; }
+  h1 { font-family: 'Bebas Neue', sans-serif; font-size: 64px; letter-spacing: 0.02em; color: #1A1A1A; margin-bottom: 8px; }
+  h1 span { color: #E84B1A; }
+  .subtitle { font-size: 16px; color: #666; font-weight: 300; margin-bottom: 56px; }
+  .section { margin-bottom: 56px; }
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #888; margin-bottom: 20px; font-family: 'DM Mono', monospace; }
+  .logo-row { display: flex; gap: 24px; flex-wrap: wrap; }
+  .logo-box { border-radius: 16px; padding: 40px 48px; display: flex; align-items: center; justify-content: center; border: 0.5px solid rgba(0,0,0,0.08); }
+  .logo-box.light { background: #FFFFFF; }
+  .logo-box.dark { background: #1A1A1A; }
+  .logo-text { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; }
+  .logo-text .red { color: #E84B1A; }
+  .logo-text.on-dark { color: #FFFFFF; }
+  .colors-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .swatch { border-radius: 12px; overflow: hidden; border: 0.5px solid rgba(0,0,0,0.08); }
+  .swatch-block { height: 80px; }
+  .swatch-info { background: #fff; padding: 12px 14px; }
+  .swatch-name { font-size: 13px; font-weight: 500; color: #1A1A1A; }
+  .swatch-hex { font-size: 12px; color: #888; font-family: 'DM Mono', monospace; }
+  .type-section { background: #fff; border-radius: 16px; padding: 36px; border: 0.5px solid rgba(0,0,0,0.06); }
+  .type-row { padding: 20px 0; border-bottom: 0.5px solid #eee; }
+  .type-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .type-label { font-size: 11px; color: #aaa; margin-bottom: 8px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
+  .type-display { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: #1A1A1A; letter-spacing: 0.01em; line-height: 1; }
+  .type-heading { font-size: 24px; font-weight: 500; color: #1A1A1A; }
+  .type-body { font-size: 16px; font-weight: 300; color: #555; line-height: 1.65; }
+  .taglines { display: flex; flex-direction: column; gap: 10px; }
+  .tagline-row { background: #fff; border-radius: 10px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border: 0.5px solid rgba(0,0,0,0.06); }
+  .tagline-text { font-size: 16px; font-weight: 500; color: #1A1A1A; }
+  .tagline-badge { background: #FFF0EB; color: #993C1D; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .voice-card { background: #fff; border-radius: 12px; padding: 24px; border: 0.5px solid rgba(0,0,0,0.06); }
+  .voice-card h4 { font-size: 13px; font-weight: 600; color: #1A1A1A; margin-bottom: 12px; }
+  .voice-card ul { list-style: none; }
+  .voice-card ul li { font-size: 14px; color: #555; padding: 6px 0; border-bottom: 0.5px solid #f0f0f0; font-weight: 300; }
+  .voice-card ul li:last-child { border-bottom: none; }
+  .voice-card ul li::before { content: '"'; color: #E84B1A; font-weight: 700; margin-right: 4px; }
+</style>
+</head>
+<body>
+
+<h1>Scan<span>Bite</span></h1>
+<p class="subtitle">Brand Identity System — Logo, Colors, Typography, Voice</p>
+
+<div class="section">
+  <div class="section-label">Logo</div>
+  <div class="logo-row">
+    <div class="logo-box light">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <svg width="40" height="40" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <rect width="120" height="120" rx="26" fill="#E84B1A"/>
+          <rect x="22" y="22" width="34" height="34" rx="6" fill="#FFFFFF"/>
+          <rect x="28" y="28" width="14" height="14" rx="2" fill="#E84B1A"/>
+          <rect x="44" y="28" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="44" y="36" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="44" y="44" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="28" y="44" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="36" y="44" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="22" y="62" width="14" height="14" rx="2" fill="#FFFFFF"/>
+          <rect x="38" y="62" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="46" y="62" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="22" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="30" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="38" y="70" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="46" y="70" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="38" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="46" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="22" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="70" y="22" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="78" y="22" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="86" y="22" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="94" y="22" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="30" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="78" y="30" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="94" y="30" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="38" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="70" y="38" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="78" y="38" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="86" y="38" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="94" y="38" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="46" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="86" y="46" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="54" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="70" y="54" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="78" y="54" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="86" y="54" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="94" y="54" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="62" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="78" y="62" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="94" y="62" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="70" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="70" y="70" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="86" y="70" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="78" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="86" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="94" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+        </svg>
+        <span class="logo-text">Scan<span class="red">Bite</span></span>
+      </div>
+    </div>
+    <div class="logo-box dark">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <svg width="40" height="40" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <rect width="120" height="120" rx="26" fill="#E84B1A"/>
+          <rect x="22" y="22" width="34" height="34" rx="6" fill="#FFFFFF"/>
+          <rect x="28" y="28" width="14" height="14" rx="2" fill="#E84B1A"/>
+          <rect x="44" y="28" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="44" y="36" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="44" y="44" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="28" y="44" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="36" y="44" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="22" y="62" width="14" height="14" rx="2" fill="#FFFFFF"/>
+          <rect x="38" y="62" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="46" y="62" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="22" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="30" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="38" y="70" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="46" y="70" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="38" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="46" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="22" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="70" y="22" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="78" y="22" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="86" y="22" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="94" y="22" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="30" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="78" y="30" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="94" y="30" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="38" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="70" y="38" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="78" y="38" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="86" y="38" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="94" y="38" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="46" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="86" y="46" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="54" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="70" y="54" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="78" y="54" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="86" y="54" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="94" y="54" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="62" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="78" y="62" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="94" y="62" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="70" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="70" y="70" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="86" y="70" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="62" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="78" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="86" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+          <rect x="94" y="78" width="6" height="6" rx="1" fill="#FFFFFF"/>
+        </svg>
+        <span class="logo-text on-dark">Scan<span class="red">Bite</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Color System</div>
+  <div class="colors-row">
+    <div class="swatch">
+      <div class="swatch-block" style="background:#E84B1A;"></div>
+      <div class="swatch-info"><div class="swatch-name">Bite Red</div><div class="swatch-hex">#E84B1A</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-block" style="background:#1A1A1A;"></div>
+      <div class="swatch-info"><div class="swatch-name">Charcoal</div><div class="swatch-hex">#1A1A1A</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-block" style="background:#F5F0E8; border:0.5px solid #e0ddd6;"></div>
+      <div class="swatch-info"><div class="swatch-name">Cream</div><div class="swatch-hex">#F5F0E8</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-block" style="background:#FFFFFF; border:0.5px solid #e8e8e8;"></div>
+      <div class="swatch-info"><div class="swatch-name">White</div><div class="swatch-hex">#FFFFFF</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Typography</div>
+  <div class="type-section">
+    <div class="type-row">
+      <div class="type-label">Display — Bebas Neue, bold</div>
+      <div class="type-display">Scan it. See it. Eat it.</div>
+    </div>
+    <div class="type-row">
+      <div class="type-label">Heading — DM Sans 500</div>
+      <div class="type-heading">Your menu, anywhere, instantly.</div>
+    </div>
+    <div class="type-row">
+      <div class="type-label">Body — DM Sans 300</div>
+      <div class="type-body">One QR code. Every dish. No app needed. Set up in under 5 minutes and start selling smarter today.</div>
+    </div>
+    <div class="type-row">
+      <div class="type-label">Mono — DM Mono 400</div>
+      <div style="font-family:'DM Mono',monospace;font-size:14px;color:#555;">scanbite.app/menu/mashawi-al-noor</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Taglines</div>
+  <div class="taglines">
+    <div class="tagline-row"><span class="tagline-text">Scan it. See it. Eat it.</span><span class="tagline-badge">Hero</span></div>
+    <div class="tagline-row"><span class="tagline-text">Your menu, one scan away.</span></div>
+    <div class="tagline-row"><span class="tagline-text">No app. No fuss. Just food.</span></div>
+    <div class="tagline-row"><span class="tagline-text">From street stalls to restaurants — go digital in minutes.</span></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Brand Voice</div>
+  <div class="voice-grid">
+    <div class="voice-card">
+      <h4>Say this</h4>
+      <ul>
+        <li>Ready in 5 minutes.</li>
+        <li>No app. No hassle.</li>
+        <li>Your customers scan, you sell more.</li>
+        <li>Free forever. Upgrade when you're ready.</li>
+      </ul>
+    </div>
+    <div class="voice-card">
+      <h4>Not this</h4>
+      <ul>
+        <li>Leverage digital transformation.</li>
+        <li>Omnichannel dining solutions.</li>
+        <li>Enterprise-grade platform.</li>
+        <li>Synergize your F&B operations.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

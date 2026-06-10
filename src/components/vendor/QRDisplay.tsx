@@ -5,6 +5,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import { Download, Copy, ExternalLink } from 'lucide-react'
 import { Vendor } from '@/types'
 import toast from 'react-hot-toast'
+import { useLocale, useTranslations } from 'next-intl'
 
 interface Props {
   vendor: Vendor
@@ -12,11 +13,14 @@ interface Props {
 }
 
 export default function QRDisplay({ vendor, menuUrl }: Props) {
-  const qrRef = useRef<SVGSVGElement>(null)
+  const qrRef  = useRef<SVGSVGElement>(null)
+  const locale = useLocale()
+  const t      = useTranslations('publicMenu')
+  const isAr   = locale === 'ar'
 
   function copyLink() {
     navigator.clipboard.writeText(menuUrl)
-    toast.success('تم نسخ الرابط!')
+    toast.success(t('copySuccess'))
   }
 
   function downloadQR() {
@@ -44,7 +48,7 @@ export default function QRDisplay({ vendor, menuUrl }: Props) {
 
       ctx.fillStyle = '#6b6760'
       ctx.font = '13px sans-serif'
-      ctx.fillText('امسح لرؤية القائمة', size / 2, size + 10)
+      ctx.fillText('Scan to view menu', size / 2, size + 10)
 
       const link = document.createElement('a')
       link.download = `${vendor.slug}-qr.png`
@@ -57,8 +61,14 @@ export default function QRDisplay({ vendor, menuUrl }: Props) {
   return (
     <div className="max-w-2xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>رمز QR</h1>
-        <p style={{ color: 'var(--text-secondary)' }}>اطبعه وضعه في بسطتك. الزبائن يمسحونه لرؤية قائمتك.</p>
+        <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>
+          {isAr ? 'رمز QR' : 'QR Code'}
+        </h1>
+        <p style={{ color: 'var(--text-secondary)' }}>
+          {isAr
+            ? 'اطبعه وضعه في مطعمك أو بسطتك. الزبائن يمسحونه لرؤية قائمتك.'
+            : 'Print and place it at your restaurant or stall. Customers scan it to see your menu.'}
+        </p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
@@ -81,32 +91,38 @@ export default function QRDisplay({ vendor, menuUrl }: Props) {
             />
           </div>
           <p className="font-bold mb-0.5">{vendor.name}</p>
-          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>امسح لرؤية القائمة</p>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+            {isAr ? 'امسح لرؤية القائمة' : 'Scan to view menu'}
+          </p>
         </div>
 
         {/* Actions */}
         <div className="space-y-4">
           <div className="card">
-            <p className="font-semibold mb-1">رابط قائمتك</p>
+            <p className="font-semibold mb-1">{isAr ? 'رابط قائمتك' : 'Your menu link'}</p>
             <p className="text-xs mb-3 break-all" style={{ color: 'var(--text-muted)' }}>{menuUrl}</p>
             <div className="flex gap-2">
               <button onClick={copyLink} className="btn-secondary text-xs flex-1">
-                <Copy size={13} /> نسخ الرابط
+                <Copy size={13} /> {isAr ? 'نسخ الرابط' : 'Copy link'}
               </button>
               <a href={menuUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary text-xs flex-1">
-                <ExternalLink size={13} /> فتح
+                <ExternalLink size={13} /> {isAr ? 'فتح' : 'Open'}
               </a>
             </div>
           </div>
 
           <button onClick={downloadQR} className="btn-primary w-full">
-            <Download size={16} /> Download QR Code (PNG)
+            <Download size={16} /> {isAr ? 'تحميل رمز QR (PNG)' : 'Download QR Code (PNG)'}
           </button>
 
           <div className="rounded-xl p-4 text-sm" style={{ background: 'var(--brand-light)' }}>
-            <p className="font-semibold mb-1" style={{ color: 'var(--brand)' }}>💡 Print tip</p>
+            <p className="font-semibold mb-1" style={{ color: 'var(--brand)' }}>
+              {isAr ? '💡 نصيحة للطباعة' : '💡 Print tip'}
+            </p>
             <p style={{ color: 'var(--text-secondary)' }}>
-              Print at minimum 5×5 cm for easy scanning. Laminate it so it's weather-resistant.
+              {isAr
+                ? 'اطبع بحجم 5×5 سم على الأقل لسهولة المسح. الصقه بغلاف لامع لحمايته.'
+                : 'Print at minimum 5×5 cm for easy scanning. Laminate it so it\'s weather-resistant.'}
             </p>
           </div>
         </div>

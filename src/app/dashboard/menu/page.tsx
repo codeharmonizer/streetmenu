@@ -8,12 +8,15 @@ export default async function MenuPage() {
   if (!vendor) redirect('/login')
 
   const supabase = await createClient()
-  const { data: items } = await supabase
+  const { data: items, error: itemsError } = await supabase
     .from('menu_items')
     .select('*')
     .eq('vendor_id', vendor.id)
-    .order('sort_order', { ascending: true })
     .order('created_at', { ascending: true })
+
+  if (itemsError) {
+    console.error('[MenuPage] items fetch error:', itemsError)
+  }
 
   return <MenuManager vendor={vendor} initialItems={items || []} />
 }

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { QrCode, LayoutDashboard, UtensilsCrossed, QrCodeIcon, BarChart3, LogOut, ExternalLink, Settings } from 'lucide-react'
+import { LayoutDashboard, UtensilsCrossed, QrCodeIcon, BarChart3, LogOut, ExternalLink, Settings, ShoppingBag } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { Vendor } from '@/types'
 import { getInitials, cn } from '@/lib/utils'
@@ -10,18 +10,20 @@ import Image from 'next/image'
 import toast from 'react-hot-toast'
 import { useTranslations } from 'next-intl'
 import LanguageSwitcher from './LanguageSwitcher'
+import ScanBiteLogo from './ScanBiteLogo'
 
-export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
+export default function DashboardSidebar({ vendor, pendingOrders }: { vendor: Vendor; pendingOrders?: number }) {
   const pathname = usePathname()
   const router   = useRouter()
   const t        = useTranslations('sidebar')
 
   const navItems = [
-    { href: '/dashboard',            icon: LayoutDashboard, label: t('overview')   },
-    { href: '/dashboard/menu',       icon: UtensilsCrossed, label: t('menu')       },
-    { href: '/dashboard/qr',         icon: QrCodeIcon,      label: t('qr')         },
-    { href: '/dashboard/analytics',  icon: BarChart3,       label: t('analytics')  },
-    { href: '/dashboard/settings',   icon: Settings,        label: t('settings')   },
+    { href: '/dashboard',            icon: LayoutDashboard, label: t('overview'),  badge: undefined                                       },
+    { href: '/dashboard/menu',       icon: UtensilsCrossed, label: t('menu'),      badge: undefined                                       },
+    { href: '/dashboard/orders',     icon: ShoppingBag,     label: t('orders'),    badge: (pendingOrders ?? 0) > 0 ? pendingOrders : undefined },
+    { href: '/dashboard/qr',         icon: QrCodeIcon,      label: t('qr'),        badge: undefined                                       },
+    { href: '/dashboard/analytics',  icon: BarChart3,       label: t('analytics'), badge: undefined                                       },
+    { href: '/dashboard/settings',   icon: Settings,        label: t('settings'),  badge: undefined                                       },
   ]
 
   async function handleLogout() {
@@ -40,10 +42,10 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
       {/* Logo */}
       <div className="p-6 border-b" style={{ borderColor: 'var(--border)' }}>
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'var(--brand)' }}>
-            <QrCode size={15} color="white" />
-          </div>
-          <span className="font-bold" style={{ fontFamily: 'var(--font-display)' }}>StreetMenu</span>
+          <ScanBiteLogo size={28} />
+          <span className="font-bold tracking-wide" style={{ fontFamily: 'var(--font-display)', fontSize: 18, letterSpacing: '0.03em' }}>
+            Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+          </span>
         </Link>
       </div>
 
@@ -79,7 +81,7 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
 
       {/* Nav */}
       <nav className="flex-1 px-4 space-y-1">
-        {navItems.map(({ href, icon: Icon, label }) => {
+        {navItems.map(({ href, icon: Icon, label, badge }) => {
           const active = pathname === href
           return (
             <Link key={href} href={href}
@@ -89,7 +91,16 @@ export default function DashboardSidebar({ vendor }: { vendor: Vendor }) {
               )}
               style={active ? { background: 'var(--brand)', color: 'white' } : { color: 'var(--text-secondary)' }}>
               <Icon size={16} />
-              {label}
+              <span className="flex-1">{label}</span>
+              {badge !== undefined && (
+                <span className="text-xs font-bold px-1.5 py-0.5 rounded-full"
+                  style={{
+                    background: active ? 'rgba(255,255,255,0.25)' : 'var(--brand)',
+                    color:      active ? 'white' : 'white',
+                  }}>
+                  {badge}
+                </span>
+              )}
             </Link>
           )
         })}
