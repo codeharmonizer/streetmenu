@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import VendorRow from '@/components/admin/VendorRow'
 import { Search } from 'lucide-react'
 
@@ -40,9 +41,19 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
     return acc
   }, {})
 
+  // Fetch emails from auth.users via admin client
+  const adminSupabase = createAdminClient()
+  const { data: { users } } = await adminSupabase.auth.admin.listUsers({ perPage: 1000 })
+  const emailByUserId = Object.fromEntries((users ?? []).map(u => [u.id, u.email ?? '']))
+
   const enriched = (vendors ?? [])
-    .map(v => ({ ...v, scan_count: scanCounts[v.id] ?? 0, review_count: reviewCounts[v.id] ?? 0 }))
-    .filter(v => !q || v.name.toLowerCase().includes(q) || v.slug.toLowerCase().includes(q))
+    .map(v => ({
+      ...v,
+      scan_count: scanCounts[v.id] ?? 0,
+      review_count: reviewCounts[v.id] ?? 0,
+      email: emailByUserId[v.user_id] ?? '',
+    }))
+    .filter(v => !q || v.name.toLowerCase().includes(q) || v.slug.toLowerCase().includes(q) || v.email.toLowerCase().includes(q))
 
   const tabs = [
     { label: 'All',      value: 'all',      count: vendors?.length ?? 0 },
@@ -98,7 +109,7 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border overflow-hidden" style={{ borderColor: '#e2e8f0' }}>
+      <div className="bg-white rounded-2xl border overflow-x-auto" style={{ borderColor: '#e2e8f0' }}>
         {enriched.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-3xl mb-2">🔍</p>
@@ -109,19 +120,20 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
           <table className="w-full">
             <thead>
               <tr className="border-b text-xs font-semibold uppercase tracking-wide" style={{ borderColor: '#f1f5f9', color: '#94a3b8', background: '#f8fafc' }}>
-                <th className="px-4 py-3 text-right">Vendor</th>
-                <th className="px-4 py-3 text-right">Slug</th>
-                <th className="px-4 py-3 text-center">Scans</th>
-                <th className="px-4 py-3 text-center">Reviews</th>
-                <th className="px-4 py-3 text-right">Joined</th>
-                <th className="px-4 py-3 text-right">Subscription</th>
-                <th className="px-4 py-3 text-right">Active</th>
-                <th className="px-4 py-3 text-right">Reviews</th>
+                <th className="px-4 py-3 text-right whitespace-nowrap">Vendor</th>
+                <th className="px-4 py-3 text-right whitespace-nowrap">Email</th>
+                <th className="px-4 py-3 text-right whitespace-nowrap">Slug</th>
+                <th className="px-4 py-3 text-center whitespace-nowrap">Scans</th>
+                <th className="px-4 py-3 text-center whitespace-nowrap">Reviews</th>
+                <th className="px-4 py-3 text-right whitespace-nowrap">Joined</th>
+                <th className="px-4 py-3 text-right whitespace-nowrap">Subscription</th>
+                <th className="px-4 py-3 text-right whitespace-nowrap">Active</th>
+                <th className="px-4 py-3 text-right whitespace-nowrap">Reviews</th>
               </tr>
             </thead>
             <tbody>
               {enriched.map(vendor => (
-                <VendorRow key={vendor.id} vendor={vendor} />
+                <VendorRow key={vendor.id} vendor={vendor} email={vendor.email} />
               ))}
             </tbody>
           </table>

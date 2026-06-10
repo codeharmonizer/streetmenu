@@ -11,6 +11,7 @@ import toast from 'react-hot-toast'
 
 interface Props {
   vendor: Vendor & { scan_count: number; review_count: number }
+  email?: string
 }
 
 function Toggle({ enabled, onToggle, loading }: { enabled: boolean; onToggle: () => void; loading: boolean }) {
@@ -50,7 +51,7 @@ function SubBadge({ status }: { status: SubscriptionStatus }) {
   )
 }
 
-export default function VendorRow({ vendor: initial }: Props) {
+export default function VendorRow({ vendor: initial, email }: Props) {
   const [vendor, setVendor]               = useState(initial)
   const [loadingActive, setLoadingActive] = useState(false)
   const [loadingReviews, setLoadingReviews] = useState(false)
@@ -150,6 +151,11 @@ export default function VendorRow({ vendor: initial }: Props) {
             <p className="text-xs" style={{ color: '#94a3b8' }}>{vendor.category || '—'}</p>
           </div>
         </div>
+      </td>
+
+      {/* Email */}
+      <td className="px-4 py-3">
+        <span className="text-xs whitespace-nowrap" style={{ color: '#64748b' }}>{email || '—'}</span>
       </td>
 
       {/* Slug */}
