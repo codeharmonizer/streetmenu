@@ -2,13 +2,18 @@
  * ePays payment gateway client — server-only, never import from client components.
  *
  * API version: 3.3
- * Docs: https://epays.io  |  Test base: https://testapi.epays.io
+ * Docs: https://epays.io  |  Live API: https://api.epays.io
  *
- * Auth model:
- *   Every request includes apiId + apiKey (gateway-scoped) plus common envelope
- *   fields (apiVersion, merchantDomain, merchantUrl, testMode).
+ * Auth model (two-level):
+ *   Master credentials  → apiId + apiMasterKey  (merchant management calls)
+ *   Gateway credentials → apiId + apiKey + merchantGateway  (payment calls)
  *
- * Key endpoints used by ScanBite:
+ *   For ScanBite we use apiMasterKey directly in Initiate (single-merchant mode,
+ *   matching the PHP sample's master flow in initiate_payment.php).
+ *   If ePays later provides a dedicated apiKey + merchantGateway, set those env
+ *   vars and they will take precedence automatically.
+ *
+ * Key endpoints:
  *   POST /API/Initiate        — create a payment session, get redirect URL
  *   POST /API/ProcessPayment  — verify result after user returns from payment page
  */
@@ -21,90 +26,121 @@ const BASE_URLS: Record<string, string> = {
 }
 
 // ---------------------------------------------------------------------------
-// Internal config — read once per request from env vars
+// Config — read from env vars
 // ---------------------------------------------------------------------------
 function getConfig() {
-  const modeType = process.env.EPAYS_MODE_TYPE ?? 'test'
+  const modeType = process.env.EPAYS_MODE_TYPE ?? 'live'
 
   return {
-    apiUrl:          BASE_URLS[modeType] ?? BASE_URLS.test,
+    apiUrl:          BASE_URLS[modeType] ?? BASE_URLS.live,
     apiVersion:      process.env.EPAYS_API_VERSION      ?? '3.3',
     apiId:           process.env.EPAYS_API_ID            ?? '',
+    apiMasterKey:    process.env.EPAYS_API_MASTER_KEY    ?? '',
+    // Gateway-scoped (optional — only needed if ePays provides them separately)
     apiKey:          process.env.EPAYS_API_KEY           ?? '',
     merchantGateway: process.env.EPAYS_MERCHANT_GATEWAY  ?? '',
-    testMode:        Number(process.env.EPAYS_TEST_MODE  ?? 1),
+    testMode:        Number(process.env.EPAYS_TEST_MODE  ?? 0),
     modeType,
   }
 }
 
-// Common envelope fields sent with every request
-function basePayload(cfg: ReturnType<typeof getConfig>) {
+// ---------------------------------------------------------------------------
+// Base envelope — mirrors PayAPI.php amendData()
+// Only includes a field if it has a non-empty value (avoids sending blanks)
+// ---------------------------------------------------------------------------
+function basePayload(cfg: ReturnType<typeof getConfig>): Record<string, string> {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite-menu.vercel.app'
   const domain = new URL(appUrl).hostname
 
-  return {
-    apiVersion:      cfg.apiVersion,
-    apiId:           cfg.apiId,
-    apiKey:          cfg.apiKey,
-    merchantGateway: cfg.merchantGateway,
-    merchantDomain:  domain,
-    merchantUrl:     appUrl,
-    testMode:        String(cfg.testMode),
+  const payload: Record<string, string> = {
+    apiVersion:     cfg.apiVersion,
+    apiId:          cfg.apiId,
+    merchantDomain: domain,
+    merchantUrl:    appUrl,
+    testMode:       String(cfg.testMode),
   }
+
+  // Send apiMasterKey when present (master-merchant flow)
+  if (cfg.apiMasterKey) payload.apiMasterKey = cfg.apiMasterKey
+
+  // Send apiKey + merchantGateway only when both are provided (gateway flow)
+  if (cfg.apiKey)           payload.apiKey          = cfg.apiKey
+  if (cfg.merchantGateway)  payload.merchantGateway = cfg.merchantGateway
+
+  return payload
 }
 
 // ---------------------------------------------------------------------------
-// Low-level POST helper (form-encoded, matching ePays PHP sample exactly)
+// Low-level POST helper — form-encoded, matches PHP cURL sample exactly
 // ---------------------------------------------------------------------------
 async function epaysPost<T>(
   endpoint: string,
   data: Record<string, string | number>,
 ): Promise<T> {
-  const cfg  = getConfig()
-  const url  = `${cfg.apiUrl}${endpoint}`
+  const cfg = getConfig()
+  const url = `${cfg.apiUrl}${endpoint}`
 
   const merged: Record<string, string> = {}
   for (const [k, v] of Object.entries({ ...basePayload(cfg), ...data })) {
     merged[k] = String(v)
   }
 
-  const res = await fetch(url, {
-    method:  'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body:    new URLSearchParams(merged),
-    // next.js fetch — no caching for payment calls
-    cache: 'no-store',
+  console.log(`[ePays] POST ${url}`, {
+    apiId:       merged.apiId,
+    hasMasterKey: !!merged.apiMasterKey,
+    hasApiKey:   !!merged.apiKey,
+    testMode:    merged.testMode,
+    endpoint,
   })
 
-  if (!res.ok) {
-    throw new Error(`ePays HTTP ${res.status} on ${endpoint}`)
+  let res: Response
+  try {
+    res = await fetch(url, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body:    new URLSearchParams(merged),
+      cache:   'no-store',
+    })
+  } catch (networkErr) {
+    console.error(`[ePays] Network error reaching ${url}:`, networkErr)
+    throw new Error('GATEWAY_UNREACHABLE')
   }
 
-  return res.json() as T
+  const text = await res.text()
+  console.log(`[ePays] Response ${res.status}:`, text.slice(0, 300))
+
+  if (!res.ok) {
+    throw new Error(`GATEWAY_HTTP_${res.status}`)
+  }
+
+  try {
+    return JSON.parse(text) as T
+  } catch {
+    throw new Error('GATEWAY_INVALID_JSON')
+  }
 }
 
 // ---------------------------------------------------------------------------
 // Initiate Payment
 // ---------------------------------------------------------------------------
 export interface InitiatePaymentInput {
-  amount:        number   // BHD, 3 decimal places
-  description:   string   // shown on payment page
-  orderNumber:   string   // stored in udf2 — returned as-is in callback
-  notifyUrl:     string   // where ePays redirects user after payment
-  lang?:         'en' | 'ar'
-  // Customer
-  fullName:      string
-  mobile?:       string
-  email?:        string
-  country?:      string
-  city?:         string
-  customerIp?:   string
+  amount:         number   // BHD, 3 decimal places
+  description:    string
+  orderNumber:    string   // stored in udf2 — echoed back in callback
+  notifyUrl:      string
+  lang?:          'en' | 'ar'
+  fullName:       string
+  mobile?:        string
+  email?:         string
+  country?:       string
+  city?:          string
+  customerIp?:    string
   customerAgent?: string
 }
 
 export interface InitiatePaymentResult {
   success:      boolean
-  redirectUrl?: string   // send user here to complete payment
+  redirectUrl?: string
   errorCode?:   string
 }
 
@@ -116,11 +152,11 @@ export async function initiatePayment(
   let res: ApiResponse
   try {
     res = await epaysPost<ApiResponse>('/API/Initiate', {
-      lang:          input.lang     ?? 'ar',
+      lang:          input.lang          ?? 'ar',
       amount:        input.amount,
       description:   input.description,
       notifyUrl:     input.notifyUrl,
-      udf2:          input.orderNumber,          // our reference, echoed back in callback
+      udf2:          input.orderNumber,
       fullName:      input.fullName,
       email:         input.email         ?? '',
       mobile:        input.mobile        ?? '',
@@ -136,27 +172,29 @@ export async function initiatePayment(
       customerNote:  '',
     })
   } catch (err) {
-    console.error('[ePays] initiatePayment error:', err)
-    return { success: false, errorCode: 'GATEWAY_UNREACHABLE' }
+    const code = err instanceof Error ? err.message : 'GATEWAY_UNREACHABLE'
+    console.error('[ePays] initiatePayment threw:', code)
+    return { success: false, errorCode: code }
   }
 
   if (res.status === 'SUCCESS' && res.redirect) {
     return { success: true, redirectUrl: res.redirect }
   }
 
+  console.error('[ePays] initiatePayment API failure:', res)
   return { success: false, errorCode: res.errorCode ?? 'INITIATE_FAILED' }
 }
 
 // ---------------------------------------------------------------------------
-// Process Payment (called in callback after user returns from payment page)
+// Process Payment
 // ---------------------------------------------------------------------------
 export interface ProcessPaymentResult {
   success:          boolean
   result?:          'Completed' | 'Failed' | ''
   paymentId?:       string
-  orderNumber?:     string   // from udf2
+  orderNumber?:     string
   amount?:          number
-  alreadyProcessed: boolean  // ePays processed flag > 0 → we already handled this
+  alreadyProcessed: boolean
   responseDesc?:    string
   errorCode?:       string
 }
@@ -182,8 +220,9 @@ export async function processPayment(
   try {
     res = await epaysPost<ApiResponse>('/API/ProcessPayment', { paymentId })
   } catch (err) {
-    console.error('[ePays] processPayment error:', err)
-    return { success: false, alreadyProcessed: false, errorCode: 'GATEWAY_UNREACHABLE' }
+    const code = err instanceof Error ? err.message : 'GATEWAY_UNREACHABLE'
+    console.error('[ePays] processPayment threw:', code)
+    return { success: false, alreadyProcessed: false, errorCode: code }
   }
 
   if (res.status !== 'SUCCESS' || !res.data) {
