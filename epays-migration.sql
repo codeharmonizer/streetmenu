@@ -2,22 +2,46 @@
 -- ePays Payment Integration — Supabase SQL Migration
 -- Run this in: Supabase Dashboard → SQL Editor
 -- ============================================================
+-- Purpose: log vendor subscription payments for audit trail.
+-- Vendor subscription_status / expires_at are updated on the
+-- existing `vendors` table by the callback route.
+-- ============================================================
 
--- 1. Add payment columns to orders table
-alter table public.orders
-  add column if not exists payment_status  text not null default 'unpaid'
-    check (payment_status in ('unpaid', 'pending_payment', 'paid', 'failed')),
-  add column if not exists payment_id      text,
-  add column if not exists payment_amount  numeric(10, 3);
+create table if not exists public.subscription_payments (
+  id          uuid primary key default gen_random_uuid(),
+  vendor_id   uuid not null references public.vendors(id) on delete cascade,
+  payment_id  text not null unique,          -- ePays paymentId (dedup key)
+  amount      numeric(10, 3) not null,
+  expires_at  timestamptz not null,          -- what subscription_expires_at was set to
+  created_at  timestamptz not null default now()
+);
 
--- 2. Index for fast lookup by payment_id (used in callback dedup)
-create index if not exists orders_payment_id_idx
-  on public.orders (payment_id)
-  where payment_id is not null;
+-- Index for fast lookup by vendor
+create index if not exists subscription_payments_vendor_idx
+  on public.subscription_payments (vendor_id);
+
+-- RLS: vendors can view their own payment history; only service role can insert
+alter table public.subscription_payments enable row level security;
+
+do $$ begin
+  if not exists (
+    select 1 from pg_policies
+    where tablename = 'subscription_payments' and policyname = 'vendor can view own payments'
+  ) then
+    create policy "vendor can view own payments"
+      on public.subscription_payments for select
+      using (
+        vendor_id in (
+          select id from public.vendors where user_id = auth.uid()
+        )
+      );
+  end if;
+end $$;
 
 -- ============================================================
--- No new tables needed — orders already has RLS policies.
--- payment_status / payment_id / payment_amount are updated by
--- the server-side callback route using the service role key,
--- so no additional RLS policies are required.
+-- No changes needed to the `vendors` table — it already has:
+--   subscription_status      text
+--   subscription_starts_at   timestamptz
+--   subscription_expires_at  timestamptz
+-- These are updated directly by the callback route.
 -- ============================================================

@@ -1,139 +1,146 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Phone, MessageSquare, CheckCircle, ArrowRight } from 'lucide-react'
-import { sendUpgradeRequest } from './actions'
-import toast from 'react-hot-toast'
-import { useTranslations } from 'next-intl'
+import { useState }         from 'react'
+import Link                 from 'next/link'
+import { useSearchParams }  from 'next/navigation'
+import {
+  ArrowRight, CheckCircle, CreditCard,
+  Zap, BarChart2, Infinity, XCircle,
+} from 'lucide-react'
+import toast               from 'react-hot-toast'
+import { useTranslations, useLocale } from 'next-intl'
+
+const FEATURES = [
+  { icon: Infinity,  key: 'feature1' },
+  { icon: BarChart2, key: 'feature2' },
+  { icon: CheckCircle, key: 'feature3' },
+]
 
 export default function UpgradePage() {
-  const t = useTranslations('upgrade')
-  const [phone,   setPhone]   = useState('')
-  const [note,    setNote]    = useState('')
-  const [loading, setLoading] = useState(false)
-  const [done,    setDone]    = useState(false)
+  const t      = useTranslations('upgrade')
+  const locale = useLocale()
+  const searchParams = useSearchParams()
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!phone.trim()) { toast.error(t('phoneRequired')); return }
-    setLoading(true)
-    const result = await sendUpgradeRequest(phone.trim(), note.trim())
-    if (result?.error) {
-      toast.error(result.error)
-      setLoading(false)
-    } else {
-      setDone(true)
+  const [paying, setPaying] = useState(false)
+
+  const paymentParam = searchParams.get('payment') // 'failed' | 'error'
+
+  async function handlePay() {
+    if (paying) return
+    setPaying(true)
+    try {
+      const res  = await fetch('/api/payment/initiate', { method: 'POST' })
+      const data = await res.json()
+
+      if (!res.ok || !data.redirectUrl) {
+        toast.error(locale === 'ar' ? 'حدث خطأ، حاول مجدداً.' : 'Something went wrong. Please try again.')
+        return
+      }
+
+      // Redirect vendor to ePays payment page
+      window.location.href = data.redirectUrl
+    } catch {
+      toast.error(locale === 'ar' ? 'فشل الاتصال بالشبكة.' : 'Network error. Please try again.')
+    } finally {
+      setPaying(false)
     }
-  }
-
-  if (done) {
-    return (
-      <div className="max-w-md mx-auto">
-        <div className="card text-center py-14">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
-            style={{ background: 'var(--brand-light)' }}>
-            <CheckCircle size={32} style={{ color: 'var(--brand)' }} />
-          </div>
-          <h2 className="text-2xl font-black mb-2" style={{ fontFamily: 'var(--font-display)' }}>
-            {t('successTitle')}
-          </h2>
-          <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>
-            {t('successDesc')}
-          </p>
-          <Link href="/dashboard" className="btn-primary mx-auto">
-            {t('backBtn')}
-          </Link>
-        </div>
-      </div>
-    )
   }
 
   return (
     <div className="max-w-md mx-auto">
+
       {/* Back */}
       <Link href="/dashboard"
         className="inline-flex items-center gap-1.5 text-sm mb-6 hover:underline"
         style={{ color: 'var(--text-secondary)' }}>
-        <ArrowRight size={14} className="rtl:rotate-0 ltr:rotate-180" /> {t('backToDashboard')}
+        <ArrowRight size={14} className="rtl:rotate-0 ltr:rotate-180" />
+        {t('backToDashboard')}
       </Link>
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-black mb-2" style={{ fontFamily: 'var(--font-display)' }}>
-          {t('title')}
-        </h1>
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+            style={{ background: 'var(--brand)' }}>
+            <Zap size={18} color="white" />
+          </div>
+          <h1 className="text-3xl font-black" style={{ fontFamily: 'var(--font-display)' }}>
+            {t('title')}
+          </h1>
+        </div>
         <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>
-          {t('desc')}
+          {locale === 'ar'
+            ? 'ادفع الآن واحصل على وصول فوري لجميع ميزات Pro.'
+            : 'Pay now and get instant access to all Pro features.'}
         </p>
       </div>
 
-      {/* What you get */}
-      <div className="rounded-2xl p-5 mb-6" style={{ background: 'var(--brand-light)', border: '1px solid #ffd4a8' }}>
-        <p className="font-bold mb-3" style={{ color: 'var(--brand)', fontFamily: 'var(--font-display)' }}>
+      {/* Payment failed/error banner */}
+      {(paymentParam === 'failed' || paymentParam === 'error') && (
+        <div className="rounded-2xl p-4 mb-6 flex items-start gap-3"
+          style={{ background: '#fef2f2', border: '1px solid #fca5a5' }}>
+          <XCircle size={20} style={{ color: '#dc2626', flexShrink: 0, marginTop: 1 }} />
+          <div>
+            <p className="font-bold text-sm" style={{ color: '#991b1b' }}>
+              {locale === 'ar' ? 'لم تكتمل عملية الدفع' : 'Payment was not completed'}
+            </p>
+            <p className="text-xs mt-0.5" style={{ color: '#b91c1c' }}>
+              {locale === 'ar' ? 'يمكنك المحاولة مرة أخرى.' : 'You can try again below.'}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Features card */}
+      <div className="rounded-2xl p-5 mb-6"
+        style={{ background: 'var(--brand-light)', border: '1px solid #ffd4a8' }}>
+        <p className="font-bold mb-4" style={{ color: 'var(--brand)', fontFamily: 'var(--font-display)' }}>
           {t('whatYouGet')}
         </p>
-        <ul className="space-y-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
-          {[t('feature1'), t('feature2'), t('feature3')].map(f => (
-            <li key={f} className="flex items-center gap-2">
-              <span style={{ color: 'var(--brand)', fontWeight: 700 }}>✓</span> {f}
+        <ul className="space-y-3">
+          {FEATURES.map(({ icon: Icon, key }) => (
+            <li key={key} className="flex items-center gap-3 text-sm">
+              <Icon size={15} style={{ color: 'var(--brand)', flexShrink: 0 }} />
+              <span style={{ color: 'var(--text-secondary)' }}>{t(key as never)}</span>
             </li>
           ))}
         </ul>
-        <p className="text-lg font-black mt-4" style={{ color: 'var(--brand)', fontFamily: 'var(--font-display)' }}>
-          {t('price')}
+      </div>
+
+      {/* Pricing + CTA card */}
+      <div className="card">
+        {/* Price */}
+        <div className="text-center mb-6 pb-6" style={{ borderBottom: '1px solid var(--border)' }}>
+          <p className="text-sm mb-1" style={{ color: 'var(--text-muted)' }}>
+            {locale === 'ar' ? 'رسوم الاشتراك الشهري' : 'Monthly subscription'}
+          </p>
+          <p className="text-5xl font-black" style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>
+            3 BD
+          </p>
+          <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+            {locale === 'ar' ? '/ شهر · دينار بحريني' : '/ month · Bahraini Dinar'}
+          </p>
+        </div>
+
+        {/* Pay button */}
+        <button
+          onClick={handlePay}
+          disabled={paying}
+          className="btn-primary w-full py-4 flex items-center justify-center gap-2 text-base"
+          style={{ borderRadius: 14 }}>
+          <CreditCard size={18} />
+          {paying
+            ? (locale === 'ar' ? 'جارٍ التوجيه للدفع…' : 'Redirecting to payment…')
+            : (locale === 'ar' ? 'اشترك الآن · ادفع 3 د.ب' : 'Subscribe Now · Pay BD 3.000')}
+        </button>
+
+        <p className="text-center text-xs mt-3" style={{ color: 'var(--text-muted)' }}>
+          {locale === 'ar'
+            ? 'ستُوجَّه إلى بوابة الدفع الآمنة ePays. يُفعَّل اشتراكك فور اكتمال الدفع.'
+            : 'You\'ll be redirected to the secure ePays payment gateway. Subscription activates instantly after payment.'}
         </p>
       </div>
 
-      {/* Form */}
-      <div className="card">
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Phone */}
-          <div>
-            <label className="label">{t('phoneLabel')} *</label>
-            <div className="relative">
-              <Phone size={15} className="absolute start-3 top-1/2 -translate-y-1/2"
-                style={{ color: 'var(--text-muted)' }} />
-              <input
-                type="tel"
-                required
-                className="input ps-9"
-                placeholder={t('phonePlaceholder')}
-                dir="ltr"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-              />
-            </div>
-            <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
-              {t('phoneHint')}
-            </p>
-          </div>
-
-          {/* Note */}
-          <div>
-            <label className="label">{t('noteLabel')}</label>
-            <div className="relative">
-              <MessageSquare size={15} className="absolute start-3 top-3"
-                style={{ color: 'var(--text-muted)' }} />
-              <textarea
-                rows={3}
-                className="input resize-none ps-9"
-                placeholder={t('notePlaceholder')}
-                value={note}
-                onChange={e => setNote(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <button type="submit" disabled={loading} className="btn-primary w-full py-3">
-            {loading ? t('sending') : t('submitBtn')}
-          </button>
-        </form>
-      </div>
-
-      <p className="text-center text-xs mt-4" style={{ color: 'var(--text-muted)' }}>
-        {t('emailNote')}
-      </p>
     </div>
   )
 }

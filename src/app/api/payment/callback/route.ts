@@ -1,76 +1,91 @@
 /**
- * GET|POST /api/payment/callback?orderNumber=XXX&paymentId=YYY
+ * GET|POST /api/payment/callback?vendorId=XXX&paymentId=YYY
  *
- * ePays redirects the user's browser here after payment completes.
+ * ePays redirects the vendor's browser here after payment completes.
+ *
  * Flow:
- *   1. Extract paymentId + orderNumber from query string
- *   2. Call ePays /API/ProcessPayment to get the authoritative result
- *   3. If result === 'Completed' → mark order paid, redirect to /track/XXX?payment=success
- *   4. If result === 'Failed'    → mark order failed, redirect to /track/XXX?payment=failed
- *   5. alreadyProcessed guard prevents double-updates (ePays sets processed flag)
+ *   1. Extract vendorId + paymentId from query string
+ *   2. Call ePays /API/ProcessPayment for the authoritative result
+ *   3. Completed → extend vendor subscription by 1 month, log payment, redirect to dashboard
+ *   4. Failed     → redirect to upgrade page with ?payment=failed
  *
- * ePays may call this via GET (browser redirect) or POST (server-to-server).
- * We handle both.
+ * Uses admin/service-role client — this request comes from ePays, not a logged-in user.
+ * ePays may call via GET (browser redirect) or POST (server-to-server); we handle both.
  */
 
-import { NextRequest, NextResponse }  from 'next/server'
-import { createAdminClient }          from '@/lib/supabase/admin'
-import { processPayment }             from '@/lib/epays'
+import { NextRequest, NextResponse } from 'next/server'
+import { createAdminClient }         from '@/lib/supabase/admin'
+import { processPayment }            from '@/lib/epays'
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite-menu.vercel.app'
+const APP_URL              = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite-menu.vercel.app'
+const SUBSCRIPTION_MONTHS  = 1   // how many months each payment covers
 
 async function handler(req: NextRequest) {
   const { searchParams } = req.nextUrl
-  const paymentId   = searchParams.get('paymentId')
-  const orderNumber = searchParams.get('orderNumber')
+  const vendorId  = searchParams.get('vendorId')
+  const paymentId = searchParams.get('paymentId')
 
-  // ── Validate params ──────────────────────────────────────────────────────
-  if (!paymentId || !orderNumber) {
-    // Redirect to home rather than showing a raw JSON error (this is browser-facing)
-    return NextResponse.redirect(`${APP_URL}/?payment_error=missing_params`)
+  if (!vendorId || !paymentId) {
+    return NextResponse.redirect(`${APP_URL}/dashboard/upgrade?payment=error`)
   }
 
-  // ── Call ePays ProcessPayment ─────────────────────────────────────────────
+  // ── Call ePays to verify the payment ─────────────────────────────────────
   const result = await processPayment(paymentId)
 
   if (!result.success) {
-    console.error('[payment/callback] processPayment failed:', result.errorCode, { paymentId, orderNumber })
-    return NextResponse.redirect(`${APP_URL}/track/${orderNumber}?payment=error`)
+    console.error('[payment/callback] processPayment failed:', result.errorCode, { vendorId, paymentId })
+    return NextResponse.redirect(`${APP_URL}/dashboard/upgrade?payment=error`)
   }
 
-  // ── Already handled by a previous callback call — just redirect ───────────
+  // Already handled — redirect appropriately without double-updating
   if (result.alreadyProcessed) {
-    const paymentStatus = result.result === 'Completed' ? 'success' : 'failed'
-    return NextResponse.redirect(`${APP_URL}/track/${orderNumber}?payment=${paymentStatus}`)
+    return NextResponse.redirect(`${APP_URL}/dashboard?subscription=renewed`)
   }
 
-  // ── Update Supabase ───────────────────────────────────────────────────────
-  // Use admin client — this request comes from ePays, not a logged-in user
-  const supabase = createAdminClient()
-
+  // ── Completed: activate / extend subscription ─────────────────────────────
   if (result.result === 'Completed') {
-    await supabase
-      .from('orders')
-      .update({
-        payment_status: 'paid',
-        payment_id:     result.paymentId ?? paymentId,
-        payment_amount: result.amount,
-      })
-      .eq('order_number', orderNumber)
+    const supabase = createAdminClient()
 
-    return NextResponse.redirect(`${APP_URL}/track/${orderNumber}?payment=success`)
+    // Load current vendor to handle subscription extension correctly
+    const { data: vendor } = await supabase
+      .from('vendors')
+      .select('subscription_expires_at')
+      .eq('id', vendorId)
+      .single()
+
+    // Extend from current expiry if still active, otherwise from today
+    const baseDate =
+      vendor?.subscription_expires_at && new Date(vendor.subscription_expires_at) > new Date()
+        ? new Date(vendor.subscription_expires_at)
+        : new Date()
+
+    const expiresAt = new Date(baseDate)
+    expiresAt.setMonth(expiresAt.getMonth() + SUBSCRIPTION_MONTHS)
+
+    await supabase
+      .from('vendors')
+      .update({
+        subscription_status:     'active',
+        subscription_starts_at:  new Date().toISOString(),
+        subscription_expires_at: expiresAt.toISOString(),
+      })
+      .eq('id', vendorId)
+
+    // Log the payment for audit trail
+    await supabase
+      .from('subscription_payments')
+      .insert({
+        vendor_id:  vendorId,
+        payment_id: result.paymentId ?? paymentId,
+        amount:     result.amount,
+        expires_at: expiresAt.toISOString(),
+      })
+
+    return NextResponse.redirect(`${APP_URL}/dashboard?subscription=success`)
   }
 
-  // Failed or empty result (pending/failed)
-  await supabase
-    .from('orders')
-    .update({
-      payment_status: 'failed',
-      payment_id:     result.paymentId ?? paymentId,
-    })
-    .eq('order_number', orderNumber)
-
-  return NextResponse.redirect(`${APP_URL}/track/${orderNumber}?payment=failed`)
+  // ── Failed / pending ──────────────────────────────────────────────────────
+  return NextResponse.redirect(`${APP_URL}/dashboard/upgrade?payment=failed`)
 }
 
 export const GET  = handler

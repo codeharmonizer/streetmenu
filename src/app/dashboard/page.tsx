@@ -7,7 +7,11 @@ import IsOpenToggle from '@/components/dashboard/IsOpenToggle'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { getVendor } from '@/lib/data'
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams?: { subscription?: string }
+}) {
   const vendor = await getVendor()
   if (!vendor) redirect('/login')
 
@@ -61,6 +65,24 @@ export default async function DashboardPage() {
         </h1>
         <p style={{ color: 'var(--text-secondary)' }}>{t('welcomeDesc')} <strong>{vendor.name}</strong>.</p>
       </div>
+
+      {/* ── Subscription payment success banner ── */}
+      {(searchParams?.subscription === 'success' || searchParams?.subscription === 'renewed') && (
+        <div className="rounded-2xl p-4 mb-6 flex items-center gap-3"
+          style={{ background: '#dcfce7', border: '1px solid #86efac' }}>
+          <span className="text-2xl">🎉</span>
+          <div>
+            <p className="font-bold text-sm" style={{ color: '#166534' }}>
+              {locale === 'ar' ? 'تم تفعيل اشتراكك بنجاح!' : 'Subscription activated successfully!'}
+            </p>
+            <p className="text-xs mt-0.5" style={{ color: '#15803d' }}>
+              {locale === 'ar'
+                ? 'يمكنك الآن إضافة أصناف غير محدودة والوصول لجميع ميزات Pro.'
+                : 'You can now add unlimited items and access all Pro features.'}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* ── Subscription banner ── */}
       {paid && daysLeft !== null && daysLeft <= 7 && (

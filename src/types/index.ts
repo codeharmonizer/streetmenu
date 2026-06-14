@@ -56,8 +56,7 @@ export interface Review {
   created_at: string
 }
 
-export type OrderStatus    = 'pending' | 'accepted' | 'ready' | 'completed' | 'rejected'
-export type PaymentStatus  = 'unpaid' | 'pending_payment' | 'paid' | 'failed'
+export type OrderStatus = 'pending' | 'accepted' | 'ready' | 'completed' | 'rejected'
 
 export interface OrderItem {
   id: string
@@ -74,9 +73,6 @@ export interface Order {
   vendor_id: string
   order_number: string
   status: OrderStatus
-  payment_status: PaymentStatus
-  payment_id: string | null
-  payment_amount: number | null
   customer_name: string | null
   customer_phone: string | null
   note: string | null
