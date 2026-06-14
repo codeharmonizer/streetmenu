@@ -50,7 +50,8 @@ function getConfig() {
 // ---------------------------------------------------------------------------
 function basePayload(cfg: ReturnType<typeof getConfig>): Record<string, string> {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite-menu.vercel.app'
-  const domain = new URL(appUrl).hostname
+  // EPAYS_MERCHANT_DOMAIN must match exactly what is registered in ePays dashboard
+  const domain = process.env.EPAYS_MERCHANT_DOMAIN ?? new URL(appUrl).hostname
 
   const payload: Record<string, string> = {
     apiVersion:     cfg.apiVersion,
@@ -86,10 +87,11 @@ async function epaysPost<T>(
   }
 
   console.log(`[ePays] POST ${url}`, {
-    apiId:       merged.apiId,
-    hasMasterKey: !!merged.apiMasterKey,
-    hasApiKey:   !!merged.apiKey,
-    testMode:    merged.testMode,
+    apiId:          merged.apiId,
+    merchantDomain: merged.merchantDomain,
+    hasMasterKey:   !!merged.apiMasterKey,
+    hasApiKey:      !!merged.apiKey,
+    testMode:       merged.testMode,
     endpoint,
   })
 

@@ -32,7 +32,8 @@ function getMasterConfig() {
 async function masterPost(endpoint: string, extra: Record<string, string> = {}) {
   const cfg    = getMasterConfig()
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite-menu.vercel.app'
-  const domain = new URL(appUrl).hostname
+  // EPAYS_MERCHANT_DOMAIN must match exactly what is registered in ePays dashboard
+  const domain = process.env.EPAYS_MERCHANT_DOMAIN ?? new URL(appUrl).hostname
 
   const body = new URLSearchParams({
     apiVersion:     cfg.apiVersion,
