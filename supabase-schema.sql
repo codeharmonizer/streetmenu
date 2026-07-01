@@ -19,6 +19,11 @@ create table if not exists public.vendors (
   hours text,
   logo_url text,
   plan text default 'free' check (plan in ('free', 'pro')),
+  subscription_status text default 'free' check (subscription_status in ('free', 'trial', 'active', 'expired')),
+  subscription_starts_at timestamptz,
+  subscription_expires_at timestamptz,
+  is_active boolean default true,
+  reviews_enabled boolean default true,
   is_open boolean default true,
   created_at timestamptz default now()
 );
@@ -139,9 +144,38 @@ create index if not exists orders_vendor_id_idx     on public.orders(vendor_id);
 create index if not exists orders_order_number_idx  on public.orders(order_number);
 create index if not exists order_items_order_id_idx on public.order_items(order_id);
 
+-- Subscription payment attempts and audit trail
+create table if not exists public.subscription_orders (
+  id               uuid primary key default uuid_generate_v4(),
+  vendor_id        uuid references public.vendors(id) on delete cascade not null,
+  status           text not null default 'pending'
+                   check (status in ('pending', 'paid', 'failed', 'expired')),
+  amount           numeric(10,3) not null,
+  epays_payment_id text unique,
+  created_at       timestamptz default now(),
+  paid_at          timestamptz
+);
+
+create table if not exists public.subscription_payments (
+  id                    uuid primary key default uuid_generate_v4(),
+  subscription_order_id uuid references public.subscription_orders(id) on delete set null,
+  vendor_id             uuid references public.vendors(id) on delete cascade not null,
+  payment_id            text unique not null,
+  amount                numeric(10,3) not null,
+  expires_at            timestamptz not null,
+  created_at            timestamptz default now()
+);
+
+create index if not exists subscription_orders_vendor_idx  on public.subscription_orders(vendor_id);
+create index if not exists subscription_orders_status_idx  on public.subscription_orders(status);
+create index if not exists subscription_payments_vendor_idx on public.subscription_payments(vendor_id);
+create index if not exists subscription_payments_order_idx  on public.subscription_payments(subscription_order_id);
+
 -- Enable RLS
-alter table public.orders      enable row level security;
-alter table public.order_items enable row level security;
+alter table public.orders                enable row level security;
+alter table public.order_items           enable row level security;
+alter table public.subscription_orders   enable row level security;
+alter table public.subscription_payments enable row level security;
 
 -- Orders policies
 create policy "Orders are publicly insertable"
@@ -165,6 +199,31 @@ create policy "Order items are publicly insertable"
 
 create policy "Order items are publicly readable"
   on public.order_items for select using (true);
+
+-- Subscription payment policies
+create policy "Vendors can create own subscription orders"
+  on public.subscription_orders for insert
+  with check (
+    vendor_id in (
+      select id from public.vendors where user_id = auth.uid()
+    )
+  );
+
+create policy "Vendors can view own subscription orders"
+  on public.subscription_orders for select
+  using (
+    vendor_id in (
+      select id from public.vendors where user_id = auth.uid()
+    )
+  );
+
+create policy "Vendors can view own subscription payments"
+  on public.subscription_payments for select
+  using (
+    vendor_id in (
+      select id from public.vendors where user_id = auth.uid()
+    )
+  );
 
 -- Storage bucket for menu photos
 insert into storage.buckets (id, name, public)

@@ -35,19 +35,35 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'vendor_not_found' }, { status: 404 })
   }
 
-  // ── 3. Build URLs ─────────────────────────────────────────────────────────
+  // ── 3. Create local subscription order before leaving our app ─────────────
+  const { data: subscriptionOrder, error: orderError } = await supabase
+    .from('subscription_orders')
+    .insert({
+      vendor_id: vendor.id,
+      amount:    SUBSCRIPTION_PRICE_BHD,
+      status:    'pending',
+    })
+    .select('id')
+    .single()
+
+  if (orderError || !subscriptionOrder) {
+    console.error('[payment/initiate] failed to create local subscription order:', orderError, 'vendor:', vendor.id)
+    return NextResponse.json({ error: 'order_create_failed' }, { status: 500 })
+  }
+
+  // ── 4. Build URLs ─────────────────────────────────────────────────────────
   const appUrl    = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite-menu.vercel.app'
-  // vendorId in notifyUrl so the callback can identify who paid (no session there)
-  const notifyUrl = `${appUrl}/api/payment/callback?vendorId=${vendor.id}`
+  // orderId is our local payment attempt id. ePays also stores it in udf2.
+  const notifyUrl = `${appUrl}/api/payment/callback?orderId=${subscriptionOrder.id}`
 
   const customerIp    = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? ''
   const customerAgent = req.headers.get('user-agent') ?? ''
 
-  // ── 4. Call ePays /API/Initiate ───────────────────────────────────────────
+  // ── 5. Call ePays /API/Initiate ───────────────────────────────────────────
   const result = await initiatePayment({
     amount:        SUBSCRIPTION_PRICE_BHD,
     description:   `ScanBite Pro — 1 month subscription (${vendor.name})`,
-    orderNumber:   vendor.id,   // stored in udf2, echoed back in callback
+    orderNumber:   subscriptionOrder.id,   // stored in udf2, echoed back by ProcessPayment
     notifyUrl,
     fullName:      vendor.name,
     email:         user.email ?? '',
