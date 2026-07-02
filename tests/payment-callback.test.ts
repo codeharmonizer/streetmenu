@@ -213,6 +213,21 @@ describe('payment callback behavior', () => {
     expect(supabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'update' && c.payload.status === 'paid')).toBe(true)
   })
 
+  it('treats ePays ATM card approval responseCode 00 as successful even when result text is not Completed', async () => {
+    processPaymentMock.mockResolvedValue({ success: true, result: 'CAPTURED', responseCode: '00', responseDesc: 'Approved', alreadyProcessed: false, paymentId: 'pay-atm-1', orderNumber: 'order-a', amount: 3 })
+    const supabase = makeSupabaseMock({
+      subscriptionOrder: { id: 'order-a', vendor_id: 'vendor-a', status: 'pending', amount: 3 },
+      vendor: { id: 'vendor-a', name: 'Vendor A', subscription_status: 'free', subscription_expires_at: null },
+    })
+    createAdminClientMock.mockReturnValue(supabase)
+
+    const res = await callCallback('?orderId=order-a&paymentId=pay-atm-1')
+
+    expect(res.headers.get('location')).toBe('https://scanbite-menu.vercel.app/dashboard?subscription=success')
+    expect(supabase.calls.some(c => c.table === 'vendors' && c.op === 'update' && c.payload.plan === 'pro' && c.payload.subscription_status === 'active')).toBe(true)
+    expect(supabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'update' && c.payload.status === 'paid' && c.payload.epays_payment_id === 'pay-atm-1')).toBe(true)
+  })
+
   it('sets the matching vendor plan to pro, activates subscription, marks order paid, and logs payment when ePays verifies Completed', async () => {
     processPaymentMock.mockResolvedValue({ success: true, result: 'Completed', alreadyProcessed: false, paymentId: 'pay-2', orderNumber: 'order-a', amount: 3 })
     const supabase = makeSupabaseMock({

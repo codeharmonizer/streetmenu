@@ -21,6 +21,22 @@ import { processPayment }            from '@/lib/epays'
 const APP_URL              = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite-menu.vercel.app'
 const SUBSCRIPTION_MONTHS  = 1   // how many months each payment covers
 
+function isSuccessfulPayment(result: Awaited<ReturnType<typeof processPayment>>) {
+  const normalizedResult = (result.result ?? '').trim().toLowerCase()
+  const normalizedCode   = (result.responseCode ?? '').trim()
+
+  return (
+    normalizedResult === 'completed' ||
+    normalizedResult === 'success' ||
+    normalizedResult === 'successful' ||
+    normalizedResult === 'succeeded' ||
+    normalizedResult === 'approved' ||
+    normalizedResult === 'captured' ||
+    normalizedCode === '00' ||
+    normalizedCode === '000'
+  )
+}
+
 async function handler(req: NextRequest) {
   const { searchParams } = req.nextUrl
   const orderId   = searchParams.get('orderId')
@@ -83,8 +99,16 @@ async function handler(req: NextRequest) {
   }
 
   // ── Failed / pending ──────────────────────────────────────────────────────
-  if (result.result !== 'Completed') {
-    if (result.result === 'Failed') {
+  if (!isSuccessfulPayment(result)) {
+    console.error('[payment/callback] payment was not successful:', {
+      orderId,
+      paymentId,
+      result:       result.result,
+      responseCode: result.responseCode,
+      responseDesc: result.responseDesc,
+    })
+
+    if ((result.result ?? '').trim().toLowerCase() === 'failed') {
       await supabase
         .from('subscription_orders')
         .update({

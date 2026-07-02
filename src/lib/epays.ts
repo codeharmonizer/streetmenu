@@ -192,11 +192,12 @@ export async function initiatePayment(
 // ---------------------------------------------------------------------------
 export interface ProcessPaymentResult {
   success:          boolean
-  result?:          'Completed' | 'Failed' | ''
+  result?:          string
   paymentId?:       string
   orderNumber?:     string
   amount?:          number
   alreadyProcessed: boolean
+  responseCode?:    string
   responseDesc?:    string
   errorCode?:       string
 }
@@ -238,11 +239,12 @@ export async function processPayment(
   const d = res.data
   return {
     success:          true,
-    result:           d.result as 'Completed' | 'Failed' | '',
+    result:           d.result,
     paymentId:        d.paymentId,
     orderNumber:      d.udf2,
     amount:           d.amount,
     alreadyProcessed: d.processed > 0,
+    responseCode:     d.responseCode,
     responseDesc:     d.responseDesc,
   }
 }
