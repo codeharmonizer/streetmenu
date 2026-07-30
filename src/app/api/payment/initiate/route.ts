@@ -10,6 +10,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient }             from '@/lib/supabase/server'
+import { createAdminClient }        from '@/lib/supabase/admin'
 import { initiatePayment }          from '@/lib/epays'
 
 // Monthly subscription price in BHD
@@ -36,7 +37,12 @@ export async function POST(req: NextRequest) {
   }
 
   // ── 3. Create local subscription order before leaving our app ─────────────
-  const { data: subscriptionOrder, error: orderError } = await supabase
+  // Use the service-role client for the durable payment attempt row. The user
+  // session client is only for auth/vendor lookup; callback reconciliation also
+  // uses the admin client, so creating the order through the same trusted path
+  // avoids RLS/session-context issues between initiate and callback runtimes.
+  const adminSupabase = createAdminClient()
+  const { data: subscriptionOrder, error: orderError } = await adminSupabase
     .from('subscription_orders')
     .insert({
       vendor_id: vendor.id,
@@ -50,6 +56,11 @@ export async function POST(req: NextRequest) {
     console.error('[payment/initiate] failed to create local subscription order:', orderError, 'vendor:', vendor.id)
     return NextResponse.json({ error: 'order_create_failed' }, { status: 500 })
   }
+
+  console.log('[payment/initiate] created subscription order:', {
+    orderId:  subscriptionOrder.id,
+    vendorId: vendor.id,
+  })
 
   // ── 4. Build URLs ─────────────────────────────────────────────────────────
   const appUrl    = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite-menu.vercel.app'

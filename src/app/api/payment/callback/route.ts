@@ -70,14 +70,18 @@ async function handler(req: NextRequest) {
 
   // Load the local subscription order. This is the source of truth for which
   // vendor may be updated; never update a vendor directly from callback params.
-  const { data: subscriptionOrder } = await supabase
+  const { data: subscriptionOrder, error: orderLookupError } = await supabase
     .from('subscription_orders')
     .select('id, vendor_id, status, amount, epays_payment_id, paid_at')
     .eq('id', orderId)
     .single()
 
-  if (!subscriptionOrder) {
-    console.error('[payment/callback] local subscription order not found:', { orderId, paymentId })
+  if (orderLookupError || !subscriptionOrder) {
+    console.error('[payment/callback] local subscription order not found:', {
+      orderId,
+      paymentId,
+      error: orderLookupError,
+    })
     return NextResponse.redirect(`${APP_URL}/dashboard/upgrade?payment=error`)
   }
 
