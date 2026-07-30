@@ -110,15 +110,12 @@ describe('payment initiate behavior', () => {
     process.env.NEXT_PUBLIC_APP_URL = 'https://scanbite-menu.vercel.app'
   })
 
-  it('creates the local subscription order with the admin client and sends its id to ePays as orderNumber', async () => {
-    const userSupabase = makeSupabaseMock({
+  it('creates a local subscription order for the authenticated vendor and sends its id to ePays as orderNumber', async () => {
+    const supabase = makeSupabaseMock({
       vendor: { id: 'vendor-a', name: 'Vendor A', subscription_status: 'free', subscription_expires_at: null },
-    })
-    const adminSupabase = makeSupabaseMock({
       createdSubscriptionOrder: { id: 'sub-order-1', vendor_id: 'vendor-a', status: 'pending', amount: 3 },
     })
-    createClientMock.mockResolvedValue(userSupabase)
-    createAdminClientMock.mockReturnValue(adminSupabase)
+    createClientMock.mockResolvedValue(supabase)
     initiatePaymentMock.mockResolvedValue({ success: true, redirectUrl: 'https://epays.example/pay' })
 
     const res = await callInitiate()
@@ -126,8 +123,7 @@ describe('payment initiate behavior', () => {
 
     expect(res.status).toBe(200)
     expect(body).toEqual({ redirectUrl: 'https://epays.example/pay' })
-    expect(userSupabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'insert')).toBe(false)
-    expect(adminSupabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'insert' && c.payload.vendor_id === 'vendor-a' && c.payload.status === 'pending')).toBe(true)
+    expect(supabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'insert' && c.payload.vendor_id === 'vendor-a' && c.payload.status === 'pending')).toBe(true)
     expect(initiatePaymentMock).toHaveBeenCalledWith(expect.objectContaining({
       orderNumber: 'sub-order-1',
       notifyUrl: 'https://scanbite-menu.vercel.app/api/payment/callback?orderId=sub-order-1',

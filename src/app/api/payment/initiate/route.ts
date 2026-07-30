@@ -10,7 +10,6 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient }             from '@/lib/supabase/server'
-import { createAdminClient }        from '@/lib/supabase/admin'
 import { initiatePayment }          from '@/lib/epays'
 
 // Monthly subscription price in BHD
@@ -37,12 +36,7 @@ export async function POST(req: NextRequest) {
   }
 
   // ── 3. Create local subscription order before leaving our app ─────────────
-  // Use the service-role client for the durable payment attempt row. The user
-  // session client is only for auth/vendor lookup; callback reconciliation also
-  // uses the admin client, so creating the order through the same trusted path
-  // avoids RLS/session-context issues between initiate and callback runtimes.
-  const adminSupabase = createAdminClient()
-  const { data: subscriptionOrder, error: orderError } = await adminSupabase
+  const { data: subscriptionOrder, error: orderError } = await supabase
     .from('subscription_orders')
     .insert({
       vendor_id: vendor.id,
