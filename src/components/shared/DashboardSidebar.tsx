@@ -1,8 +1,9 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { LayoutDashboard, UtensilsCrossed, QrCodeIcon, BarChart3, LogOut, ExternalLink, Settings, ShoppingBag } from 'lucide-react'
+import { LayoutDashboard, UtensilsCrossed, QrCodeIcon, BarChart3, LogOut, ExternalLink, Settings, ShoppingBag, Menu, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { Vendor } from '@/types'
 import { getInitials, cn } from '@/lib/utils'
@@ -16,6 +17,11 @@ export default function DashboardSidebar({ vendor, pendingOrders }: { vendor: Ve
   const pathname = usePathname()
   const router   = useRouter()
   const t        = useTranslations('sidebar')
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [pathname])
 
   const navItems = [
     { href: '/dashboard',            icon: LayoutDashboard, label: t('overview'),  badge: undefined                                       },
@@ -34,11 +40,8 @@ export default function DashboardSidebar({ vendor, pendingOrders }: { vendor: Ve
     router.refresh()
   }
 
-  return (
-    <aside
-      className="fixed top-0 h-full w-64 flex flex-col hidden md:flex rtl:right-0 ltr:left-0 rtl:border-l ltr:border-r"
-      style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
-    >
+  const renderSidebarContent = () => (
+    <>
       {/* Logo */}
       <div className="p-6 border-b" style={{ borderColor: 'var(--border)' }}>
         <Link href="/" className="flex items-center gap-2">
@@ -116,6 +119,61 @@ export default function DashboardSidebar({ vendor, pendingOrders }: { vendor: Ve
           {t('logout')}
         </button>
       </div>
-    </aside>
+    </>
+  )
+
+  return (
+    <>
+      {/* Mobile top bar */}
+      <div
+        className="fixed top-0 inset-x-0 z-50 flex items-center justify-between border-b px-4 md:hidden"
+        style={{ background: 'var(--surface)', borderColor: 'var(--border)', height: 64 }}
+      >
+        <Link href="/" className="flex items-center gap-2">
+          <ScanBiteLogo size={24} />
+          <span className="font-bold tracking-wide" style={{ fontFamily: 'var(--font-display)', fontSize: 16, letterSpacing: '0.03em' }}>
+            Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+          </span>
+        </Link>
+        <button
+          type="button"
+          aria-label={mobileOpen ? t('closeMenu') : t('openMenu')}
+          aria-expanded={mobileOpen}
+          onClick={() => setMobileOpen(open => !open)}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-xl transition-all hover:bg-[var(--surface-2)]"
+          style={{ color: 'var(--text-primary)' }}
+        >
+          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+      </div>
+
+      {mobileOpen && (
+        <button
+          type="button"
+          aria-label={t('closeMenu')}
+          className="fixed inset-0 z-40 bg-black/40 md:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      <aside
+        className={cn(
+          'fixed top-0 z-50 flex h-full w-64 flex-col transition-transform duration-200 md:hidden rtl:right-0 ltr:left-0 rtl:border-l ltr:border-r',
+          mobileOpen ? 'translate-x-0' : 'ltr:-translate-x-full rtl:translate-x-full'
+        )}
+        style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
+      >
+        <div className="flex h-full flex-col">
+          {renderSidebarContent()}
+        </div>
+      </aside>
+
+      <aside
+        className="fixed top-0 h-full w-64 hidden flex-col md:flex rtl:right-0 ltr:left-0 rtl:border-l ltr:border-r"
+        style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
+      >
+        {renderSidebarContent()}
+      </aside>
+    </>
   )
 }

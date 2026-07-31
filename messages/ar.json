@@ -40,6 +40,8 @@
     "analytics": "الإحصائيات",
     "settings": "الإعدادات",
     "viewPublicMenu": "عرض القائمة العامة",
+    "openMenu": "فتح القائمة",
+    "closeMenu": "إغلاق القائمة",
     "logout": "تسجيل الخروج",
     "defaultCategory": "طعام شعبي"
   },
