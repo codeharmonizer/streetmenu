@@ -5,16 +5,18 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 interface Props {
-  params: { code: string }
+  params: Promise<{ code: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  return { title: `Order ${params.code} — ScanBite` }
+  const { code } = await params
+  return { title: `Order ${code} — ScanBite` }
 }
 
 export default async function TrackOrderPage({ params }: Props) {
+  const { code } = await params
   const t     = await getTranslations('track')
-  const order = await getOrderByNumber(params.code.toUpperCase())
+  const order = await getOrderByNumber(code.toUpperCase())
 
   if (!order) {
     return (
