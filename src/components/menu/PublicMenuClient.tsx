@@ -8,6 +8,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import { formatPrice } from '@/lib/utils'
 import { placeOrder } from '@/lib/orders'
 import ReviewForm from './ReviewForm'
+import CategoryTabs, { categorySectionId } from './CategoryTabs'
 import toast from 'react-hot-toast'
 
 type MenuItem = {
@@ -173,8 +174,18 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
             <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>{t('comingSoonDesc')}</p>
           </div>
         ) : (
-          Object.entries(grouped).map(([category, catItems]) => (
-            <div key={category} className="mb-6">
+          <>
+            <CategoryTabs
+              categories={categories}
+              sectionPrefix="public-menu-category"
+            />
+            {Object.entries(grouped).map(([category, catItems]) => (
+              <section
+                key={category}
+                id={categorySectionId('public-menu-category', category)}
+                data-category={category}
+                className="mb-6 scroll-mt-24"
+              >
               <h2 className="font-bold text-sm uppercase tracking-wider mb-3"
                 style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-display)' }}>
                 {category}
@@ -245,8 +256,9 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
                   )
                 })}
               </div>
-            </div>
-          ))
+              </section>
+            ))}
+          </>
         )}
       </div>
 
