@@ -89,10 +89,22 @@ create policy "Menu items can be managed by vendor owner"
     )
   );
 
--- Scans policies
-create policy "Scans are publicly insertable"
-  on public.scans for insert with check (true);
 
+-- Server-side anonymous action rate limiting. Fingerprints are one-way hashes;
+-- no raw IP/user-agent values are stored.
+create table if not exists public.public_action_rate_limits (
+  id bigserial primary key,
+  action text not null check (action in ('scan', 'review', 'order')),
+  vendor_id uuid references public.vendors(id) on delete cascade,
+  fingerprint text not null,
+  created_at timestamptz not null default now()
+);
+alter table public.public_action_rate_limits enable row level security;
+create index if not exists public_action_rate_limits_lookup_idx
+  on public.public_action_rate_limits (action, fingerprint, created_at desc);
+
+-- Scans policies
+-- Public scan logging is performed by trusted server code with the service-role key.
 create policy "Scans are readable by vendor owner"
   on public.scans for select using (
     exists (
@@ -105,8 +117,7 @@ create policy "Scans are readable by vendor owner"
 create policy "Reviews are publicly readable"
   on public.reviews for select using (true);
 
-create policy "Reviews are publicly insertable"
-  on public.reviews for insert with check (true);
+-- Public review submission is performed by trusted server code with the service-role key.
 
 -- ── Online Ordering ──────────────────────────────────────────────────────────
 
@@ -178,11 +189,15 @@ alter table public.subscription_orders   enable row level security;
 alter table public.subscription_payments enable row level security;
 
 -- Orders policies
-create policy "Orders are publicly insertable"
-  on public.orders for insert with check (true);
+-- Public order placement is performed by trusted server code with the service-role key.
 
-create policy "Orders are publicly readable"
-  on public.orders for select using (true);
+create policy "Orders are readable by vendor owner"
+  on public.orders for select using (
+    exists (
+      select 1 from public.vendors
+      where id = orders.vendor_id and user_id = auth.uid()
+    )
+  );
 
 create policy "Orders can be updated by vendor owner"
   on public.orders for update
@@ -194,11 +209,17 @@ create policy "Orders can be updated by vendor owner"
   );
 
 -- Order items policies
-create policy "Order items are publicly insertable"
-  on public.order_items for insert with check (true);
+-- Public order item creation is performed by trusted server code with the service-role key.
 
-create policy "Order items are publicly readable"
-  on public.order_items for select using (true);
+create policy "Order items are readable by vendor owner"
+  on public.order_items for select using (
+    exists (
+      select 1
+      from public.orders
+      join public.vendors on vendors.id = orders.vendor_id
+      where orders.id = order_items.order_id and vendors.user_id = auth.uid()
+    )
+  );
 
 -- Subscription payment policies
 create policy "Vendors can create own subscription orders"
@@ -225,6 +246,15 @@ create policy "Vendors can view own subscription payments"
     )
   );
 
+-- Admin access table expected by src/app/admin/*
+create table if not exists public.admins (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+alter table public.admins enable row level security;
+create policy "Admins can read own row"
+  on public.admins for select using (auth.uid() = user_id);
+
 -- Storage bucket for menu photos
 insert into storage.buckets (id, name, public)
   values ('menu-photos', 'menu-photos', true)
@@ -233,12 +263,33 @@ insert into storage.buckets (id, name, public)
 create policy "Menu photos are publicly readable"
   on storage.objects for select using (bucket_id = 'menu-photos');
 
-create policy "Menu photos can be uploaded by authenticated users"
+create policy "Menu photos can be uploaded by vendor owner"
   on storage.objects for insert with check (
-    bucket_id = 'menu-photos' and auth.role() = 'authenticated'
+    bucket_id = 'menu-photos'
+    and auth.role() = 'authenticated'
+    and exists (
+      select 1 from public.vendors
+      where vendors.id::text = (storage.foldername(name))[1]
+        and vendors.user_id = auth.uid()
+    )
   );
 
-create policy "Menu photos can be deleted by uploader"
+create policy "Menu photos can be updated by vendor owner"
+  on storage.objects for update using (
+    bucket_id = 'menu-photos'
+    and exists (
+      select 1 from public.vendors
+      where vendors.id::text = (storage.foldername(name))[1]
+        and vendors.user_id = auth.uid()
+    )
+  );
+
+create policy "Menu photos can be deleted by vendor owner"
   on storage.objects for delete using (
-    bucket_id = 'menu-photos' and auth.uid()::text = (storage.foldername(name))[1]
+    bucket_id = 'menu-photos'
+    and exists (
+      select 1 from public.vendors
+      where vendors.id::text = (storage.foldername(name))[1]
+        and vendors.user_id = auth.uid()
+    )
   );

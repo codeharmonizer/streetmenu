@@ -1,5 +1,6 @@
--- StreetMenu Online Ordering Migration
--- Run this in your Supabase SQL Editor
+-- StreetMenu Online Ordering Migration (hardened)
+-- Public customers place/read orders through trusted server actions using the
+-- service-role key, so anonymous Supabase clients must not get global order RLS.
 
 -- 1. Add orders_enabled flag to vendors
 alter table public.vendors
@@ -31,74 +32,51 @@ create table if not exists public.order_items (
 );
 
 -- 4. Indexes
-create index if not exists orders_vendor_id_idx    on public.orders(vendor_id);
+create index if not exists orders_vendor_id_idx on public.orders(vendor_id);
 create index if not exists orders_order_number_idx on public.orders(order_number);
 create index if not exists order_items_order_id_idx on public.order_items(order_id);
 
 -- 5. Enable RLS
-alter table public.orders     enable row level security;
+alter table public.orders enable row level security;
 alter table public.order_items enable row level security;
 
--- 6. RLS Policies for orders
--- Public can place orders
+-- 6. Remove unsafe legacy public policies if present
+drop policy if exists "Orders are publicly insertable" on public.orders;
+drop policy if exists "Orders are publicly readable" on public.orders;
+drop policy if exists "Order items are publicly insertable" on public.order_items;
+drop policy if exists "Order items are publicly readable" on public.order_items;
+
+-- 7. Vendor-owner read/update policies for authenticated dashboard users
 do $$ begin
   if not exists (
     select 1 from pg_policies
     where schemaname = 'public' and tablename = 'orders'
-      and policyname = 'Orders are publicly insertable'
+      and policyname = 'Orders are readable by vendor owner'
   ) then
-    execute $p$
-      create policy "Orders are publicly insertable"
-        on public.orders for insert with check (true)
-    $p$;
+    create policy "Orders are readable by vendor owner"
+      on public.orders for select using (
+        exists (
+          select 1 from public.vendors
+          where id = orders.vendor_id and user_id = auth.uid()
+        )
+      );
   end if;
 end $$;
 
--- Public can read orders (tracking via unguessable code)
-do $$ begin
-  if not exists (
-    select 1 from pg_policies
-    where schemaname = 'public' and tablename = 'orders'
-      and policyname = 'Orders are publicly readable'
-  ) then
-    execute $p$
-      create policy "Orders are publicly readable"
-        on public.orders for select using (true)
-    $p$;
-  end if;
-end $$;
-
--- Only vendor owner can update order status
 do $$ begin
   if not exists (
     select 1 from pg_policies
     where schemaname = 'public' and tablename = 'orders'
       and policyname = 'Orders can be updated by vendor owner'
   ) then
-    execute $p$
-      create policy "Orders can be updated by vendor owner"
-        on public.orders for update
-        using (
-          exists (
-            select 1 from public.vendors
-            where id = orders.vendor_id and user_id = auth.uid()
-          )
+    create policy "Orders can be updated by vendor owner"
+      on public.orders for update
+      using (
+        exists (
+          select 1 from public.vendors
+          where id = orders.vendor_id and user_id = auth.uid()
         )
-    $p$;
-  end if;
-end $$;
-
--- 7. RLS Policies for order_items
-do $$ begin
-  if not exists (
-    select 1 from pg_policies
-    where schemaname = 'public' and tablename = 'order_items'
-      and policyname = 'Order items are publicly insertable'
-  ) then
-    execute $p$
-      create policy "Order items are publicly insertable"
-        on public.order_items for insert with check (true)
-    $p$;
+      );
   end if;
 end $$;
 
@@ -106,11 +84,16 @@ do $$ begin
   if not exists (
     select 1 from pg_policies
     where schemaname = 'public' and tablename = 'order_items'
-      and policyname = 'Order items are publicly readable'
+      and policyname = 'Order items are readable by vendor owner'
   ) then
-    execute $p$
-      create policy "Order items are publicly readable"
-        on public.order_items for select using (true)
-    $p$;
+    create policy "Order items are readable by vendor owner"
+      on public.order_items for select using (
+        exists (
+          select 1
+          from public.orders
+          join public.vendors on vendors.id = orders.vendor_id
+          where orders.id = order_items.order_id and vendors.user_id = auth.uid()
+        )
+      );
   end if;
 end $$;

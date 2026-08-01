@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { logPublicScan } from '@/lib/public-actions'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { MapPin, Clock, Phone, Star } from 'lucide-react'
@@ -71,8 +72,7 @@ export default async function PublicMenuPage({ params }: Props) {
     )
   }
 
-  // Log scan
-  try { await supabase.from('scans').insert({ vendor_id: vendor.id }) } catch {}
+  await logPublicScan(vendor.id)
 
   const { data: items } = await supabase
     .from('menu_items')

@@ -1,9 +1,44 @@
 'use server'
 
+import { headers } from 'next/headers'
+import { createHash } from 'node:crypto'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import type { Order, OrderStatus } from '@/types'
 
 const ORDER_NUMBER_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'
+const ORDER_RATE_LIMIT = { windowMinutes: 10, maxEvents: 5 }
+
+async function getClientFingerprint(action: string, vendorId: string): Promise<string> {
+  const h = await headers()
+  const forwardedFor = h.get('x-forwarded-for')?.split(',')[0]?.trim()
+  const ip = forwardedFor || h.get('x-real-ip') || 'unknown'
+  const ua = h.get('user-agent') || 'unknown'
+  return createHash('sha256').update(`${action}:${vendorId}:${ip}:${ua}`).digest('hex')
+}
+
+async function isRateLimited(
+  supabase: ReturnType<typeof createAdminClient>,
+  action: string,
+  vendorId: string,
+  limit: { windowMinutes: number; maxEvents: number }
+): Promise<boolean> {
+  const key = await getClientFingerprint(action, vendorId)
+  const since = new Date(Date.now() - limit.windowMinutes * 60_000).toISOString()
+
+  const { count, error: countError } = await supabase
+    .from('public_action_rate_limits')
+    .select('id', { count: 'exact', head: true })
+    .eq('action', action)
+    .eq('fingerprint', key)
+    .gte('created_at', since)
+
+  if (countError) return false
+  if ((count ?? 0) >= limit.maxEvents) return true
+
+  await supabase.from('public_action_rate_limits').insert({ action, vendor_id: vendorId, fingerprint: key })
+  return false
+}
 
 function generateOrderNumber(): string {
   let result = ''
@@ -27,9 +62,11 @@ export async function placeOrder(input: {
     if (!it.menuItemId || it.quantity < 1) return { error: 'invalid_quantity' }
   }
 
-  const supabase = await createClient()
+  const supabase = createAdminClient()
+  if (await isRateLimited(supabase, 'order', vendorId, ORDER_RATE_LIMIT)) {
+    return { error: 'rate_limited' }
+  }
 
-  // Load vendor
   const { data: vendor } = await supabase
     .from('vendors')
     .select('id, orders_enabled, is_open, is_active')
@@ -115,7 +152,7 @@ export async function placeOrder(input: {
 export async function getOrderByNumber(
   orderNumber: string
 ): Promise<(Order & { vendor_name: string; vendor_slug: string }) | null> {
-  const supabase = await createClient()
+  const supabase = createAdminClient()
 
   const { data: order } = await supabase
     .from('orders')
