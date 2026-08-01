@@ -20,6 +20,7 @@ type MenuItem = {
   photo_url: string | null
   category: string | null
   available: boolean
+  sort_order: number
   created_at: string
 }
 

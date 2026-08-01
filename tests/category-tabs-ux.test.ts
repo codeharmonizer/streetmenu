@@ -15,6 +15,9 @@ describe('category jump tabs UX', () => {
     expect(component).toContain('IntersectionObserver')
     expect(component).toContain('scrollIntoView')
     expect(component).toContain('aria-current')
+    expect(component).toContain('isProgrammaticScrollRef')
+    expect(component).toContain('scrollEndTimerRef')
+    expect(component).toContain("block: 'nearest'")
   })
 
   it('adds category tabs and section ids to the public customer menu', () => {
@@ -34,5 +37,18 @@ describe('category jump tabs UX', () => {
     expect(manager).toContain('sectionPrefix="vendor-menu-category"')
     expect(manager).toContain('id={categorySectionId')
     expect(manager).toContain('Object.entries(groupedItems)')
+  })
+
+  it('lets vendors reorder whole categories and persists item sort_order', () => {
+    const manager = read('src/components/menu/MenuManager.tsx')
+    const menuPage = read('src/app/dashboard/menu/page.tsx')
+    const schema = read('supabase-schema.sql')
+
+    expect(manager).toContain('async function moveCategory')
+    expect(manager).toContain('aria-label={`Move ${category} up`}')
+    expect(manager).toContain('aria-label={`Move ${category} down`}')
+    expect(manager).toContain('sort_order')
+    expect(menuPage).toContain(".order('sort_order'")
+    expect(schema).toContain('sort_order integer')
   })
 })

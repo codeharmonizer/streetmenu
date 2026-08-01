@@ -114,6 +114,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
       price:       parseFloat(form.price),
       category:    form.category || null,
       available:   form.available,
+      sort_order:  editing?.sort_order ?? items.length,
       photo_url:   photoUrl,
     }
 
@@ -159,8 +160,31 @@ export default function MenuManager({ vendor, initialItems }: Props) {
 
     ;[newItems[index], newItems[swapIdx]] = [newItems[swapIdx], newItems[index]]
 
-    const updates = newItems.map((item, i) => ({ id: item.id, sort_order: i }))
-    setItems(newItems)
+    const reordered = newItems.map((item, i) => ({ ...item, sort_order: i }))
+    const updates = reordered.map((item, i) => ({ id: item.id, sort_order: i }))
+    setItems(reordered)
+
+    await Promise.all(
+      updates.map(({ id, sort_order }) =>
+        supabase.from('menu_items').update({ sort_order }).eq('id', id)
+      )
+    )
+  }
+
+  async function moveCategory(category: string, direction: 'up' | 'down') {
+    const currentIndex = visibleCategories.indexOf(category)
+    const swapIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1
+    if (currentIndex < 0 || swapIndex < 0 || swapIndex >= visibleCategories.length) return
+
+    const nextCategories = [...visibleCategories]
+    ;[nextCategories[currentIndex], nextCategories[swapIndex]] = [nextCategories[swapIndex], nextCategories[currentIndex]]
+
+    const reordered = nextCategories
+      .flatMap(cat => groupedItems[cat] ?? [])
+      .map((item, index) => ({ ...item, sort_order: index }))
+    const updates = reordered.map(item => ({ id: item.id, sort_order: item.sort_order }))
+
+    setItems(reordered)
 
     await Promise.all(
       updates.map(({ id, sort_order }) =>
@@ -317,10 +341,34 @@ export default function MenuManager({ vendor, initialItems }: Props) {
                 data-category={category}
                 className="scroll-mt-28"
               >
-                <h2 className="font-bold text-sm uppercase tracking-wider mb-3"
-                  style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-display)' }}>
-                  {category}
-                </h2>
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <h2 className="font-bold text-sm uppercase tracking-wider"
+                    style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-display)' }}>
+                    {category}
+                  </h2>
+                  {visibleCategories.length > 1 && (
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        aria-label={`Move ${category} up`}
+                        onClick={() => moveCategory(category, 'up')}
+                        disabled={visibleCategories.indexOf(category) === 0}
+                        className="w-8 h-8 rounded-full flex items-center justify-center disabled:opacity-30"
+                        style={{ background: 'var(--surface-2)', color: 'var(--text-secondary)' }}>
+                        <ChevronUp size={14} />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label={`Move ${category} down`}
+                        onClick={() => moveCategory(category, 'down')}
+                        disabled={visibleCategories.indexOf(category) === visibleCategories.length - 1}
+                        className="w-8 h-8 rounded-full flex items-center justify-center disabled:opacity-30"
+                        style={{ background: 'var(--surface-2)', color: 'var(--text-secondary)' }}>
+                        <ChevronDown size={14} />
+                      </button>
+                    </div>
+                  )}
+                </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                   {categoryItems.map(item => {
                     const index = items.findIndex(i => i.id === item.id)

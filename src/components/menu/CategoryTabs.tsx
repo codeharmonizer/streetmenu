@@ -25,6 +25,8 @@ export default function CategoryTabs({ categories, sectionPrefix, className = ''
   )
   const [activeCategory, setActiveCategory] = useState(uniqueCategories[0] ?? '')
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({})
+  const isProgrammaticScrollRef = useRef(false)
+  const scrollEndTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     if (!uniqueCategories.length) return
@@ -36,6 +38,8 @@ export default function CategoryTabs({ categories, sectionPrefix, className = ''
 
     const observer = new IntersectionObserver(
       entries => {
+        if (isProgrammaticScrollRef.current) return
+
         const visible = entries
           .filter(entry => entry.isIntersecting)
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0]
@@ -55,7 +59,10 @@ export default function CategoryTabs({ categories, sectionPrefix, className = ''
       if (section) observer.observe(section)
     })
 
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      if (scrollEndTimerRef.current) clearTimeout(scrollEndTimerRef.current)
+    }
   }, [sectionPrefix, uniqueCategories])
 
   useEffect(() => {
@@ -70,9 +77,16 @@ export default function CategoryTabs({ categories, sectionPrefix, className = ''
 
   function jumpToCategory(category: string) {
     setActiveCategory(category)
+    isProgrammaticScrollRef.current = true
+    if (scrollEndTimerRef.current) clearTimeout(scrollEndTimerRef.current)
+
     document
       .getElementById(categorySectionId(sectionPrefix, category))
-      ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+
+    scrollEndTimerRef.current = setTimeout(() => {
+      isProgrammaticScrollRef.current = false
+    }, 450)
   }
 
   return (

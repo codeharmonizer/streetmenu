@@ -38,6 +38,7 @@ create table if not exists public.menu_items (
   photo_url text,
   category text,
   available boolean default true,
+  sort_order integer not null default 0,
   created_at timestamptz default now()
 );
 

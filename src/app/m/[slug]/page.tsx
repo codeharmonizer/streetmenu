@@ -82,6 +82,7 @@ export default async function PublicMenuPage({ params }: Props) {
     .select('*')
     .eq('vendor_id', vendor.id)
     .order('available', { ascending: false })
+    .order('sort_order', { ascending: true })
     .order('created_at', { ascending: true })
 
   const { data: reviews } = await supabase
