@@ -11,6 +11,7 @@ import type { Order, OrderStatus } from '@/types'
 type TrackOrder = Order & { vendor_name: string; vendor_slug: string }
 
 const TERMINAL: OrderStatus[] = ['completed', 'rejected']
+const LIVE_STATUS_POLL_INTERVAL = 3_000
 
 interface Props {
   initialOrder: TrackOrder
@@ -24,25 +25,47 @@ export default function OrderTracker({ initialOrder }: Props) {
   const [lastChecked, setLastChecked] = useState<Date | null>(null)
   const isTerminal = TERMINAL.includes(order.status)
 
-  // ── Supabase Realtime: push status updates instantly ──────────────────────
+  // ── Supabase Realtime + short fallback polling: push status updates instantly ─
   useEffect(() => {
     if (isTerminal) return
 
     const supabase = createClient()
+    let stopped = false
+
+    async function refreshStatus() {
+      const fresh = await getOrderByNumber(order.order_number)
+      if (!stopped && fresh) {
+        setOrder(fresh)
+        setLastChecked(new Date())
+      }
+    }
+
     const channel  = supabase
       .channel(`order-status-${order.id}`)
+      .on('broadcast', { event: 'status' }, (payload: { payload: { id?: string; status?: OrderStatus } }) => {
+        const next = payload.payload
+        if (next.id !== order.id || !next.status) return
+        setOrder((prev: TrackOrder) => ({ ...prev, status: next.status! }))
+        setLastChecked(new Date())
+      })
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'orders', filter: `id=eq.${order.id}` },
-        (payload) => {
-          setOrder(prev => ({ ...prev, ...(payload.new as Partial<TrackOrder>) }))
+        (payload: { new: Partial<TrackOrder> }) => {
+          setOrder((prev: TrackOrder) => ({ ...prev, ...payload.new }))
           setLastChecked(new Date())
         }
       )
       .subscribe()
 
-    return () => { supabase.removeChannel(channel) }
-  }, [order.id, isTerminal])
+    const timer = setInterval(refreshStatus, LIVE_STATUS_POLL_INTERVAL)
+
+    return () => {
+      stopped = true
+      clearInterval(timer)
+      supabase.removeChannel(channel)
+    }
+  }, [order.id, order.order_number, isTerminal])
 
   // ── Manual "Check Status" button ──────────────────────────────────────────
   async function checkStatus() {

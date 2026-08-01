@@ -6,12 +6,13 @@ const root = join(__dirname, '..')
 const read = (path: string) => readFileSync(join(root, path), 'utf8')
 
 describe('category jump tabs UX', () => {
-  it('provides reusable viewport-pinned horizontal category tabs with stable scroll-spy behavior', () => {
+  it('provides reusable sticky horizontal category tabs with stable scroll-spy behavior', () => {
     const component = read('src/components/menu/CategoryTabs.tsx')
 
     expect(component).toContain('data-category-tabs')
-    expect(component).toContain('fixed inset-x-0 top-0')
-    expect(component).toContain('PINNED_TABS_HEIGHT')
+    expect(component).toContain('sticky top-0')
+    expect(component).toContain('STICKY_TABS_HEIGHT')
+    expect(component).not.toContain('fixed inset-x-0 top-0')
     expect(component).toContain('overflow-x-auto')
     expect(component).toContain('IntersectionObserver')
     expect(component).toContain('scrollIntoView')

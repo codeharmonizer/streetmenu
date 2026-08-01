@@ -212,5 +212,34 @@ export async function updateOrderStatus(
     .eq('id', orderId)
 
   if (error) return { error: error.message }
+
+  // Notify the public track screen immediately. The DB realtime stream can be
+  // blocked by public RLS, so we also broadcast a status-only event to the
+  // unguessable order UUID channel that the track page already knows.
+  try {
+    const channel = supabase.channel(`order-status-${orderId}`, {
+      config: { broadcast: { self: false } },
+    })
+
+    await new Promise<void>((resolve) => {
+      const timeout = setTimeout(resolve, 1_500)
+      channel.subscribe(async (realtimeStatus) => {
+        if (realtimeStatus !== 'SUBSCRIBED') return
+        await channel.send({
+          type: 'broadcast',
+          event: 'status',
+          payload: { id: orderId, status },
+        })
+        clearTimeout(timeout)
+        resolve()
+      })
+    })
+
+    await supabase.removeChannel(channel)
+  } catch {
+    // Do not fail the vendor update if the realtime notification cannot send;
+    // the customer track screen also has a short polling fallback.
+  }
+
   return {}
 }

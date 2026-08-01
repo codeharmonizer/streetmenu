@@ -8,7 +8,7 @@ interface Props {
   className?: string
 }
 
-const PINNED_TABS_HEIGHT = 68
+const STICKY_TABS_HEIGHT = 68
 
 export function categorySectionId(sectionPrefix: string, category: string) {
   const safe = category
@@ -52,7 +52,7 @@ export default function CategoryTabs({ categories, sectionPrefix, className = ''
       },
       {
         root: null,
-        rootMargin: `-${PINNED_TABS_HEIGHT + 18}px 0px -65% 0px`,
+        rootMargin: `-${STICKY_TABS_HEIGHT + 18}px 0px -65% 0px`,
         threshold: [0, 0.2, 0.6],
       }
     )
@@ -94,42 +94,39 @@ export default function CategoryTabs({ categories, sectionPrefix, className = ''
   }
 
   return (
-    <>
-      <div aria-hidden="true" style={{ height: PINNED_TABS_HEIGHT }} />
-      <div
-        data-category-tabs
-        className={`fixed inset-x-0 top-0 z-50 overflow-x-auto overscroll-x-contain px-4 py-3 backdrop-blur-xl ${className}`}
-        style={{
-          background: 'color-mix(in srgb, var(--bg) 94%, transparent)',
-          borderBottom: '1px solid var(--border)',
-          scrollbarWidth: 'none',
-        }}
-        ref={scrollerRef}
-      >
-        <div className="mx-auto flex min-w-max max-w-3xl gap-2">
-          {uniqueCategories.map(category => {
-            const isActive = category === activeCategory
-            return (
-              <button
-                key={category}
-                ref={node => { tabRefs.current[category] = node }}
-                type="button"
-                aria-current={isActive ? 'true' : undefined}
-                onClick={() => jumpToCategory(category)}
-                className="whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold transition-all active:scale-95"
-                style={{
-                  background: isActive ? 'var(--brand)' : 'var(--surface)',
-                  color:      isActive ? 'white'        : 'var(--text-secondary)',
-                  border:     `1px solid ${isActive ? 'var(--brand)' : 'var(--border)'}`,
-                  boxShadow:  isActive ? '0 8px 18px rgba(0,0,0,0.12)' : 'none',
-                }}
-              >
-                {category}
-              </button>
-            )
-          })}
-        </div>
+    <div
+      data-category-tabs
+      className={`sticky top-0 z-40 -mx-4 mb-5 overflow-x-auto overscroll-x-contain px-4 py-3 backdrop-blur-xl ${className}`}
+      style={{
+        background: 'color-mix(in srgb, var(--bg) 94%, transparent)',
+        borderBottom: '1px solid var(--border)',
+        scrollbarWidth: 'none',
+      }}
+      ref={scrollerRef}
+    >
+      <div className="flex min-w-max gap-2">
+        {uniqueCategories.map(category => {
+          const isActive = category === activeCategory
+          return (
+            <button
+              key={category}
+              ref={node => { tabRefs.current[category] = node }}
+              type="button"
+              aria-current={isActive ? 'true' : undefined}
+              onClick={() => jumpToCategory(category)}
+              className="whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold transition-all active:scale-95"
+              style={{
+                background: isActive ? 'var(--brand)' : 'var(--surface)',
+                color:      isActive ? 'white'        : 'var(--text-secondary)',
+                border:     `1px solid ${isActive ? 'var(--brand)' : 'var(--border)'}`,
+                boxShadow:  isActive ? '0 8px 18px rgba(0,0,0,0.12)' : 'none',
+              }}
+            >
+              {category}
+            </button>
+          )
+        })}
       </div>
-    </>
+    </div>
   )
 }
