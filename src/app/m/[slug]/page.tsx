@@ -1,5 +1,5 @@
-import { createClient } from '@/lib/supabase/server'
 import { logPublicScan } from '@/lib/public-actions'
+import { getCachedPublicMenuData, getPublicMenuMetadata } from '@/lib/public-menu-cache'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { MapPin, Clock, Phone, Star } from 'lucide-react'
@@ -15,12 +15,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const supabase = await createClient()
-  const { data: vendor } = await supabase
-    .from('vendors')
-    .select('name, description, category')
-    .eq('slug', slug)
-    .single()
+  const vendor = await getPublicMenuMetadata(slug)
 
   if (!vendor) return { title: 'Menu not found' }
 
@@ -48,15 +43,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PublicMenuPage({ params }: Props) {
   const { slug } = await params
-  const supabase = await createClient()
   const t        = await getTranslations('publicMenu')
   const locale   = await getLocale()
 
-  const { data: vendor } = await supabase
-    .from('vendors')
-    .select('*')
-    .eq('slug', slug)
-    .single()
+  const { vendor, items, reviews } = await getCachedPublicMenuData(slug)
 
   if (!vendor) notFound()
 
@@ -77,21 +67,6 @@ export default async function PublicMenuPage({ params }: Props) {
 
   await logPublicScan(vendor.id)
 
-  const { data: items } = await supabase
-    .from('menu_items')
-    .select('*')
-    .eq('vendor_id', vendor.id)
-    .order('available', { ascending: false })
-    .order('sort_order', { ascending: true })
-    .order('created_at', { ascending: true })
-
-  const { data: reviews } = await supabase
-    .from('reviews')
-    .select('*')
-    .eq('vendor_id', vendor.id)
-    .order('created_at', { ascending: false })
-    .limit(20)
-
   const avgRating = reviews?.length
     ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
     : null
@@ -101,8 +76,7 @@ export default async function PublicMenuPage({ params }: Props) {
 
   const ordersEnabled =
     vendor.orders_enabled === true &&
-    vendor.is_open === true &&
-    vendor.is_active !== false
+    vendor.is_open === true
 
   return (
     <div className="min-h-screen pb-24" style={{ background: 'var(--bg)' }}>
@@ -191,8 +165,8 @@ export default async function PublicMenuPage({ params }: Props) {
           slug:            vendor.slug,
           reviews_enabled: vendor.reviews_enabled !== false,
         }}
-        items={items ?? []}
-        reviews={reviews ?? []}
+        items={items}
+        reviews={reviews}
         avgRating={avgRating}
         ordersEnabled={ordersEnabled}
       />

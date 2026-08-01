@@ -10,6 +10,7 @@ import toast from 'react-hot-toast'
 import { useTranslations } from 'next-intl'
 import HoursBuilder from './HoursBuilder'
 import LocationPicker from './LocationPicker'
+import { revalidateVendorPublicMenu } from '@/lib/public-menu-cache-actions'
 
 export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) {
   const [vendor,      setVendor]      = useState(initial)
@@ -19,6 +20,12 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
   const supabase = createClient()
   const t  = useTranslations('settings')
   const tc = useTranslations('common')
+
+  async function clearPublicMenuCache() {
+    try {
+      await revalidateVendorPublicMenu(vendor.id)
+    } catch {}
+  }
 
   function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -90,6 +97,7 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
     } else {
       setVendor(v => ({ ...v, logo_url: logoUrl }))
       setLogoFile(null)
+      await clearPublicMenuCache()
       toast.success(t('saveSuccess'))
     }
     setSaving(false)
@@ -100,7 +108,10 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
       .from('vendors')
       .update({ is_open: !vendor.is_open })
       .eq('id', vendor.id)
-    if (!error) setVendor(v => ({ ...v, is_open: !v.is_open }))
+    if (!error) {
+      setVendor(v => ({ ...v, is_open: !v.is_open }))
+      await clearPublicMenuCache()
+    }
   }
 
   async function toggleOrdersEnabled() {
@@ -111,6 +122,7 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
       .eq('id', vendor.id)
     if (!error) {
       setVendor(v => ({ ...v, orders_enabled: next }))
+      await clearPublicMenuCache()
       toast.success(t('saveSuccess'))
     } else {
       toast.error(t('saveFailed'))
@@ -261,3 +273,4 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
     </div>
   )
 }
+

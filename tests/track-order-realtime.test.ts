@@ -12,8 +12,11 @@ describe('track order realtime updates', () => {
     expect(tracker).toContain(".channel(`order-status-${order.id}`)")
     expect(tracker).toContain(".on('broadcast', { event: 'status' }")
     expect(tracker).toContain("'postgres_changes'")
-    expect(tracker).toContain('LIVE_STATUS_POLL_INTERVAL = 3_000')
-    expect(tracker).toContain('setInterval(refreshStatus, LIVE_STATUS_POLL_INTERVAL)')
+    expect(tracker).toContain('LIVE_STATUS_POLL_INTERVAL_FAST = 3_000')
+    expect(tracker).toContain('LIVE_STATUS_POLL_INTERVAL_ACTIVE = 5_000')
+    expect(tracker).toContain('LIVE_STATUS_POLL_INTERVAL_SLOW = 15_000')
+    expect(tracker).toContain('function getLiveStatusPollInterval')
+    expect(tracker).toContain('setInterval(refreshStatus, pollInterval)')
     expect(tracker).toContain('clearInterval(timer)')
   })
 

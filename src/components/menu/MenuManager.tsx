@@ -9,6 +9,7 @@ import Image from 'next/image'
 import toast from 'react-hot-toast'
 import { useTranslations, useLocale } from 'next-intl'
 import CategoryTabs, { categorySectionId } from './CategoryTabs'
+import { revalidateVendorPublicMenu } from '@/lib/public-menu-cache-actions'
 
 interface Props {
   vendor: Vendor
@@ -50,6 +51,12 @@ export default function MenuManager({ vendor, initialItems }: Props) {
       return acc
     }, {})
   }, [items, visibleCategories])
+
+  async function clearPublicMenuCache() {
+    try {
+      await revalidateVendorPublicMenu(vendor.id)
+    } catch {}
+  }
 
   function openAdd() {
     if (atLimit) {
@@ -128,6 +135,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
 
       if (error) { toast.error(t('updateFailed')); setSaving(false); return }
       setItems(prev => prev.map(i => i.id === editing.id ? data : i))
+      await clearPublicMenuCache()
       toast.success(t('updated'))
     } else {
       const { data, error } = await supabase
@@ -138,6 +146,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
 
       if (error) { toast.error(t('addFailed')); setSaving(false); return }
       setItems(prev => [...prev, data])
+      await clearPublicMenuCache()
       toast.success(t('added'))
     }
 
@@ -150,6 +159,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
     const { error } = await supabase.from('menu_items').delete().eq('id', id)
     if (error) { toast.error(t('deleteFailed')); return }
     setItems(prev => prev.filter(i => i.id !== id))
+    await clearPublicMenuCache()
     toast.success(t('deleted'))
   }
 
@@ -169,6 +179,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
         supabase.from('menu_items').update({ sort_order }).eq('id', id)
       )
     )
+    await clearPublicMenuCache()
   }
 
   async function moveCategory(category: string, direction: 'up' | 'down') {
@@ -191,6 +202,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
         supabase.from('menu_items').update({ sort_order }).eq('id', id)
       )
     )
+    await clearPublicMenuCache()
   }
 
   async function toggleAvailable(item: MenuItem) {
@@ -200,6 +212,7 @@ export default function MenuManager({ vendor, initialItems }: Props) {
       .eq('id', item.id)
     if (error) { toast.error(t('updateStatusFailed')); return }
     setItems(prev => prev.map(i => i.id === item.id ? { ...i, available: !i.available } : i))
+    await clearPublicMenuCache()
   }
 
   return (
@@ -488,3 +501,4 @@ export default function MenuManager({ vendor, initialItems }: Props) {
     </div>
   )
 }
+

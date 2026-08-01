@@ -42,6 +42,12 @@ create table if not exists public.menu_items (
   created_at timestamptz default now()
 );
 
+-- Launch traffic indexes for public menu/order/scans hot paths
+create index if not exists vendors_slug_idx on public.vendors(slug);
+create index if not exists vendors_user_id_idx on public.vendors(user_id);
+create index if not exists menu_items_vendor_sort_order_idx on public.menu_items(vendor_id, sort_order, created_at);
+create index if not exists menu_items_vendor_available_sort_idx on public.menu_items(vendor_id, available desc, sort_order, created_at);
+
 -- Scans table (analytics)
 create table if not exists public.scans (
   id uuid primary key default uuid_generate_v4(),
@@ -58,6 +64,9 @@ create table if not exists public.reviews (
   reviewer_name text,
   created_at timestamptz default now()
 );
+
+create index if not exists scans_vendor_scanned_at_idx on public.scans(vendor_id, scanned_at desc);
+create index if not exists reviews_vendor_created_at_idx on public.reviews(vendor_id, created_at desc);
 
 -- Row Level Security (RLS)
 alter table public.vendors enable row level security;
@@ -154,6 +163,7 @@ create table if not exists public.order_items (
 -- Indexes
 create index if not exists orders_vendor_id_idx     on public.orders(vendor_id);
 create index if not exists orders_order_number_idx  on public.orders(order_number);
+create index if not exists orders_vendor_status_created_at_idx on public.orders(vendor_id, status, created_at desc);
 create index if not exists order_items_order_id_idx on public.order_items(order_id);
 
 -- Subscription payment attempts and audit trail

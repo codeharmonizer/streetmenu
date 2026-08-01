@@ -11,7 +11,16 @@ import type { Order, OrderStatus } from '@/types'
 type TrackOrder = Order & { vendor_name: string; vendor_slug: string }
 
 const TERMINAL: OrderStatus[] = ['completed', 'rejected']
-const LIVE_STATUS_POLL_INTERVAL = 3_000
+const LIVE_STATUS_POLL_INTERVAL_FAST = 3_000
+const LIVE_STATUS_POLL_INTERVAL_ACTIVE = 5_000
+const LIVE_STATUS_POLL_INTERVAL_SLOW = 15_000
+
+function getLiveStatusPollInterval(order: TrackOrder) {
+  const ageMs = Date.now() - new Date(order.created_at).getTime()
+  if (ageMs > 10 * 60_000) return LIVE_STATUS_POLL_INTERVAL_SLOW
+  if (order.status === 'accepted' || order.status === 'ready') return LIVE_STATUS_POLL_INTERVAL_ACTIVE
+  return LIVE_STATUS_POLL_INTERVAL_FAST
+}
 
 interface Props {
   initialOrder: TrackOrder
@@ -24,6 +33,7 @@ export default function OrderTracker({ initialOrder }: Props) {
   const [checking,    setChecking]    = useState(false)
   const [lastChecked, setLastChecked] = useState<Date | null>(null)
   const isTerminal = TERMINAL.includes(order.status)
+  const pollInterval = getLiveStatusPollInterval(order)
 
   // ── Supabase Realtime + short fallback polling: push status updates instantly ─
   useEffect(() => {
@@ -58,14 +68,14 @@ export default function OrderTracker({ initialOrder }: Props) {
       )
       .subscribe()
 
-    const timer = setInterval(refreshStatus, LIVE_STATUS_POLL_INTERVAL)
+    const timer = setInterval(refreshStatus, pollInterval)
 
     return () => {
       stopped = true
       clearInterval(timer)
       supabase.removeChannel(channel)
     }
-  }, [order.id, order.order_number, isTerminal])
+  }, [order.id, order.order_number, isTerminal, pollInterval])
 
   // ── Manual "Check Status" button ──────────────────────────────────────────
   async function checkStatus() {
