@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Star, X, Pencil, ShoppingBag, Plus, Minus, Trash2 } from 'lucide-react'
@@ -46,6 +46,7 @@ interface Props {
 type SheetType = 'cart' | 'reviews' | 'write' | null
 
 const SM_ORDERS_KEY = 'sm_orders'
+const SM_CUSTOMER_KEY = 'sm_customer_info'
 
 export default function PublicMenuClient({ vendor, items, reviews, avgRating, ordersEnabled }: Props) {
   const t      = useTranslations('publicMenu')
@@ -60,6 +61,16 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
   const [note,          setNote]          = useState('')
   const [isPending,     startTransition]  = useTransition()
   const [successCode,   setSuccessCode]   = useState<string | null>(null)
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(SM_CUSTOMER_KEY)
+      if (!raw) return
+      const savedCustomer = JSON.parse(raw) as { name?: string; phone?: string }
+      if (savedCustomer.name) setCustomerName(savedCustomer.name)
+      if (savedCustomer.phone) setCustomerPhone(savedCustomer.phone)
+    } catch {}
+  }, [])
 
   // ── Cart helpers ──────────────────────────────────────────────────────────
   function addItem(itemId: string) {
@@ -133,12 +144,14 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
           at:         new Date().toISOString(),
         })
         localStorage.setItem(SM_ORDERS_KEY, JSON.stringify(saved.slice(0, 20)))
+        localStorage.setItem(SM_CUSTOMER_KEY, JSON.stringify({
+          name: customerName.trim(),
+          phone: customerPhone.trim(),
+        }))
       } catch {}
 
       setSuccessCode(result.orderNumber)
       setCart(new Map())
-      setCustomerName('')
-      setCustomerPhone('')
       setNote('')
     })
   }

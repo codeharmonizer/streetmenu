@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { MapPin, Clock, Phone, Star } from 'lucide-react'
 import ShareButton from '@/components/menu/ShareButton'
 import PublicMenuClient from '@/components/menu/PublicMenuClient'
+import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
 import type { Metadata } from 'next'
 import { getTranslations, getLocale } from 'next-intl/server'
 
@@ -105,7 +106,10 @@ export default async function PublicMenuPage({ params }: Props) {
   return (
     <div className="min-h-screen pb-24" style={{ background: 'var(--bg)' }}>
       {/* Header — server-rendered */}
-      <div className="px-4 pt-8 pb-6 max-w-lg mx-auto">
+      <div className="px-4 pt-4 pb-6 max-w-lg mx-auto">
+        <div className="flex justify-end mb-4">
+          <LanguageSwitcher variant="compact" />
+        </div>
         <div className="flex items-start gap-4 mb-4">
           {vendor.logo_url ? (
             <div className="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 relative">
