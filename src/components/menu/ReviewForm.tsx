@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { Star } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
 import toast from 'react-hot-toast'
 import { useTranslations } from 'next-intl'
+import { submitReview } from '@/lib/public-actions'
 
 const COOLDOWN_HOURS = 24
 const storageKey = (id: string) => `sm_review_${id}`
@@ -42,15 +42,14 @@ export default function ReviewForm({ vendorId, onSuccess }: ReviewFormProps) {
     if (!rating) { toast.error(t('ratingRequired')); return }
     setSubmitting(true)
 
-    const supabase = createClient()
-    const { error } = await supabase.from('reviews').insert({
-      vendor_id:     vendorId,
+    const result = await submitReview({
+      vendorId,
       rating,
-      comment:       comment || null,
-      reviewer_name: name || null,
+      comment,
+      reviewerName: name,
     })
 
-    if (error) {
+    if (result.error) {
       toast.error(t('submitFailed'))
     } else {
       localStorage.setItem(storageKey(vendorId), new Date().toISOString())

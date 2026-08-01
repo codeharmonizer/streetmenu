@@ -104,7 +104,7 @@ export default function HoursBuilder({ value, onChange }: Props) {
       // Try builder mode; if value has no schedule data yet, start fresh
       setSched(defaultSchedule())
     }
-  }, [])
+  }, [value])
 
   function toggleDay(idx: number) {
     setSched(prev => {

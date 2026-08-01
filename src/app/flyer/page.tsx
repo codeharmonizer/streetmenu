@@ -24,7 +24,7 @@ export default function FlyerPage() {
       <div className="no-print screen-controls">
         <div style={{ textAlign: 'center', padding: '24px 16px 8px', background: '#1A1A1A' }}>
           <p style={{ fontSize: 13, color: '#888880', marginBottom: 12 }}>
-            اضغط "طباعة" لتصدير الفلاير كـ PDF أو طباعته مباشرة
+            اضغط &quot;طباعة&quot; لتصدير الفلاير كـ PDF أو طباعته مباشرة
             &nbsp;·&nbsp;
             Press &quot;Print&quot; to export as PDF or print directly
           </p>
