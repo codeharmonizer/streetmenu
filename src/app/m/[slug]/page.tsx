@@ -9,15 +9,16 @@ import type { Metadata } from 'next'
 import { getTranslations, getLocale } from 'next-intl/server'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
   const supabase = await createClient()
   const { data: vendor } = await supabase
     .from('vendors')
     .select('name, description, category')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single()
 
   if (!vendor) return { title: 'Menu not found' }
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: vendor.name,
       description: desc,
-      url: `${appUrl}/m/${params.slug}`,
+      url: `${appUrl}/m/${slug}`,
       siteName: 'ScanBite',
       locale: 'ar_BH',
       type: 'website',
@@ -45,6 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PublicMenuPage({ params }: Props) {
+  const { slug } = await params
   const supabase = await createClient()
   const t        = await getTranslations('publicMenu')
   const locale   = await getLocale()
@@ -52,7 +54,7 @@ export default async function PublicMenuPage({ params }: Props) {
   const { data: vendor } = await supabase
     .from('vendors')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single()
 
   if (!vendor) notFound()

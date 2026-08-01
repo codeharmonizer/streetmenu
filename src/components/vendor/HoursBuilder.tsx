@@ -202,49 +202,25 @@ export default function HoursBuilder({ value, onChange }: Props) {
             </div>
           )}
 
-          {/* Per-day rows */}
-          {enabledIndices.length === 1 ? (
-            // Single day — show one row
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-bold w-14 flex-shrink-0" style={{ color: 'var(--text-primary)' }}>
-                {days[enabledIndices[0]]}
-              </span>
-              <div className="flex items-center gap-2 flex-1">
-                <input type="time" value={sched[enabledIndices[0]].open}
-                  onChange={e => setTime(enabledIndices[0], 'open', e.target.value)}
-                  className="input py-1.5 text-sm flex-1" style={{ minWidth: 0 }} />
-                <span className="text-xs" style={{ color: 'var(--text-muted)' }}>–</span>
-                <input type="time" value={sched[enabledIndices[0]].close}
-                  onChange={e => setTime(enabledIndices[0], 'close', e.target.value)}
-                  className="input py-1.5 text-sm flex-1" style={{ minWidth: 0 }} />
+          {/* Per-day rows — visible immediately for every selected day */}
+          <div className="space-y-2">
+            {enabledIndices.map(idx => (
+              <div key={idx} className="flex items-center gap-3">
+                <span className="text-xs font-medium w-14 flex-shrink-0" style={{ color: 'var(--text-secondary)' }}>
+                  {enabledIndices.length === 1 ? days[idx] : daysShort[idx]}
+                </span>
+                <div className="flex items-center gap-2 flex-1">
+                  <input type="time" value={sched[idx].open}
+                    onChange={e => setTime(idx, 'open', e.target.value)}
+                    className="input py-1.5 text-sm flex-1" style={{ minWidth: 0 }} />
+                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>–</span>
+                  <input type="time" value={sched[idx].close}
+                    onChange={e => setTime(idx, 'close', e.target.value)}
+                    className="input py-1.5 text-sm flex-1" style={{ minWidth: 0 }} />
+                </div>
               </div>
-            </div>
-          ) : (
-            // Multiple days — expandable per-day customization
-            <details>
-              <summary className="text-xs cursor-pointer select-none" style={{ color: 'var(--brand)' }}>
-                {locale === 'ar' ? 'تخصيص وقت كل يوم' : 'Customize per day'}
-              </summary>
-              <div className="mt-3 space-y-2">
-                {enabledIndices.map(idx => (
-                  <div key={idx} className="flex items-center gap-3">
-                    <span className="text-xs font-medium w-14 flex-shrink-0" style={{ color: 'var(--text-secondary)' }}>
-                      {daysShort[idx]}
-                    </span>
-                    <div className="flex items-center gap-2 flex-1">
-                      <input type="time" value={sched[idx].open}
-                        onChange={e => setTime(idx, 'open', e.target.value)}
-                        className="input py-1.5 text-sm flex-1" style={{ minWidth: 0 }} />
-                      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>–</span>
-                      <input type="time" value={sched[idx].close}
-                        onChange={e => setTime(idx, 'close', e.target.value)}
-                        className="input py-1.5 text-sm flex-1" style={{ minWidth: 0 }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </details>
-          )}
+            ))}
+          </div>
         </div>
       )}
 

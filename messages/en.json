@@ -277,7 +277,8 @@
     "save": "Save settings",
     "saveSuccess": "Settings saved!",
     "saveFailed": "Failed to save",
-    "uploadFailed": "Failed to upload photo"
+    "uploadFailed": "Failed to upload photo",
+    "locationMap": "Map location"
   },
   "upgrade": {
     "title": "Upgrade subscription ⭐",

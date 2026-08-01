@@ -3,12 +3,13 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Vendor } from '@/types'
-import { Save, ToggleLeft, ToggleRight, Camera, X } from 'lucide-react'
+import { Save, ToggleLeft, ToggleRight, Camera, X, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import { getInitials } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { useTranslations } from 'next-intl'
 import HoursBuilder from './HoursBuilder'
+import LocationPicker from './LocationPicker'
 
 export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) {
   const [vendor,      setVendor]      = useState(initial)
@@ -76,6 +77,8 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
         description: vendor.description,
         category:    vendor.category,
         address:     vendor.address,
+        lat:         vendor.lat,
+        lng:         vendor.lng,
         phone:       vendor.phone,
         hours:       vendor.hours,
         logo_url:    logoUrl,
@@ -215,6 +218,23 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
 
         {field(t('category'), 'category')}
         {field(t('address'),  'address',  t('addressPlaceholder'))}
+
+        <div>
+          <label className="label flex items-center gap-1.5">
+            <MapPin size={14} />
+            {t('locationMap')}
+          </label>
+          <LocationPicker
+            value={{ lat: vendor.lat, lng: vendor.lng, address: vendor.address }}
+            onChange={location => setVendor(v => ({
+              ...v,
+              lat: location.lat,
+              lng: location.lng,
+              address: location.address,
+            }))}
+          />
+        </div>
+
         {field(t('phone'),    'phone',    t('phonePlaceholder'), 'tel')}
 
         {/* ── Working hours builder ── */}

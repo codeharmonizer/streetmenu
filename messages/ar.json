@@ -277,7 +277,8 @@
     "save": "حفظ الإعدادات",
     "saveSuccess": "تم حفظ الإعدادات!",
     "saveFailed": "فشل الحفظ",
-    "uploadFailed": "فشل رفع الصورة"
+    "uploadFailed": "فشل رفع الصورة",
+    "locationMap": "الموقع على الخريطة"
   },
   "upgrade": {
     "title": "ترقية الاشتراك ⭐",
