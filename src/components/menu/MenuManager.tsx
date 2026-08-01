@@ -331,7 +331,6 @@ export default function MenuManager({ vendor, initialItems }: Props) {
           <CategoryTabs
             categories={visibleCategories}
             sectionPrefix="vendor-menu-category"
-            className="top-14 md:top-0"
           />
           <div className="space-y-8">
             {Object.entries(groupedItems).map(([category, categoryItems]) => (

@@ -6,18 +6,21 @@ const root = join(__dirname, '..')
 const read = (path: string) => readFileSync(join(root, path), 'utf8')
 
 describe('category jump tabs UX', () => {
-  it('provides a reusable pinned horizontal category tabs component with scroll-spy behavior', () => {
+  it('provides reusable viewport-pinned horizontal category tabs with stable scroll-spy behavior', () => {
     const component = read('src/components/menu/CategoryTabs.tsx')
 
     expect(component).toContain('data-category-tabs')
-    expect(component).toContain('sticky')
+    expect(component).toContain('fixed inset-x-0 top-0')
+    expect(component).toContain('PINNED_TABS_HEIGHT')
     expect(component).toContain('overflow-x-auto')
     expect(component).toContain('IntersectionObserver')
     expect(component).toContain('scrollIntoView')
+    expect(component).toContain("block: 'start'")
+    expect(component).toContain('scroller.scrollTo')
     expect(component).toContain('aria-current')
     expect(component).toContain('isProgrammaticScrollRef')
     expect(component).toContain('scrollEndTimerRef')
-    expect(component).toContain("block: 'nearest'")
+    expect(component).not.toContain('tabRefs.current[activeCategory]?.scrollIntoView')
   })
 
   it('adds category tabs and section ids to the public customer menu', () => {

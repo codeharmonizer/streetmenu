@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useLocale } from 'next-intl'
 
 interface DaySchedule {
@@ -95,16 +95,7 @@ export default function HoursBuilder({ value, onChange }: Props) {
   const daysShort = locale === 'ar' ? DAYS_SHORT_AR : DAYS_SHORT_EN
   const presets  = locale === 'ar' ? PRESETS_AR    : PRESETS_EN
 
-  const [sched, setSched] = useState<Schedule>(defaultSchedule)
-  const [mode,  setMode]  = useState<'builder' | 'text'>('builder')
-
-  // Detect if existing value can't be cleanly represented → fall back to text mode
-  useEffect(() => {
-    if (value && value.trim()) {
-      // Try builder mode; if value has no schedule data yet, start fresh
-      setSched(defaultSchedule())
-    }
-  }, [value])
+  const [sched, setSched] = useState<Schedule>(() => parseHours(value))
 
   function toggleDay(idx: number) {
     setSched(prev => {

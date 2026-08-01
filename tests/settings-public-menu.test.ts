@@ -27,5 +27,7 @@ describe('settings and public menu regressions', () => {
     expect(hours).not.toContain('<details>')
     expect(hours).toContain('enabledIndices.map')
     expect(hours).toMatch(/type="time"/) 
+    expect(hours).toContain('useState<Schedule>(() => parseHours(value))')
+    expect(hours).not.toContain('useEffect')
   })
 })
