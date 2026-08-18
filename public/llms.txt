@@ -2,7 +2,11 @@
 
 > ScanBite is a QR-code digital menu and online ordering platform for restaurants, cafés, food trucks, and small food businesses in Bahrain.
 
+> سكان بايت هو نظام قوائم طعام رقمية برمز QR وطلبات أونلاين للمطاعم والكافيهات والبسطات ومشاريع الطعام الصغيرة في البحرين.
+
 ScanBite helps food businesses create a mobile-first public menu, generate a printable QR code, receive online orders, collect customer reviews, and track menu scans without requiring customers to install an app.
+
+سكان بايت يساعد أصحاب المطاعم والكافيهات والبسطات على إنشاء منيو رقمي للجوال، توليد رمز QR للطباعة، استقبال طلبات أونلاين، جمع تقييمات الزبائن، ومعرفة عدد مرات مسح القائمة بدون أن يحتاج الزبون لتحميل تطبيق.
 
 ## Canonical URLs
 
@@ -12,9 +16,13 @@ ScanBite helps food businesses create a mobile-first public menu, generate a pri
 - Contact: https://scanbite.beyounded.com/contact
 - Sitemap: https://scanbite.beyounded.com/sitemap.xml
 
-## Key phrases
+## English key phrases
 
 QR menu, digital menu, restaurant QR code menu, online ordering, menu scans, customer reviews, Bahrain restaurants, food business menu, ScanBite.
+
+## كلمات بحث عربية
+
+سكان بايت، منيو QR، منيو كيو آر، قائمة QR، قائمة كيو آر، قائمة طعام رقمية، قائمة مطعم رقمية، منيو رقمي للمطاعم، رمز QR للمطاعم، طلبات أونلاين للمطاعم، طلبات مطاعم اونلاين، منيو مطاعم البحرين، قوائم مطاعم البحرين، مطاعم البحرين، بسطات البحرين، كافيهات البحرين.
 
 ## Product summary
 
@@ -24,6 +32,15 @@ QR menu, digital menu, restaurant QR code menu, online ordering, menu scans, cus
 - Online ordering and order tracking
 - Customer reviews
 - Scan analytics for paid plans
+
+## ملخص المنتج بالعربية
+
+- خطة مجانية للبدء
+- توليد رمز QR لكل قائمة مطعم أو بسطة
+- صفحة منيو عامة ومناسبة للجوال للزبائن
+- استقبال الطلبات أونلاين وتتبع حالة الطلب
+- تقييمات الزبائن
+- إحصائيات مسح القائمة للخطط المدفوعة
 
 ## Relationship to Beyounded
 
