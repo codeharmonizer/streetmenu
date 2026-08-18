@@ -13,10 +13,26 @@ import { createClient }             from '@/lib/supabase/server'
 import { initiatePayment }          from '@/lib/epays'
 import { getAppUrl }                from '@/lib/app-url'
 
-// Monthly subscription price in BHD
-const SUBSCRIPTION_PRICE_BHD = 3.000
+type BillingPeriod = 'monthly' | 'yearly'
+
+const SUBSCRIPTION_PLANS: Record<BillingPeriod, { amount: number; months: number; label: string }> = {
+  monthly: { amount: 3.000, months: 1, label: '1 month' },
+  yearly:  { amount: 30.000, months: 12, label: '12 month' },
+}
+
+async function getBillingPeriod(req: NextRequest): Promise<BillingPeriod> {
+  try {
+    const body = await req.json()
+    return body?.billingPeriod === 'yearly' ? 'yearly' : 'monthly'
+  } catch {
+    return 'monthly'
+  }
+}
 
 export async function POST(req: NextRequest) {
+  const billingPeriod = await getBillingPeriod(req)
+  const plan = SUBSCRIPTION_PLANS[billingPeriod]
+
   // ── 1. Authenticate vendor ────────────────────────────────────────────────
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -41,7 +57,7 @@ export async function POST(req: NextRequest) {
     .from('subscription_orders')
     .insert({
       vendor_id: vendor.id,
-      amount:    SUBSCRIPTION_PRICE_BHD,
+      amount:    plan.amount,
       status:    'pending',
     })
     .select('id')
@@ -67,8 +83,8 @@ export async function POST(req: NextRequest) {
 
   // ── 5. Call ePays /API/Initiate ───────────────────────────────────────────
   const result = await initiatePayment({
-    amount:        SUBSCRIPTION_PRICE_BHD,
-    description:   `ScanBite Pro — 1 month subscription (${vendor.name})`,
+    amount:        plan.amount,
+    description:   `ScanBite Pro — ${plan.label} subscription (${vendor.name})`,
     orderNumber:   subscriptionOrder.id,   // stored in udf2, echoed back by ProcessPayment
     notifyUrl,
     fullName:      vendor.name,

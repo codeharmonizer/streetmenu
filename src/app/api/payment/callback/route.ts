@@ -20,7 +20,9 @@ import { processPayment }            from '@/lib/epays'
 import { getAppUrl }                 from '@/lib/app-url'
 
 const APP_URL              = getAppUrl()
-const SUBSCRIPTION_MONTHS  = 1   // how many months each payment covers
+function getSubscriptionMonths(amount: number | string | null | undefined) {
+  return Number(amount) >= 30 ? 12 : 1
+}
 
 function isSuccessfulPayment(result: Awaited<ReturnType<typeof processPayment>>) {
   const normalizedResult = (result.result ?? '').trim().toLowerCase()
@@ -148,7 +150,7 @@ async function handler(req: NextRequest) {
 
   const nowIso = new Date().toISOString()
   const expiresAt = new Date(baseDate)
-  expiresAt.setMonth(expiresAt.getMonth() + SUBSCRIPTION_MONTHS)
+  expiresAt.setMonth(expiresAt.getMonth() + getSubscriptionMonths(subscriptionOrder.amount))
 
   await supabase
     .from('vendors')

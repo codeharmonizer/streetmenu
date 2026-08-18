@@ -22,6 +22,7 @@ export default function UpgradePage() {
   const searchParams = useSearchParams()
 
   const [paying, setPaying] = useState(false)
+  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('yearly')
 
   const paymentParam = searchParams.get('payment') // 'failed' | 'error'
 
@@ -29,7 +30,11 @@ export default function UpgradePage() {
     if (paying) return
     setPaying(true)
     try {
-      const res  = await fetch('/api/payment/initiate', { method: 'POST' })
+      const res  = await fetch('/api/payment/initiate', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ billingPeriod }),
+      })
       const data = await res.json()
 
       if (!res.ok || !data.redirectUrl) {
@@ -109,17 +114,49 @@ export default function UpgradePage() {
 
       {/* Pricing + CTA card */}
       <div className="card">
-        {/* Price */}
-        <div className="text-center mb-6 pb-6" style={{ borderBottom: '1px solid var(--border)' }}>
-          <p className="text-sm mb-1" style={{ color: 'var(--text-muted)' }}>
-            {locale === 'ar' ? 'رسوم الاشتراك الشهري' : 'Monthly subscription'}
-          </p>
-          <p className="text-5xl font-black" style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>
-            3 BD
-          </p>
-          <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
-            {locale === 'ar' ? '/ شهر · دينار بحريني' : '/ month · Bahraini Dinar'}
-          </p>
+        {/* Plan selector */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <button
+            type="button"
+            onClick={() => setBillingPeriod('monthly')}
+            className="rounded-2xl p-4 text-center transition-all"
+            style={{
+              border: billingPeriod === 'monthly' ? '2px solid var(--brand)' : '1px solid var(--border)',
+              background: billingPeriod === 'monthly' ? 'var(--brand-light)' : 'transparent',
+            }}>
+            <p className="text-xs mb-1" style={{ color: 'var(--text-muted)' }}>
+              {locale === 'ar' ? 'شهرياً' : 'Monthly'}
+            </p>
+            <p className="text-3xl font-black" style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>
+              3 BD
+            </p>
+            <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+              {locale === 'ar' ? '/ شهر' : '/ month'}
+            </p>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setBillingPeriod('yearly')}
+            className="rounded-2xl p-4 text-center transition-all relative"
+            style={{
+              border: billingPeriod === 'yearly' ? '2px solid var(--brand)' : '1px solid var(--border)',
+              background: billingPeriod === 'yearly' ? 'var(--brand-light)' : 'transparent',
+            }}>
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-bold px-2 py-1 rounded-full whitespace-nowrap"
+              style={{ background: 'var(--brand)', color: 'white' }}>
+              {locale === 'ar' ? 'وفّر شهرين' : 'Save 2 months'}
+            </span>
+            <p className="text-xs mb-1" style={{ color: 'var(--text-muted)' }}>
+              {locale === 'ar' ? 'سنوياً' : 'Yearly'}
+            </p>
+            <p className="text-3xl font-black" style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>
+              30 BD
+            </p>
+            <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+              {locale === 'ar' ? '/ سنة · بدلاً من 36 د.ب' : '/ year · instead of BD 36'}
+            </p>
+          </button>
         </div>
 
         {/* Pay button */}
@@ -131,7 +168,9 @@ export default function UpgradePage() {
           <CreditCard size={18} />
           {paying
             ? (locale === 'ar' ? 'جارٍ التوجيه للدفع…' : 'Redirecting to payment…')
-            : (locale === 'ar' ? 'اشترك الآن · ادفع 3 د.ب' : 'Subscribe Now · Pay BD 3.000')}
+            : billingPeriod === 'yearly'
+              ? (locale === 'ar' ? 'اشترك سنوياً · ادفع 30 د.ب' : 'Subscribe Yearly · Pay BD 30.000')
+              : (locale === 'ar' ? 'اشترك شهرياً · ادفع 3 د.ب' : 'Subscribe Monthly · Pay BD 3.000')}
         </button>
 
         <p className="text-center text-xs mt-3" style={{ color: 'var(--text-muted)' }}>

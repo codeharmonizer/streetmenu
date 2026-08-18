@@ -98,9 +98,13 @@ async function callCallback(query: string) {
   return mod.GET(req)
 }
 
-async function callInitiate() {
+async function callInitiate(body?: unknown) {
   const mod = await import('../src/app/api/payment/initiate/route')
-  const req = new NextRequest('https://scanbite.beyounded.com/api/payment/initiate', { method: 'POST' })
+  const req = new NextRequest('https://scanbite.beyounded.com/api/payment/initiate', {
+    method: 'POST',
+    body: body ? JSON.stringify(body) : undefined,
+    headers: body ? { 'content-type': 'application/json' } : undefined,
+  })
   return mod.POST(req)
 }
 
@@ -125,8 +129,32 @@ describe('payment initiate behavior', () => {
     expect(body).toEqual({ redirectUrl: 'https://epays.example/pay' })
     expect(supabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'insert' && c.payload.vendor_id === 'vendor-a' && c.payload.status === 'pending')).toBe(true)
     expect(initiatePaymentMock).toHaveBeenCalledWith(expect.objectContaining({
+      amount: 3,
       orderNumber: 'sub-order-1',
       notifyUrl: 'https://scanbite.beyounded.com/api/payment/callback?orderId=sub-order-1',
+    }))
+  })
+
+
+  it('creates a yearly subscription order for 30 BHD when yearly billing is selected', async () => {
+    const supabase = makeSupabaseMock({
+      vendor: { id: 'vendor-a', name: 'Vendor A', subscription_status: 'free', subscription_expires_at: null },
+      createdSubscriptionOrder: { id: 'sub-order-yearly', vendor_id: 'vendor-a', status: 'pending', amount: 30 },
+    })
+    createClientMock.mockResolvedValue(supabase)
+    initiatePaymentMock.mockResolvedValue({ success: true, redirectUrl: 'https://epays.example/pay-yearly' })
+
+    const res = await callInitiate({ billingPeriod: 'yearly' })
+    const body = await res.json()
+
+    expect(res.status).toBe(200)
+    expect(body).toEqual({ redirectUrl: 'https://epays.example/pay-yearly' })
+    expect(supabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'insert' && c.payload.vendor_id === 'vendor-a' && c.payload.amount === 30 && c.payload.status === 'pending')).toBe(true)
+    expect(initiatePaymentMock).toHaveBeenCalledWith(expect.objectContaining({
+      amount: 30,
+      description: 'ScanBite Pro — 12 month subscription (Vendor A)',
+      orderNumber: 'sub-order-yearly',
+      notifyUrl: 'https://scanbite.beyounded.com/api/payment/callback?orderId=sub-order-yearly',
     }))
   })
 })
@@ -226,6 +254,30 @@ describe('payment callback behavior', () => {
     expect(res.headers.get('location')).toBe('https://scanbite.beyounded.com/dashboard?subscription=success')
     expect(supabase.calls.some(c => c.table === 'vendors' && c.op === 'update' && c.payload.plan === 'pro' && c.payload.subscription_status === 'active')).toBe(true)
     expect(supabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'update' && c.payload.status === 'paid' && c.payload.epays_payment_id === 'pay-atm-1')).toBe(true)
+  })
+
+  it('extends a 30 BHD yearly subscription order by 12 months after verified payment', async () => {
+    processPaymentMock.mockResolvedValue({ success: true, result: 'Completed', alreadyProcessed: false, paymentId: 'pay-yearly', orderNumber: 'order-yearly', amount: 30 })
+    const supabase = makeSupabaseMock({
+      subscriptionOrder: { id: 'order-yearly', vendor_id: 'vendor-a', status: 'pending', amount: 30 },
+      vendor: { id: 'vendor-a', name: 'Vendor A', subscription_status: 'free', subscription_expires_at: null },
+    })
+    createAdminClientMock.mockReturnValue(supabase)
+
+    const before = Date.now()
+    const res = await callCallback('?orderId=order-yearly&paymentId=pay-yearly')
+    const after = Date.now()
+    const vendorUpdate = supabase.calls.find(c => c.table === 'vendors' && c.op === 'update')
+    const paymentInsert = supabase.calls.find(c => c.table === 'subscription_payments' && c.op === 'insert')
+    const expiresAt = new Date(vendorUpdate.payload.subscription_expires_at).getTime()
+    const minYearlyExpiry = before + 360 * 24 * 60 * 60 * 1000
+    const maxYearlyExpiry = after + 370 * 24 * 60 * 60 * 1000
+
+    expect(res.headers.get('location')).toBe('https://scanbite.beyounded.com/dashboard?subscription=success')
+    expect(expiresAt).toBeGreaterThanOrEqual(minYearlyExpiry)
+    expect(expiresAt).toBeLessThanOrEqual(maxYearlyExpiry)
+    expect(paymentInsert.payload.amount).toBe(30)
+    expect(paymentInsert.payload.expires_at).toBe(vendorUpdate.payload.subscription_expires_at)
   })
 
   it('sets the matching vendor plan to pro, activates subscription, marks order paid, and logs payment when ePays verifies Completed', async () => {
