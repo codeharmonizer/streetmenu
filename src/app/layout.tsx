@@ -4,7 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 
-const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite-menu.vercel.app'
+const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),

@@ -33,11 +33,20 @@ describe('production hardening checks', () => {
     expect(pkg.scripts.lint).toBe('eslint .')
   })
 
+  it('deduplicates refreshes so menu scans count one unique visitor per day', () => {
+    const publicActions = read('src/lib/public-actions.ts')
+    expect(publicActions).toContain('SCAN_DEDUPE_WINDOW_HOURS = 24')
+    expect(publicActions).toMatch(/\.eq\('action', 'scan'\)/)
+    expect(publicActions).toMatch(/\.eq\('vendor_id', vendorId\)/)
+    expect(publicActions).toMatch(/\.eq\('fingerprint', fingerprint\)/)
+    expect(publicActions).toMatch(/if \(countError \|\| \(count \?\? 0\) > 0\) return/)
+    expect(publicActions.indexOf("from('public_action_rate_limits').insert")).toBeLessThan(publicActions.indexOf("from('scans').insert"))
+  })
+
   it('keeps public writes behind server-side rate limited actions', () => {
     const publicActions = read('src/lib/public-actions.ts')
     const orders = read('src/lib/orders.ts')
     const schema = read('supabase-schema.sql')
-    expect(publicActions).toMatch(/isRateLimited\(supabase, 'scan'/)
     expect(publicActions).toMatch(/isRateLimited\(supabase, 'review'/)
     expect(orders).toMatch(/isRateLimited\(supabase, 'order'/)
     expect(schema).toContain('public_action_rate_limits')

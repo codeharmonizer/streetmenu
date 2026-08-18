@@ -49,7 +49,7 @@ function getConfig() {
 // Only includes a field if it has a non-empty value (avoids sending blanks)
 // ---------------------------------------------------------------------------
 function basePayload(cfg: ReturnType<typeof getConfig>): Record<string, string> {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite-menu.vercel.app'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
   // EPAYS_MERCHANT_DOMAIN must match exactly what is registered in ePays dashboard
   const domain = process.env.EPAYS_MERCHANT_DOMAIN ?? new URL(appUrl).hostname
 

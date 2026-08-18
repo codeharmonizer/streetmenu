@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
   })
 
   // ── 4. Build URLs ─────────────────────────────────────────────────────────
-  const appUrl    = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite-menu.vercel.app'
+  const appUrl    = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
   // orderId is our local payment attempt id. ePays also stores it in udf2.
   const notifyUrl = `${appUrl}/api/payment/callback?orderId=${subscriptionOrder.id}`
 

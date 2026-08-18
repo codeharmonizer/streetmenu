@@ -6,7 +6,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 
 const MAX_REVIEW_NAME_LENGTH = 80
 const MAX_REVIEW_COMMENT_LENGTH = 1000
-const SCAN_RATE_LIMIT = { windowMinutes: 10, maxEvents: 30 }
+const SCAN_DEDUPE_WINDOW_HOURS = 24
 const REVIEW_RATE_LIMIT = { windowMinutes: 60, maxEvents: 3 }
 
 async function getClientFingerprint(action: string, vendorId: string): Promise<string> {
@@ -44,7 +44,24 @@ export async function logPublicScan(vendorId: string): Promise<void> {
   if (!vendorId) return
   try {
     const supabase = createAdminClient()
-    if (await isRateLimited(supabase, 'scan', vendorId, SCAN_RATE_LIMIT)) return
+    const fingerprint = await getClientFingerprint('scan', vendorId)
+    const since = new Date(Date.now() - SCAN_DEDUPE_WINDOW_HOURS * 60 * 60_000).toISOString()
+
+    const { count, error: countError } = await supabase
+      .from('public_action_rate_limits')
+      .select('id', { count: 'exact', head: true })
+      .eq('action', 'scan')
+      .eq('vendor_id', vendorId)
+      .eq('fingerprint', fingerprint)
+      .gte('created_at', since)
+
+    if (countError || (count ?? 0) > 0) return
+
+    await supabase.from('public_action_rate_limits').insert({
+      action: 'scan',
+      vendor_id: vendorId,
+      fingerprint,
+    })
     await supabase.from('scans').insert({ vendor_id: vendorId })
   } catch {
     // Scan analytics must never break public menu rendering.

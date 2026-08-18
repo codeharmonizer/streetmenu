@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!vendor) return { title: 'Menu not found' }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://streetmenu-ten.vercel.app'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
   const desc   = vendor.description || `تصفح قائمة ${vendor.name} — ${vendor.category ?? 'طعام'} بالبحرين`
 
   return {
@@ -71,7 +71,7 @@ export default async function PublicMenuPage({ params }: Props) {
     ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
     : null
 
-  const appUrl  = process.env.NEXT_PUBLIC_APP_URL ?? 'https://streetmenu-ten.vercel.app'
+  const appUrl  = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
   const menuUrl = `${appUrl}/m/${vendor.slug}`
 
   const ordersEnabled =
