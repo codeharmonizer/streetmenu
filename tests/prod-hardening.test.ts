@@ -57,4 +57,23 @@ describe('production hardening checks', () => {
     expect(layout).toContain('metadataBase: new URL(appUrl)')
     expect(layout).toContain('getAppUrl()')
   })
+
+  it('publishes Google and AI discovery files for the ScanBite subdomain', () => {
+    const layout = read('src/app/layout.tsx')
+    const robots = read('src/app/robots.ts')
+    const sitemap = read('src/app/sitemap.ts')
+    const llms = read('public/llms.txt')
+    const indexNowKey = read('public/indexnow-key.txt')
+
+    expect(layout).toContain("robots: {")
+    expect(layout).toContain("'max-image-preview': 'large'")
+    expect(layout).toContain("'text/markdown': '/llms.txt'")
+    expect(layout).toContain("type=\"application/ld+json\"")
+    expect(layout).toContain("SoftwareApplication")
+    expect(robots).toContain('sitemap: `${appUrl}/sitemap.xml`')
+    expect(sitemap).toContain('`${appUrl}/`')
+    expect(sitemap).toContain('`${appUrl}/register`')
+    expect(llms).toContain('ScanBite is a QR-code digital menu and online ordering platform')
+    expect(indexNowKey.trim()).toMatch(/^[a-f0-9]{32}$/)
+  })
 })

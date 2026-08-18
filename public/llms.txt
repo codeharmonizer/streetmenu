@@ -1,0 +1,30 @@
+# ScanBite
+
+> ScanBite is a QR-code digital menu and online ordering platform for restaurants, cafés, food trucks, and small food businesses in Bahrain.
+
+ScanBite helps food businesses create a mobile-first public menu, generate a printable QR code, receive online orders, collect customer reviews, and track menu scans without requiring customers to install an app.
+
+## Canonical URLs
+
+- Homepage: https://scanbite.beyounded.com/
+- Create a free menu: https://scanbite.beyounded.com/register
+- Demo: https://scanbite.beyounded.com/demo
+- Contact: https://scanbite.beyounded.com/contact
+- Sitemap: https://scanbite.beyounded.com/sitemap.xml
+
+## Key phrases
+
+QR menu, digital menu, restaurant QR code menu, online ordering, menu scans, customer reviews, Bahrain restaurants, food business menu, ScanBite.
+
+## Product summary
+
+- Free plan for getting started
+- QR code generated for each vendor menu
+- Public mobile menu pages for customers
+- Online ordering and order tracking
+- Customer reviews
+- Scan analytics for paid plans
+
+## Relationship to Beyounded
+
+ScanBite is a Beyounded product. Beyounded's main site is https://beyounded.com/.
