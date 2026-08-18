@@ -3,8 +3,9 @@ import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
+import { getAppUrl } from '@/lib/app-url'
 
-const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
+const appUrl = getAppUrl()
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),

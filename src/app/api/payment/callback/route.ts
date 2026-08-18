@@ -17,8 +17,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient }         from '@/lib/supabase/admin'
 import { processPayment }            from '@/lib/epays'
+import { getAppUrl }                 from '@/lib/app-url'
 
-const APP_URL              = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
+const APP_URL              = getAppUrl()
 const SUBSCRIPTION_MONTHS  = 1   // how many months each payment covers
 
 function isSuccessfulPayment(result: Awaited<ReturnType<typeof processPayment>>) {

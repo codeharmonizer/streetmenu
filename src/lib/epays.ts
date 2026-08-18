@@ -18,6 +18,8 @@
  *   POST /API/ProcessPayment  — verify result after user returns from payment page
  */
 
+import { getAppUrl, getMerchantDomain } from '@/lib/app-url'
+
 const BASE_URLS: Record<string, string> = {
   localhost: 'https://localhost:7124',
   localip:   'https://192.168.100.115:8081',
@@ -49,9 +51,9 @@ function getConfig() {
 // Only includes a field if it has a non-empty value (avoids sending blanks)
 // ---------------------------------------------------------------------------
 function basePayload(cfg: ReturnType<typeof getConfig>): Record<string, string> {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
+  const appUrl = getAppUrl()
   // EPAYS_MERCHANT_DOMAIN must match exactly what is registered in ePays dashboard
-  const domain = process.env.EPAYS_MERCHANT_DOMAIN ?? new URL(appUrl).hostname
+  const domain = getMerchantDomain()
 
   const payload: Record<string, string> = {
     apiVersion:     cfg.apiVersion,

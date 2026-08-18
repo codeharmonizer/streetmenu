@@ -52,9 +52,9 @@ describe('production hardening checks', () => {
     expect(schema).toContain('public_action_rate_limits')
   })
 
-  it('sets metadataBase from NEXT_PUBLIC_APP_URL for production URLs', () => {
+  it('sets metadataBase from normalized production app URL', () => {
     const layout = read('src/app/layout.tsx')
     expect(layout).toContain('metadataBase: new URL(appUrl)')
-    expect(layout).toContain('NEXT_PUBLIC_APP_URL')
+    expect(layout).toContain('getAppUrl()')
   })
 })

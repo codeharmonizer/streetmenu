@@ -8,6 +8,7 @@ import PublicMenuClient from '@/components/menu/PublicMenuClient'
 import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
 import type { Metadata } from 'next'
 import { getTranslations, getLocale } from 'next-intl/server'
+import { getAppUrl } from '@/lib/app-url'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!vendor) return { title: 'Menu not found' }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
+  const appUrl = getAppUrl()
   const desc   = vendor.description || `تصفح قائمة ${vendor.name} — ${vendor.category ?? 'طعام'} بالبحرين`
 
   return {
@@ -71,7 +72,7 @@ export default async function PublicMenuPage({ params }: Props) {
     ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
     : null
 
-  const appUrl  = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
+  const appUrl  = getAppUrl()
   const menuUrl = `${appUrl}/m/${vendor.slug}`
 
   const ordersEnabled =

@@ -1,7 +1,8 @@
 import FlyerQR from '@/components/flyer/FlyerQR'
+import { getAppUrl } from '@/lib/app-url'
 import PrintButton from './PrintButton'
 
-const APP_URL     = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
+const APP_URL     = getAppUrl()
 const REGISTER_URL = `${APP_URL}/register`
 
 const AR_FEATURES = [

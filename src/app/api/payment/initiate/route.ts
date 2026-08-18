@@ -11,6 +11,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient }             from '@/lib/supabase/server'
 import { initiatePayment }          from '@/lib/epays'
+import { getAppUrl }                from '@/lib/app-url'
 
 // Monthly subscription price in BHD
 const SUBSCRIPTION_PRICE_BHD = 3.000
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
   })
 
   // ── 4. Build URLs ─────────────────────────────────────────────────────────
-  const appUrl    = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
+  const appUrl    = getAppUrl()
   // orderId is our local payment attempt id. ePays also stores it in udf2.
   const notifyUrl = `${appUrl}/api/payment/callback?orderId=${subscriptionOrder.id}`
 

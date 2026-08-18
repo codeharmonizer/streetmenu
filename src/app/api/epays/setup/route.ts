@@ -12,6 +12,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { getAppUrl, getMerchantDomain } from '@/lib/app-url'
 
 const BASE_URLS: Record<string, string> = {
   test: 'https://testapi.epays.io',
@@ -31,9 +32,9 @@ function getMasterConfig() {
 
 async function masterPost(endpoint: string, extra: Record<string, string> = {}) {
   const cfg    = getMasterConfig()
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://scanbite.beyounded.com'
+  const appUrl = getAppUrl()
   // EPAYS_MERCHANT_DOMAIN must match exactly what is registered in ePays dashboard
-  const domain = process.env.EPAYS_MERCHANT_DOMAIN ?? new URL(appUrl).hostname
+  const domain = getMerchantDomain()
 
   const body = new URLSearchParams({
     apiVersion:     cfg.apiVersion,
