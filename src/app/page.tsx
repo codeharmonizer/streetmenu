@@ -496,8 +496,12 @@ export default async function HomePage() {
               </div>
               <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: C.gray, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>{t('proPlanName')}</div>
               <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 64, color: C.white, lineHeight: 1, marginBottom: 4 }}>
-                3<span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 18, fontWeight: 300, color: C.gray }}> BD / mo</span>
+                30<span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 18, fontWeight: 300, color: C.gray }}> BD / yr</span>
               </div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(232,75,26,0.15)', color: '#FF6B35', fontSize: 12, fontWeight: 700, padding: '5px 10px', borderRadius: 999, marginBottom: 14 }}>
+                {t('proYearlySavings')}
+              </div>
+              <div style={{ fontSize: 13, color: C.gray, marginBottom: 6 }}>{t('proMonthlyFallback')}</div>
               <div style={{ fontSize: 13, color: C.gray, marginBottom: 32 }}>{t('proEverything')}</div>
               <ul style={{ listStyle: 'none', marginBottom: 36 }}>
                 {[t('proFeature1'), t('proFeature2'), t('proFeature3'), t('proFeature4')].map(f => (

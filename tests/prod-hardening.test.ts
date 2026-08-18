@@ -81,4 +81,18 @@ describe('production hardening checks', () => {
     expect(llms).toContain('منيو QR')
     expect(indexNowKey.trim()).toMatch(/^[a-f0-9]{32}$/)
   })
+
+  it('shows the yearly 30 BHD plan on the public landing page in both languages', () => {
+    const landing = read('src/app/page.tsx')
+    const ar = read('messages/ar.json')
+    const en = read('messages/en.json')
+
+    expect(landing).toContain("30")
+    expect(landing).toContain("BD / yr")
+    expect(landing).toContain("proYearlySavings")
+    expect(en).toContain('30 BD')
+    expect(en).toContain('Save 2 months')
+    expect(ar).toContain('٣٠ د.ب')
+    expect(ar).toContain('وفّر شهرين')
+  })
 })
