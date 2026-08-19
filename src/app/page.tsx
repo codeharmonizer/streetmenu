@@ -495,13 +495,25 @@ export default async function HomePage() {
                 {t('proPlanBadge')}
               </div>
               <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, color: C.gray, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>{t('proPlanName')}</div>
-              <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 64, color: C.white, lineHeight: 1, marginBottom: 4 }}>
-                30<span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 18, fontWeight: 300, color: C.gray }}> BD / yr</span>
+              <div style={{ display: 'grid', gap: 12, marginBottom: 18 }}>
+                <div style={{ border: '0.5px solid rgba(255,255,255,0.12)', borderRadius: 14, padding: '14px 16px', background: 'rgba(255,255,255,0.03)' }}>
+                  <div style={{ fontFamily: "'DM Sans','Cairo',sans-serif", fontSize: 12, color: C.gray, marginBottom: 2 }}>{isAr ? 'شهرياً' : 'Monthly'}</div>
+                  <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 48, color: C.white, lineHeight: 1 }}>
+                    3<span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 16, fontWeight: 300, color: C.gray }}> BD / mo</span>
+                  </div>
+                </div>
+                <div style={{ border: `1px solid ${C.red}`, borderRadius: 14, padding: '14px 16px', background: 'rgba(232,75,26,0.08)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 2 }}>
+                    <div style={{ fontFamily: "'DM Sans','Cairo',sans-serif", fontSize: 12, color: C.gray }}>{isAr ? 'سنوياً' : 'Yearly'}</div>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(232,75,26,0.18)', color: '#FF6B35', fontSize: 11, fontWeight: 700, padding: '4px 9px', borderRadius: 999 }}>
+                      {t('proYearlySavings')}
+                    </div>
+                  </div>
+                  <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 48, color: C.white, lineHeight: 1 }}>
+                    30<span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 16, fontWeight: 300, color: C.gray }}> BD / yr</span>
+                  </div>
+                </div>
               </div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(232,75,26,0.15)', color: '#FF6B35', fontSize: 12, fontWeight: 700, padding: '5px 10px', borderRadius: 999, marginBottom: 14 }}>
-                {t('proYearlySavings')}
-              </div>
-              <div style={{ fontSize: 13, color: C.gray, marginBottom: 6 }}>{t('proMonthlyFallback')}</div>
               <div style={{ fontSize: 13, color: C.gray, marginBottom: 32 }}>{t('proEverything')}</div>
               <ul style={{ listStyle: 'none', marginBottom: 36 }}>
                 {[t('proFeature1'), t('proFeature2'), t('proFeature3'), t('proFeature4')].map(f => (
