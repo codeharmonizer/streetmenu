@@ -10,12 +10,12 @@ afterEach(() => {
 })
 
 describe('app URL normalization', () => {
-  it('uses scanbite.beyounded.com when Vercel still has the legacy app URL', () => {
+  it('uses relaxedmenu.beyounded.com when Vercel still has the legacy app URL', () => {
     process.env.NEXT_PUBLIC_APP_URL = 'https://scanbite-menu.vercel.app'
     process.env.EPAYS_MERCHANT_DOMAIN = 'scanbite-menu.vercel.app'
 
-    expect(getAppUrl()).toBe('https://scanbite.beyounded.com')
-    expect(getMerchantDomain()).toBe('scanbite.beyounded.com')
+    expect(getAppUrl()).toBe('https://relaxedmenu.beyounded.com')
+    expect(getMerchantDomain()).toBe('relaxedmenu.beyounded.com')
   })
 
   it('preserves explicit local development URLs and domains', () => {

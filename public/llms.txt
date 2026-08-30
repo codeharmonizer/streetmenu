@@ -10,11 +10,11 @@ ScanBite helps food businesses create a mobile-first public menu, generate a pri
 
 ## Canonical URLs
 
-- Homepage: https://scanbite.beyounded.com/
-- Create a free menu: https://scanbite.beyounded.com/register
-- Demo: https://scanbite.beyounded.com/demo
-- Contact: https://scanbite.beyounded.com/contact
-- Sitemap: https://scanbite.beyounded.com/sitemap.xml
+- Homepage: https://relaxedmenu.beyounded.com/
+- Create a free menu: https://relaxedmenu.beyounded.com/register
+- Demo: https://relaxedmenu.beyounded.com/demo
+- Contact: https://relaxedmenu.beyounded.com/contact
+- Sitemap: https://relaxedmenu.beyounded.com/sitemap.xml
 
 ## English key phrases
 

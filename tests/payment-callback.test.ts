@@ -94,13 +94,13 @@ function makeSupabaseMock(options: SupabaseOptions = {}) {
 
 async function callCallback(query: string) {
   const mod = await import('../src/app/api/payment/callback/route')
-  const req = new NextRequest(`https://scanbite.beyounded.com/api/payment/callback${query}`)
+  const req = new NextRequest(`https://relaxedmenu.beyounded.com/api/payment/callback${query}`)
   return mod.GET(req)
 }
 
 async function callInitiate(body?: unknown) {
   const mod = await import('../src/app/api/payment/initiate/route')
-  const req = new NextRequest('https://scanbite.beyounded.com/api/payment/initiate', {
+  const req = new NextRequest('https://relaxedmenu.beyounded.com/api/payment/initiate', {
     method: 'POST',
     body: body ? JSON.stringify(body) : undefined,
     headers: body ? { 'content-type': 'application/json' } : undefined,
@@ -111,7 +111,7 @@ async function callInitiate(body?: unknown) {
 describe('payment initiate behavior', () => {
   beforeEach(() => {
     vi.resetAllMocks()
-    process.env.NEXT_PUBLIC_APP_URL = 'https://scanbite.beyounded.com'
+    process.env.NEXT_PUBLIC_APP_URL = 'https://relaxedmenu.beyounded.com'
   })
 
   it('creates a local subscription order for the authenticated vendor and sends its id to ePays as orderNumber', async () => {
@@ -131,7 +131,7 @@ describe('payment initiate behavior', () => {
     expect(initiatePaymentMock).toHaveBeenCalledWith(expect.objectContaining({
       amount: 3,
       orderNumber: 'sub-order-1',
-      notifyUrl: 'https://scanbite.beyounded.com/api/payment/callback?orderId=sub-order-1',
+      notifyUrl: 'https://relaxedmenu.beyounded.com/api/payment/callback?orderId=sub-order-1',
     }))
   })
 
@@ -154,7 +154,7 @@ describe('payment initiate behavior', () => {
       amount: 30,
       description: 'ScanBite Pro — 12 month subscription (Vendor A)',
       orderNumber: 'sub-order-yearly',
-      notifyUrl: 'https://scanbite.beyounded.com/api/payment/callback?orderId=sub-order-yearly',
+      notifyUrl: 'https://relaxedmenu.beyounded.com/api/payment/callback?orderId=sub-order-yearly',
     }))
   })
 })
@@ -162,13 +162,13 @@ describe('payment initiate behavior', () => {
 describe('payment callback behavior', () => {
   beforeEach(() => {
     vi.resetAllMocks()
-    process.env.NEXT_PUBLIC_APP_URL = 'https://scanbite.beyounded.com'
+    process.env.NEXT_PUBLIC_APP_URL = 'https://relaxedmenu.beyounded.com'
   })
 
   it('redirects to payment=error when required callback params are missing', async () => {
     const res = await callCallback('?orderId=order-a')
     expect(res.status).toBe(307)
-    expect(res.headers.get('location')).toBe('https://scanbite.beyounded.com/dashboard/upgrade?payment=error')
+    expect(res.headers.get('location')).toBe('https://relaxedmenu.beyounded.com/dashboard/upgrade?payment=error')
     expect(processPaymentMock).not.toHaveBeenCalled()
   })
 
@@ -179,7 +179,7 @@ describe('payment callback behavior', () => {
 
     const res = await callCallback('?orderId=order-a&paymentId=pay-1')
 
-    expect(res.headers.get('location')).toBe('https://scanbite.beyounded.com/dashboard/upgrade?payment=failed')
+    expect(res.headers.get('location')).toBe('https://relaxedmenu.beyounded.com/dashboard/upgrade?payment=failed')
     expect(supabase.calls.some(c => c.table === 'vendors' && c.op === 'update')).toBe(false)
     expect(supabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'update' && c.payload.status === 'failed')).toBe(true)
   })
@@ -191,7 +191,7 @@ describe('payment callback behavior', () => {
 
     const res = await callCallback('?orderId=order-a&paymentId=pay-1')
 
-    expect(res.headers.get('location')).toBe('https://scanbite.beyounded.com/dashboard/upgrade?payment=error')
+    expect(res.headers.get('location')).toBe('https://relaxedmenu.beyounded.com/dashboard/upgrade?payment=error')
     expect(supabase.calls.some(c => c.table === 'vendors' && c.op === 'update')).toBe(false)
   })
 
@@ -202,7 +202,7 @@ describe('payment callback behavior', () => {
 
     const res = await callCallback('?orderId=order-a&paymentId=pay-1')
 
-    expect(res.headers.get('location')).toBe('https://scanbite.beyounded.com/dashboard/upgrade?payment=error')
+    expect(res.headers.get('location')).toBe('https://relaxedmenu.beyounded.com/dashboard/upgrade?payment=error')
     expect(supabase.calls.some(c => c.table === 'vendors' && c.op === 'update')).toBe(false)
   })
 
@@ -213,7 +213,7 @@ describe('payment callback behavior', () => {
 
     const res = await callCallback('?orderId=order-a&paymentId=pay-1')
 
-    expect(res.headers.get('location')).toBe('https://scanbite.beyounded.com/dashboard/upgrade?payment=error')
+    expect(res.headers.get('location')).toBe('https://relaxedmenu.beyounded.com/dashboard/upgrade?payment=error')
     expect(supabase.calls.some(c => c.table === 'vendors' && c.op === 'update')).toBe(false)
   })
 
@@ -224,7 +224,7 @@ describe('payment callback behavior', () => {
 
     const res = await callCallback('?orderId=order-a&paymentId=pay-1')
 
-    expect(res.headers.get('location')).toBe('https://scanbite.beyounded.com/dashboard?subscription=renewed')
+    expect(res.headers.get('location')).toBe('https://relaxedmenu.beyounded.com/dashboard?subscription=renewed')
     expect(supabase.calls.some(c => c.table === 'vendors' && c.op === 'update')).toBe(false)
     expect(supabase.calls.some(c => c.table === 'subscription_payments' && c.op === 'insert')).toBe(false)
   })
@@ -236,7 +236,7 @@ describe('payment callback behavior', () => {
 
     const res = await callCallback('?orderId=order-a&paymentId=pay-1')
 
-    expect(res.headers.get('location')).toBe('https://scanbite.beyounded.com/dashboard?subscription=success')
+    expect(res.headers.get('location')).toBe('https://relaxedmenu.beyounded.com/dashboard?subscription=success')
     expect(supabase.calls.some(c => c.table === 'vendors' && c.op === 'update' && c.payload.plan === 'pro')).toBe(true)
     expect(supabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'update' && c.payload.status === 'paid')).toBe(true)
   })
@@ -251,7 +251,7 @@ describe('payment callback behavior', () => {
 
     const res = await callCallback('?orderId=order-a&paymentId=pay-atm-1')
 
-    expect(res.headers.get('location')).toBe('https://scanbite.beyounded.com/dashboard?subscription=success')
+    expect(res.headers.get('location')).toBe('https://relaxedmenu.beyounded.com/dashboard?subscription=success')
     expect(supabase.calls.some(c => c.table === 'vendors' && c.op === 'update' && c.payload.plan === 'pro' && c.payload.subscription_status === 'active')).toBe(true)
     expect(supabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'update' && c.payload.status === 'paid' && c.payload.epays_payment_id === 'pay-atm-1')).toBe(true)
   })
@@ -273,7 +273,7 @@ describe('payment callback behavior', () => {
     const minYearlyExpiry = before + 360 * 24 * 60 * 60 * 1000
     const maxYearlyExpiry = after + 370 * 24 * 60 * 60 * 1000
 
-    expect(res.headers.get('location')).toBe('https://scanbite.beyounded.com/dashboard?subscription=success')
+    expect(res.headers.get('location')).toBe('https://relaxedmenu.beyounded.com/dashboard?subscription=success')
     expect(expiresAt).toBeGreaterThanOrEqual(minYearlyExpiry)
     expect(expiresAt).toBeLessThanOrEqual(maxYearlyExpiry)
     expect(paymentInsert.payload.amount).toBe(30)
@@ -290,7 +290,7 @@ describe('payment callback behavior', () => {
 
     const res = await callCallback('?orderId=order-a&paymentId=pay-2')
 
-    expect(res.headers.get('location')).toBe('https://scanbite.beyounded.com/dashboard?subscription=success')
+    expect(res.headers.get('location')).toBe('https://relaxedmenu.beyounded.com/dashboard?subscription=success')
     expect(supabase.calls.some(c => c.table === 'vendors' && c.op === 'update' && c.payload.plan === 'pro' && c.payload.subscription_status === 'active')).toBe(true)
     expect(supabase.calls.some(c => c.table === 'vendors' && c.op === 'update.eq' && c.column === 'id' && c.value === 'vendor-a')).toBe(true)
     expect(supabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'update' && c.payload.status === 'paid' && c.payload.epays_payment_id === 'pay-2')).toBe(true)

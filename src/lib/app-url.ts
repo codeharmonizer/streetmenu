@@ -1,4 +1,4 @@
-const CANONICAL_APP_URL = 'https://scanbite.beyounded.com'
+const CANONICAL_APP_URL = 'https://relaxedmenu.beyounded.com'
 
 const LEGACY_APP_HOSTS = new Set([
   'scanbite-menu.vercel.app',
