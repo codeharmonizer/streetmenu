@@ -61,7 +61,7 @@ export default function FlyerPage() {
                 <rect x="22" y="22" width="3" height="3" rx="0.5" fill="white"/>
               </svg>
               <span className="flyer-brand">
-                Scan<span className="flyer-brand-accent">Bite</span>
+                Relaxed <span className="flyer-brand-accent">Menu</span>
               </span>
             </div>
 
@@ -130,7 +130,7 @@ export default function FlyerPage() {
 
         {/* ━━━ FOOTER ━━━ */}
         <div className="flyer-footer">
-          <span>Scan<span style={{ color: '#E84B1A' }}>Bite</span></span>
+          <span>Relaxed <span style={{ color: '#E84B1A' }}>Menu</span></span>
           <span className="footer-sep">·</span>
           <span>🇧🇭 Bahrain</span>
           <span className="footer-sep">·</span>

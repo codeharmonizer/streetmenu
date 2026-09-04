@@ -1,4 +1,4 @@
-# StreetMenu 🍢
+# Relaxed Menu 🍢
 
 QR-powered digital menus for street vendors, food trucks, and home kitchens.
 
@@ -11,7 +11,7 @@ QR-powered digital menus for street vendors, food trucks, and home kitchens.
 Open Terminal, navigate to this folder, and run:
 
 ```bash
-cd streetmenu
+cd relaxedmenu
 npm install
 ```
 
@@ -20,7 +20,7 @@ npm install
 ### Step 2 — Create your Supabase project (free)
 
 1. Go to [supabase.com](https://supabase.com) and sign up
-2. Click **"New project"**, give it a name (e.g. `streetmenu`), set a database password
+2. Click **"New project"**, give it a name (e.g. `relaxedmenu`), set a database password
 3. Wait ~1 minute for it to provision
 4. Go to **Settings → API** and copy:
    - `Project URL`
@@ -75,7 +75,7 @@ git init
 git add .
 git commit -m "Initial commit"
 # Create a repo on github.com, then:
-git remote add origin https://github.com/YOUR_USERNAME/streetmenu.git
+git remote add origin https://github.com/YOUR_USERNAME/relaxedmenu.git
 git push -u origin main
 ```
 
@@ -83,7 +83,7 @@ git push -u origin main
 1. On Vercel, click **"Add New Project"**
 2. Import your GitHub repo
 3. In **Environment Variables**, add the same 3 variables from your `.env.local`
-4. Change `NEXT_PUBLIC_APP_URL` to your Vercel URL (e.g. `https://streetmenu.vercel.app`)
+4. Change `NEXT_PUBLIC_APP_URL` to your Vercel URL (e.g. `https://relaxedmenu.vercel.app`)
 5. Click **Deploy** — done in ~2 minutes!
 
 ---

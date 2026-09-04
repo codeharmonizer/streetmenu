@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Mail, ArrowRight } from 'lucide-react'
-import ScanBiteLogo from '@/components/shared/ScanBiteLogo'
+import RelaxedMenuLogo from '@/components/shared/RelaxedMenuLogo'
 import { createClient } from '@/lib/supabase/client'
 import toast from 'react-hot-toast'
 
@@ -44,9 +44,9 @@ function ForgotPasswordInner() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 justify-center">
-            <ScanBiteLogo size={36} />
+            <RelaxedMenuLogo size={36} />
             <span className="font-bold text-xl tracking-wide" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.03em' }}>
-              Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+              Relaxed <span style={{ color: 'var(--brand)' }}>Menu</span>
             </span>
           </Link>
           <h1 className="text-2xl font-bold mt-6 mb-1" style={{ fontFamily: 'var(--font-display)' }}>

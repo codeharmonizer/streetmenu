@@ -37,7 +37,7 @@ export default function ContactPage() {
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'var(--brand)' }}>
               <QrCode size={20} color="white" />
             </div>
-            <span className="font-bold text-xl" style={{ fontFamily: 'var(--font-display)' }}>ScanBite</span>
+            <span className="font-bold text-xl" style={{ fontFamily: 'var(--font-display)' }}>Relaxed Menu</span>
           </Link>
           <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: 'var(--font-display)' }}>تواصل معنا</h1>
           <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>سنرد عليك في أقرب وقت ممكن.</p>

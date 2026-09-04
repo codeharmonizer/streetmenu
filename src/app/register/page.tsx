@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Mail, Lock, Store } from 'lucide-react'
-import ScanBiteLogo from '@/components/shared/ScanBiteLogo'
+import RelaxedMenuLogo from '@/components/shared/RelaxedMenuLogo'
 import { createClient } from '@/lib/supabase/client'
 import { slugify } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -91,7 +91,7 @@ export default function RegisterPage() {
       return
     }
 
-    toast.success(locale === 'ar' ? 'مرحباً بك في ScanBite!' : 'Welcome to ScanBite!')
+    toast.success(locale === 'ar' ? 'مرحباً بك في Relaxed Menu!' : 'Welcome to Relaxed Menu!')
     router.push('/dashboard')
     router.refresh()
   }
@@ -108,9 +108,9 @@ export default function RegisterPage() {
             <LanguageSwitcher variant="compact" />
           </div>
           <Link href="/" className="inline-flex items-center gap-2 justify-center">
-            <ScanBiteLogo size={36} />
+            <RelaxedMenuLogo size={36} />
             <span className="font-bold text-xl tracking-wide" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.03em' }}>
-              Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+              Relaxed <span style={{ color: 'var(--brand)' }}>Menu</span>
             </span>
           </Link>
           <h1 className="text-2xl font-bold mt-6 mb-1" style={{ fontFamily: 'var(--font-display)' }}>

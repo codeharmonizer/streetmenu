@@ -1,4 +1,4 @@
--- StreetMenu Online Ordering Migration (hardened)
+-- Relaxed Menu Online Ordering Migration (hardened)
 -- Public customers place/read orders through trusted server actions using the
 -- service-role key, so anonymous Supabase clients must not get global order RLS.
 

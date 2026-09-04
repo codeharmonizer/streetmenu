@@ -1,4 +1,4 @@
--- ScanBite production hardening migration
+-- Relaxed Menu production hardening migration
 -- Safe to run on existing Supabase projects before launch.
 
 -- Admin access table expected by src/app/admin/*

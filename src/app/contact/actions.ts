@@ -5,8 +5,8 @@ import { Resend } from 'resend'
 /** Normalise the from address.
  *  Handles three env var formats:
  *    "onboarding@resend.dev"            → unchanged
- *    "ScanBite <onboarding@resend.dev>" → unchanged
- *    "ScanBite onboarding@resend.dev" → "ScanBite <onboarding@resend.dev>"
+ *    "Relaxed Menu <onboarding@resend.dev>" → unchanged
+ *    "Relaxed Menu onboarding@resend.dev" → "Relaxed Menu <onboarding@resend.dev>"
  */
 function getFromAddress(): string {
   const raw = process.env.RESEND_FROM_EMAIL?.trim()
@@ -41,10 +41,10 @@ export async function sendContactEmail(_: { error?: string; success?: boolean },
       from: getFromAddress(),
       to:   process.env.CONTACT_EMAIL!,
       replyTo: email,
-      subject: `[ScanBite] ${subject}`,
+      subject: `[Relaxed Menu] ${subject}`,
       html: `
         <div style="font-family:sans-serif;max-width:560px;margin:0 auto">
-          <h2 style="color:#ff6b00">رسالة جديدة من ScanBite</h2>
+          <h2 style="color:#ff6b00">رسالة جديدة من Relaxed Menu</h2>
           <table style="width:100%;border-collapse:collapse">
             <tr><td style="padding:8px 0;color:#6b6760;width:100px">الاسم</td><td style="padding:8px 0;font-weight:600">${name}</td></tr>
             <tr><td style="padding:8px 0;color:#6b6760">البريد</td><td style="padding:8px 0"><a href="mailto:${email}">${email}</a></td></tr>

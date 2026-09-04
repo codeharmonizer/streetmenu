@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
   // ── 5. Call ePays /API/Initiate ───────────────────────────────────────────
   const result = await initiatePayment({
     amount:        plan.amount,
-    description:   `ScanBite Pro — ${plan.label} subscription (${vendor.name})`,
+    description:   `Relaxed Menu Pro — ${plan.label} subscription (${vendor.name})`,
     orderNumber:   subscriptionOrder.id,   // stored in udf2, echoed back by ProcessPayment
     notifyUrl,
     fullName:      vendor.name,

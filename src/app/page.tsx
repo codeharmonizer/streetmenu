@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { getTranslations, getLocale } from 'next-intl/server'
 import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
-import ScanBiteLogo from '@/components/shared/ScanBiteLogo'
+import RelaxedMenuLogo from '@/components/shared/RelaxedMenuLogo'
 
 /* ─────────────────────────────────────────────
    Inline SVG helpers (brand-kit originals)
@@ -90,9 +90,9 @@ export default async function HomePage() {
         borderBottom: '0.5px solid rgba(255,255,255,0.06)',
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-          <ScanBiteLogo size={30} />
+          <RelaxedMenuLogo size={30} />
           <span style={{ fontWeight: 700, fontSize: 18, color: C.white, letterSpacing: '-0.3px' }}>
-            Scan<span style={{ color: C.red }}>Bite</span>
+            Relaxed <span style={{ color: C.red }}>Menu</span>
           </span>
         </Link>
 
@@ -568,7 +568,7 @@ export default async function HomePage() {
       {/* ══════════════ CTA ══════════════ */}
       <div style={{ background: C.red, padding: '100px 0', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
         <div className="sb-cta-watermark" style={{ position: 'absolute', fontFamily: "'Bebas Neue',sans-serif", fontSize: 240, color: 'rgba(255,255,255,0.05)', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', whiteSpace: 'nowrap', pointerEvents: 'none', letterSpacing: '0.1em' }}>
-          SCANBITE
+          RELAXED MENU
         </div>
         <div style={{ position: 'relative', zIndex: 1 }}>
           <h2 style={{ fontFamily: isAr ? "'Cairo',sans-serif" : "'Bebas Neue',sans-serif", fontSize: 'clamp(56px, 7vw, 96px)', color: C.white, lineHeight: 0.95, marginBottom: 24, fontWeight: isAr ? 900 : 400 }}>
@@ -592,8 +592,8 @@ export default async function HomePage() {
           <div className="sb-footer-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 48, flexWrap: 'wrap' }}>
             <div style={{ maxWidth: 280 }}>
               <div style={{ fontWeight: 700, fontSize: 18, color: C.white, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <ScanBiteLogo size={24} />
-                Scan<span style={{ color: C.red }}>Bite</span>
+                <RelaxedMenuLogo size={24} />
+                Relaxed <span style={{ color: C.red }}>Menu</span>
               </div>
               <p style={{ fontSize: 13, color: C.gray, lineHeight: 1.6, fontWeight: 300 }}>{t('footerTagline')}</p>
             </div>

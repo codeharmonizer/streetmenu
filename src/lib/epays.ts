@@ -8,7 +8,7 @@
  *   Master credentials  → apiId + apiMasterKey  (merchant management calls)
  *   Gateway credentials → apiId + apiKey + merchantGateway  (payment calls)
  *
- *   For ScanBite we use apiMasterKey directly in Initiate (single-merchant mode,
+ *   For Relaxed Menu we use apiMasterKey directly in Initiate (single-merchant mode,
  *   matching the PHP sample's master flow in initiate_payment.php).
  *   If ePays later provides a dedicated apiKey + merchantGateway, set those env
  *   vars and they will take precedence automatically.

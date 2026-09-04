@@ -11,7 +11,7 @@ import Image from 'next/image'
 import toast from 'react-hot-toast'
 import { useTranslations } from 'next-intl'
 import LanguageSwitcher from './LanguageSwitcher'
-import ScanBiteLogo from './ScanBiteLogo'
+import RelaxedMenuLogo from './RelaxedMenuLogo'
 
 export default function DashboardSidebar({ vendor, pendingOrders }: { vendor: Vendor; pendingOrders?: number }) {
   const pathname = usePathname()
@@ -45,9 +45,9 @@ export default function DashboardSidebar({ vendor, pendingOrders }: { vendor: Ve
       {/* Logo */}
       <div className="p-6 border-b" style={{ borderColor: 'var(--border)' }}>
         <Link href="/" className="flex items-center gap-2">
-          <ScanBiteLogo size={28} />
+          <RelaxedMenuLogo size={28} />
           <span className="font-bold tracking-wide" style={{ fontFamily: 'var(--font-display)', fontSize: 18, letterSpacing: '0.03em' }}>
-            Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+            Relaxed <span style={{ color: 'var(--brand)' }}>Menu</span>
           </span>
         </Link>
       </div>
@@ -130,9 +130,9 @@ export default function DashboardSidebar({ vendor, pendingOrders }: { vendor: Ve
         style={{ background: 'var(--surface)', borderColor: 'var(--border)', height: 64 }}
       >
         <Link href="/" className="flex items-center gap-2">
-          <ScanBiteLogo size={24} />
+          <RelaxedMenuLogo size={24} />
           <span className="font-bold tracking-wide" style={{ fontFamily: 'var(--font-display)', fontSize: 16, letterSpacing: '0.03em' }}>
-            Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+            Relaxed <span style={{ color: 'var(--brand)' }}>Menu</span>
           </span>
         </Link>
         <button

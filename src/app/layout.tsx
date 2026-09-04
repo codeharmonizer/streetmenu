@@ -9,11 +9,11 @@ const appUrl = getAppUrl()
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
-  title: 'ScanBite — قوائم QR رقمية وطلبات أونلاين للمطاعم في البحرين',
-  description: 'ScanBite يساعد المطاعم والكافيهات والبسطات في البحرين على إنشاء قائمة طعام رقمية برمز QR، استقبال طلبات أونلاين، عرض تقييمات الزبائن، وتتبع مسح القائمة. QR digital menus and online ordering for Bahrain food businesses.',
+  title: 'Relaxed Menu — قوائم QR رقمية وطلبات أونلاين للمطاعم في البحرين',
+  description: 'Relaxed Menu يساعد المطاعم والكافيهات والبسطات في البحرين على إنشاء قائمة طعام رقمية برمز QR، استقبال طلبات أونلاين، عرض تقييمات الزبائن، وتتبع مسح القائمة. QR digital menus and online ordering for Bahrain food businesses.',
   keywords: [
-    'ScanBite',
-    'سكان بايت',
+    'Relaxed Menu',
+    'ريلاكسد منيو',
     'قائمة QR',
     'قائمة كيو آر',
     'منيو QR',
@@ -48,17 +48,17 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'ScanBite — قوائم QR رقمية وطلبات أونلاين',
+    title: 'Relaxed Menu — قوائم QR رقمية وطلبات أونلاين',
     description: 'أنشئ منيو QR لمطعمك أو بسطتك. الزبائن يمسحون، يتصفحون، يطلبون، ويقيّمون بدون تحميل تطبيق.',
     url: appUrl,
-    siteName: 'ScanBite',
+    siteName: 'Relaxed Menu',
     type: 'website',
     locale: 'ar_BH',
     alternateLocale: ['en_US'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ScanBite — قوائم QR رقمية وطلبات أونلاين',
+    title: 'Relaxed Menu — قوائم QR رقمية وطلبات أونلاين',
     description: 'قوائم طعام رقمية برمز QR وطلبات أونلاين للمطاعم والكافيهات والبسطات في البحرين.',
   },
 }
@@ -69,12 +69,12 @@ const structuredData = {
     {
       '@type': 'SoftwareApplication',
       '@id': `${appUrl}/#software`,
-      name: 'ScanBite',
-      alternateName: ['سكان بايت', 'منيو QR للمطاعم', 'قائمة QR للمطاعم', 'منيو QR', 'قائمة QR', 'قائمة طعام رقمية'],
+      name: 'Relaxed Menu',
+      alternateName: ['ريلاكسد منيو', 'منيو QR للمطاعم', 'قائمة QR للمطاعم', 'منيو QR', 'قائمة QR', 'قائمة طعام رقمية'],
       url: `${appUrl}/`,
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
-      description: 'ScanBite يساعد المطاعم والكافيهات والبسطات في البحرين على إنشاء قائمة طعام رقمية برمز QR، استقبال طلبات أونلاين، عرض تقييمات الزبائن، وتتبع مسح القائمة. QR-code digital menus and online ordering for Bahrain food businesses.',
+      description: 'Relaxed Menu يساعد المطاعم والكافيهات والبسطات في البحرين على إنشاء قائمة طعام رقمية برمز QR، استقبال طلبات أونلاين، عرض تقييمات الزبائن، وتتبع مسح القائمة. QR-code digital menus and online ordering for Bahrain food businesses.',
       keywords: 'قائمة QR, منيو QR, منيو رقمي, قائمة طعام رقمية, طلبات أونلاين للمطاعم, مطاعم البحرين, بسطات البحرين, QR menu Bahrain, digital menu Bahrain, restaurant online ordering',
       offers: {
         '@type': 'Offer',
@@ -86,8 +86,8 @@ const structuredData = {
     {
       '@type': 'Organization',
       '@id': `${appUrl}/#organization`,
-      name: 'ScanBite',
-      alternateName: ['سكان بايت', 'منيو QR للمطاعم', 'قائمة QR للمطاعم'],
+      name: 'Relaxed Menu',
+      alternateName: ['ريلاكسد منيو', 'منيو QR للمطاعم', 'قائمة QR للمطاعم'],
       url: `${appUrl}/`,
       parentOrganization: {
         '@type': 'Organization',
@@ -98,8 +98,8 @@ const structuredData = {
     {
       '@type': 'WebSite',
       '@id': `${appUrl}/#website`,
-      name: 'ScanBite',
-      alternateName: ['سكان بايت', 'منيو QR للمطاعم', 'قائمة QR للمطاعم'],
+      name: 'Relaxed Menu',
+      alternateName: ['ريلاكسد منيو', 'منيو QR للمطاعم', 'قائمة QR للمطاعم'],
       url: `${appUrl}/`,
       inLanguage: ['ar-BH', 'en'],
       description: 'قوائم QR رقمية وطلبات أونلاين للمطاعم والكافيهات والبسطات في البحرين. QR-code digital menus and online ordering for Bahrain food businesses.',

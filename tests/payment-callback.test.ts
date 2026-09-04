@@ -152,7 +152,7 @@ describe('payment initiate behavior', () => {
     expect(supabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'insert' && c.payload.vendor_id === 'vendor-a' && c.payload.amount === 30 && c.payload.status === 'pending')).toBe(true)
     expect(initiatePaymentMock).toHaveBeenCalledWith(expect.objectContaining({
       amount: 30,
-      description: 'ScanBite Pro — 12 month subscription (Vendor A)',
+      description: 'Relaxed Menu Pro — 12 month subscription (Vendor A)',
       orderNumber: 'sub-order-yearly',
       notifyUrl: 'https://relaxedmenu.beyounded.com/api/payment/callback?orderId=sub-order-yearly',
     }))

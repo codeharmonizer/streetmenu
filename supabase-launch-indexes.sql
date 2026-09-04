@@ -1,4 +1,4 @@
--- ScanBite launch traffic indexes
+-- Relaxed Menu launch traffic indexes
 -- Safe to run multiple times.
 
 create index if not exists vendors_slug_idx

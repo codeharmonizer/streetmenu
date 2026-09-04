@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { LayoutDashboard, Store, LogOut } from 'lucide-react'
-import ScanBiteLogo from '@/components/shared/ScanBiteLogo'
+import RelaxedMenuLogo from '@/components/shared/RelaxedMenuLogo'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -31,9 +31,9 @@ export default function AdminSidebar() {
       <div className="md:hidden fixed top-0 inset-x-0 z-50 flex items-center justify-between px-4 border-b"
         style={{ background: '#0f172a', borderColor: '#1e293b', height: 56 }}>
         <Link href="/admin" className="flex items-center gap-2">
-          <ScanBiteLogo size={22} />
+          <RelaxedMenuLogo size={22} />
           <p className="font-bold text-white text-sm" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.03em' }}>
-            Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+            Relaxed <span style={{ color: 'var(--brand)' }}>Menu</span>
           </p>
         </Link>
         <div className="flex items-center gap-1">
@@ -63,10 +63,10 @@ export default function AdminSidebar() {
         {/* Logo */}
         <div className="p-6 border-b" style={{ borderColor: '#1e293b' }}>
           <Link href="/admin" className="flex items-center gap-2">
-            <ScanBiteLogo size={28} />
+            <RelaxedMenuLogo size={28} />
             <div>
               <p className="font-bold text-white text-sm" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.03em' }}>
-                Scan<span style={{ color: 'var(--brand)' }}>Bite</span>
+                Relaxed <span style={{ color: 'var(--brand)' }}>Menu</span>
               </p>
               <p className="text-xs" style={{ color: '#64748b' }}>Admin Panel</p>
             </div>

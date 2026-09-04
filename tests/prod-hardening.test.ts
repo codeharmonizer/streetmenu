@@ -58,7 +58,7 @@ describe('production hardening checks', () => {
     expect(layout).toContain('getAppUrl()')
   })
 
-  it('publishes Google and AI discovery files for the ScanBite subdomain', () => {
+  it('publishes Google and AI discovery files for the Relaxed Menu subdomain', () => {
     const layout = read('src/app/layout.tsx')
     const robots = read('src/app/robots.ts')
     const sitemap = read('src/app/sitemap.ts')
@@ -72,12 +72,12 @@ describe('production hardening checks', () => {
     expect(layout).toContain("SoftwareApplication")
     expect(layout).toContain('قوائم QR رقمية')
     expect(layout).toContain('قائمة طعام رقمية')
-    expect(layout).toContain('سكان بايت')
+    expect(layout).toContain('ريلاكسد منيو')
     expect(robots).toContain('sitemap: `${appUrl}/sitemap.xml`')
     expect(sitemap).toContain('`${appUrl}/`')
     expect(sitemap).toContain('`${appUrl}/register`')
-    expect(llms).toContain('ScanBite is a QR-code digital menu and online ordering platform')
-    expect(llms).toContain('سكان بايت هو نظام قوائم طعام رقمية')
+    expect(llms).toContain('Relaxed Menu is a QR-code digital menu and online ordering platform')
+    expect(llms).toContain('ريلاكسد منيو هو نظام قوائم طعام رقمية')
     expect(llms).toContain('منيو QR')
     expect(indexNowKey.trim()).toMatch(/^[a-f0-9]{32}$/)
   })

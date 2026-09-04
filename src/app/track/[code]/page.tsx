@@ -10,7 +10,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { code } = await params
-  return { title: `Order ${code} — ScanBite` }
+  return { title: `Order ${code} — Relaxed Menu` }
 }
 
 export default async function TrackOrderPage({ params }: Props) {

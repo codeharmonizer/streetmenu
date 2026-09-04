@@ -34,7 +34,7 @@ export async function sendUpgradeRequest(phone: string, note: string) {
       from:    getFromAddress(),
       to:      process.env.CONTACT_EMAIL!,
       replyTo: user.email!,
-      subject: `[ScanBite] طلب ترقية — ${vendor.name}`,
+      subject: `[Relaxed Menu] طلب ترقية — ${vendor.name}`,
       html: `
         <div style="font-family:sans-serif;max-width:560px;margin:0 auto">
           <h2 style="color:#ff6b00">🚀 طلب ترقية اشتراك جديد</h2>

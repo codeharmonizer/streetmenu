@@ -1,12 +1,12 @@
-# ScanBite
+# Relaxed Menu
 
-> ScanBite is a QR-code digital menu and online ordering platform for restaurants, cafés, food trucks, and small food businesses in Bahrain.
+> Relaxed Menu is a QR-code digital menu and online ordering platform for restaurants, cafés, food trucks, and small food businesses in Bahrain.
 
-> سكان بايت هو نظام قوائم طعام رقمية برمز QR وطلبات أونلاين للمطاعم والكافيهات والبسطات ومشاريع الطعام الصغيرة في البحرين.
+> ريلاكسد منيو هو نظام قوائم طعام رقمية برمز QR وطلبات أونلاين للمطاعم والكافيهات والبسطات ومشاريع الطعام الصغيرة في البحرين.
 
-ScanBite helps food businesses create a mobile-first public menu, generate a printable QR code, receive online orders, collect customer reviews, and track menu scans without requiring customers to install an app.
+Relaxed Menu helps food businesses create a mobile-first public menu, generate a printable QR code, receive online orders, collect customer reviews, and track menu scans without requiring customers to install an app.
 
-سكان بايت يساعد أصحاب المطاعم والكافيهات والبسطات على إنشاء منيو رقمي للجوال، توليد رمز QR للطباعة، استقبال طلبات أونلاين، جمع تقييمات الزبائن، ومعرفة عدد مرات مسح القائمة بدون أن يحتاج الزبون لتحميل تطبيق.
+ريلاكسد منيو يساعد أصحاب المطاعم والكافيهات والبسطات على إنشاء منيو رقمي للجوال، توليد رمز QR للطباعة، استقبال طلبات أونلاين، جمع تقييمات الزبائن، ومعرفة عدد مرات مسح القائمة بدون أن يحتاج الزبون لتحميل تطبيق.
 
 ## Canonical URLs
 
@@ -18,11 +18,11 @@ ScanBite helps food businesses create a mobile-first public menu, generate a pri
 
 ## English key phrases
 
-QR menu, digital menu, restaurant QR code menu, online ordering, menu scans, customer reviews, Bahrain restaurants, food business menu, ScanBite.
+QR menu, digital menu, restaurant QR code menu, online ordering, menu scans, customer reviews, Bahrain restaurants, food business menu, Relaxed Menu.
 
 ## كلمات بحث عربية
 
-سكان بايت، منيو QR، منيو كيو آر، قائمة QR، قائمة كيو آر، قائمة طعام رقمية، قائمة مطعم رقمية، منيو رقمي للمطاعم، رمز QR للمطاعم، طلبات أونلاين للمطاعم، طلبات مطاعم اونلاين، منيو مطاعم البحرين، قوائم مطاعم البحرين، مطاعم البحرين، بسطات البحرين، كافيهات البحرين.
+ريلاكسد منيو، منيو QR، منيو كيو آر، قائمة QR، قائمة كيو آر، قائمة طعام رقمية، قائمة مطعم رقمية، منيو رقمي للمطاعم، رمز QR للمطاعم، طلبات أونلاين للمطاعم، طلبات مطاعم اونلاين، منيو مطاعم البحرين، قوائم مطاعم البحرين، مطاعم البحرين، بسطات البحرين، كافيهات البحرين.
 
 ## Product summary
 
@@ -44,4 +44,4 @@ QR menu, digital menu, restaurant QR code menu, online ordering, menu scans, cus
 
 ## Relationship to Beyounded
 
-ScanBite is a Beyounded product. Beyounded's main site is https://beyounded.com/.
+Relaxed Menu is a Beyounded product. Beyounded's main site is https://beyounded.com/.

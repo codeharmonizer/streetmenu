@@ -1,10 +1,10 @@
 /**
- * ScanBite brand icon — the QR-pattern SVG from the brand kit.
+ * Relaxed Menu brand icon — the QR-pattern SVG from the brand kit.
  * Used everywhere the product logo appears.
  */
-export default function ScanBiteLogo({ size = 32 }: { size?: number }) {
+export default function RelaxedMenuLogo({ size = 32 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-label="ScanBite">
+    <svg width={size} height={size} viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-label="Relaxed Menu">
       <rect width="120" height="120" rx="26" fill="#E84B1A"/>
       {/* Top-left QR corner block */}
       <rect x="22" y="22" width="34" height="34" rx="6" fill="#FFFFFF"/>
