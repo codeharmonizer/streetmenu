@@ -9,8 +9,8 @@ const appUrl = getAppUrl()
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
-  title: 'Relaxed Menu — قوائم QR رقمية وطلبات أونلاين للمطاعم في البحرين',
-  description: 'Relaxed Menu يساعد المطاعم والكافيهات والبسطات في البحرين على إنشاء قائمة طعام رقمية برمز QR، استقبال طلبات أونلاين، عرض تقييمات الزبائن، وتتبع مسح القائمة. QR digital menus and online ordering for Bahrain food businesses.',
+  title: 'Relaxed Menu — QR Menu, Restaurant Menu & Food Menu for Bahrain',
+  description: 'Relaxed Menu helps restaurants, cafés, stalls, and food businesses in Bahrain create a QR menu, restaurant menu, digital menu, food menu, online ordering, reviews, and menu scan analytics. قوائم QR رقمية وطلبات أونلاين للمطاعم في البحرين.',
   keywords: [
     'Relaxed Menu',
     'ريلاكسد منيو',
@@ -28,8 +28,15 @@ export const metadata: Metadata = {
     'مطاعم البحرين',
     'بسطات البحرين',
     'QR menu Bahrain',
+    'QR menu',
     'digital menu Bahrain',
+    'digital menu',
+    'restaurant menu',
     'restaurant QR code menu',
+    'restaurant digital menu',
+    'food menu',
+    'online food menu',
+    'menu for restaurant',
     'online ordering Bahrain',
   ],
   alternates: {
@@ -48,8 +55,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Relaxed Menu — قوائم QR رقمية وطلبات أونلاين',
-    description: 'أنشئ منيو QR لمطعمك أو بسطتك. الزبائن يمسحون، يتصفحون، يطلبون، ويقيّمون بدون تحميل تطبيق.',
+    title: 'Relaxed Menu — QR Menu, Restaurant Menu & Food Menu',
+    description: 'Create a QR menu, restaurant menu, digital menu, or food menu for your restaurant, café, stall, or food business. قوائم QR رقمية وطلبات أونلاين للمطاعم.',
     url: appUrl,
     siteName: 'Relaxed Menu',
     type: 'website',
@@ -58,8 +65,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Relaxed Menu — قوائم QR رقمية وطلبات أونلاين',
-    description: 'قوائم طعام رقمية برمز QR وطلبات أونلاين للمطاعم والكافيهات والبسطات في البحرين.',
+    title: 'Relaxed Menu — QR Menu, Restaurant Menu & Food Menu',
+    description: 'QR menu, restaurant menu, digital menu, food menu, and online ordering for restaurants, cafés, stalls, and food businesses in Bahrain.',
   },
 }
 
@@ -70,12 +77,12 @@ const structuredData = {
       '@type': 'SoftwareApplication',
       '@id': `${appUrl}/#software`,
       name: 'Relaxed Menu',
-      alternateName: ['ريلاكسد منيو', 'منيو QR للمطاعم', 'قائمة QR للمطاعم', 'منيو QR', 'قائمة QR', 'قائمة طعام رقمية'],
+      alternateName: ['ريلاكسد منيو', 'منيو QR للمطاعم', 'قائمة QR للمطاعم', 'منيو QR', 'قائمة QR', 'قائمة طعام رقمية', 'QR menu', 'restaurant menu', 'food menu', 'digital menu'],
       url: `${appUrl}/`,
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
-      description: 'Relaxed Menu يساعد المطاعم والكافيهات والبسطات في البحرين على إنشاء قائمة طعام رقمية برمز QR، استقبال طلبات أونلاين، عرض تقييمات الزبائن، وتتبع مسح القائمة. QR-code digital menus and online ordering for Bahrain food businesses.',
-      keywords: 'قائمة QR, منيو QR, منيو رقمي, قائمة طعام رقمية, طلبات أونلاين للمطاعم, مطاعم البحرين, بسطات البحرين, QR menu Bahrain, digital menu Bahrain, restaurant online ordering',
+      description: 'Relaxed Menu helps restaurants, cafés, stalls, and food businesses in Bahrain create a QR menu, restaurant menu, digital menu, food menu, online ordering, customer reviews, and menu scan analytics.',
+      keywords: 'Relaxed Menu, QR menu, restaurant menu, food menu, digital menu, online food menu, restaurant QR code menu, restaurant digital menu, menu for restaurant, قائمة QR, منيو QR, منيو رقمي, قائمة طعام رقمية, طلبات أونلاين للمطاعم, مطاعم البحرين, بسطات البحرين, QR menu Bahrain, digital menu Bahrain, restaurant online ordering',
       offers: {
         '@type': 'Offer',
         price: '0',
@@ -87,7 +94,7 @@ const structuredData = {
       '@type': 'Organization',
       '@id': `${appUrl}/#organization`,
       name: 'Relaxed Menu',
-      alternateName: ['ريلاكسد منيو', 'منيو QR للمطاعم', 'قائمة QR للمطاعم'],
+      alternateName: ['ريلاكسد منيو', 'منيو QR للمطاعم', 'قائمة QR للمطاعم', 'QR menu', 'restaurant menu', 'food menu'],
       url: `${appUrl}/`,
       parentOrganization: {
         '@type': 'Organization',
@@ -99,10 +106,10 @@ const structuredData = {
       '@type': 'WebSite',
       '@id': `${appUrl}/#website`,
       name: 'Relaxed Menu',
-      alternateName: ['ريلاكسد منيو', 'منيو QR للمطاعم', 'قائمة QR للمطاعم'],
+      alternateName: ['ريلاكسد منيو', 'منيو QR للمطاعم', 'قائمة QR للمطاعم', 'QR menu', 'restaurant menu', 'food menu', 'digital menu'],
       url: `${appUrl}/`,
       inLanguage: ['ar-BH', 'en'],
-      description: 'قوائم QR رقمية وطلبات أونلاين للمطاعم والكافيهات والبسطات في البحرين. QR-code digital menus and online ordering for Bahrain food businesses.',
+      description: 'Relaxed Menu is a QR menu, restaurant menu, digital menu, food menu, and online ordering website for restaurants, cafés, stalls, and food businesses in Bahrain. قوائم QR رقمية وطلبات أونلاين للمطاعم والكافيهات والبسطات في البحرين.',
       publisher: {
         '@id': `${appUrl}/#organization`,
       },

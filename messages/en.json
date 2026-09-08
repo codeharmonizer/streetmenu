@@ -105,7 +105,7 @@
     "heroLine1": "SCAN IT.",
     "heroLine2": "SEE IT.",
     "heroLine3": "EAT IT.",
-    "heroSubline": "A digital menu for your restaurant, stall, or food business — ready in 5 minutes. One QR code. No app needed.",
+    "heroSubline": "A QR menu, restaurant menu, and food menu for your restaurant, stall, or food business — ready in 5 minutes. One QR code. No app needed.",
     "sectionHow": "How it works",
     "howHeadline1": "THREE STEPS",
     "howHeadline2": "TO DIGITAL.",
@@ -130,7 +130,7 @@
     "ctaHeadline1": "YOUR MENU.",
     "ctaHeadline2": "ONE SCAN AWAY.",
     "ctaNote": "No credit card · Free forever · Upgrade anytime",
-    "footerTagline": "Digital menus for every restaurant, stall, and food business. Scan it. See it. Eat it."
+    "footerTagline": "QR menu, restaurant menu, digital menu, and food menu for every restaurant, stall, and food business. Scan it. See it. Eat it."
   },
   "auth": {
     "loginTitle": "Welcome back",

@@ -83,8 +83,9 @@ git push -u origin main
 1. On Vercel, click **"Add New Project"**
 2. Import your GitHub repo
 3. In **Environment Variables**, add the same 3 variables from your `.env.local`
-4. Change `NEXT_PUBLIC_APP_URL` to your Vercel URL (e.g. `https://relaxedmenu.vercel.app`)
-5. Click **Deploy** — done in ~2 minutes!
+4. Change `NEXT_PUBLIC_APP_URL` to your production domain: `https://relaxedmenu.beyounded.com`
+5. Add `relaxedmenu.beyounded.com` under **Settings → Domains** in Vercel, then point the DNS record at Vercel as instructed.
+6. Click **Deploy** — done in ~2 minutes!
 
 ---
 
