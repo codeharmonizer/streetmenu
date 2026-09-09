@@ -89,23 +89,23 @@ export default async function HomePage() {
         backdropFilter: 'blur(12px)',
         borderBottom: '0.5px solid rgba(255,255,255,0.06)',
       }}>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+        <Link className="sb-nav-brand" href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', minWidth: 0 }}>
           <RelaxedMenuLogo size={30} />
-          <span style={{ fontWeight: 700, fontSize: 18, color: C.white, letterSpacing: '-0.3px' }}>
+          <span className="sb-nav-brand-text" style={{ fontWeight: 700, fontSize: 18, color: C.white, letterSpacing: '-0.3px' }}>
             Relaxed <span style={{ color: C.red }}>Menu</span>
           </span>
         </Link>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div className="sb-nav-actions" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <LanguageSwitcher variant="nav" />
           <Link href="/login" className="sb-nav-login"
-            style={{ fontSize: 14, color: C.grayLight, textDecoration: 'none', fontWeight: 400, padding: '8px 12px' }}>
+            style={{ fontSize: 14, color: C.grayLight, textDecoration: 'none', fontWeight: 400, padding: '8px 12px', whiteSpace: 'nowrap' }}>
             {tn('login')}
           </Link>
-          <Link href="/register"
+          <Link href="/register" className="sb-nav-register"
             style={{
               background: C.red, color: C.white, fontSize: 14, fontWeight: 600,
-              padding: '9px 22px', borderRadius: 8, textDecoration: 'none',
+              padding: '9px 22px', borderRadius: 8, textDecoration: 'none', whiteSpace: 'nowrap',
             }}>
             {tn('register')}
           </Link>
@@ -317,8 +317,13 @@ export default async function HomePage() {
         <style>{`
           @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
           @media (max-width: 767px) {
-            .sb-nav { padding: 12px 16px !important; }
-            .sb-nav-login { display: none !important; }
+            .sb-nav { padding: 10px 14px !important; gap: 10px !important; }
+            .sb-nav-brand { gap: 8px !important; flex-shrink: 1 !important; }
+            .sb-nav-brand svg { width: 28px !important; height: 28px !important; flex-shrink: 0 !important; }
+            .sb-nav-brand-text { display: inline-flex !important; flex-direction: column !important; font-size: 16px !important; line-height: 1.15 !important; }
+            .sb-nav-actions { gap: 6px !important; flex-shrink: 0 !important; }
+            .sb-nav-login { display: inline-flex !important; padding: 8px 6px !important; font-size: 13px !important; color: #FFFFFF !important; }
+            .sb-nav-register { padding: 8px 10px !important; border-radius: 8px !important; font-size: 13px !important; line-height: 1 !important; }
             .sb-hero-grid { grid-template-columns: 1fr !important; }
             .sb-hero-phone { display: none !important; }
             .sb-hero-text { padding: 40px 20px 60px !important; }
