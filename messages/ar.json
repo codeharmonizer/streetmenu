@@ -360,7 +360,7 @@
     "trackOrder": "تتبع الطلب",
     "orderCode": "رمز الطلب",
     "ordersDisabled": "الطلبات الإلكترونية غير متاحة حالياً",
-    "ordersTurnedOff": "online order are turned off",
+    "ordersTurnedOff": "الطلبات الإلكترونية متوقفة",
     "mustBeOpen": "المطعم مغلق حالياً",
     "addedToast": "تمت الإضافة",
     "failed": "فشل إرسال الطلب، حاول مجدداً",

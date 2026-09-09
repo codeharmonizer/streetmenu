@@ -24,6 +24,7 @@ describe('public menu order UX', () => {
   it('keeps cart building available when online ordering is off but blocks final confirmation', () => {
     const client = read('src/components/menu/PublicMenuClient.tsx')
     const messages = read('messages/en.json')
+    const arabicMessages = read('messages/ar.json')
 
     expect(client).not.toContain('{ordersEnabled && item.available && (')
     expect(client).not.toContain('{ordersEnabled && cartCount > 0 && (')
@@ -32,7 +33,9 @@ describe('public menu order UX', () => {
     expect(client.lastIndexOf("disabled={isPending || cartItems.length === 0 || !ordersEnabled}")).toBeLessThan(
       client.lastIndexOf("tc('ordersTurnedOff')")
     )
-    expect(messages).toContain('"ordersTurnedOff": "online order are turned off"')
+    expect(messages).toContain('"ordersTurnedOff": "online orders are turned off"')
+    expect(arabicMessages).toContain('"ordersTurnedOff": "الطلبات الإلكترونية متوقفة"')
+    expect(messages).not.toContain('online order are turned off')
     expect(messages).not.toContain('Online Orders are Turned Off by Restaurant')
   })
 })
