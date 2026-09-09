@@ -20,4 +20,16 @@ describe('public menu order UX', () => {
     expect(client).toContain('setCustomerName(savedCustomer.name')
     expect(client).toContain('setCustomerPhone(savedCustomer.phone')
   })
+
+  it('keeps cart building available when online ordering is off but blocks final confirmation', () => {
+    const client = read('src/components/menu/PublicMenuClient.tsx')
+    const messages = read('messages/en.json')
+
+    expect(client).not.toContain('{ordersEnabled && item.available && (')
+    expect(client).not.toContain('{ordersEnabled && cartCount > 0 && (')
+    expect(client).toContain("disabled={isPending || cartItems.length === 0 || !ordersEnabled}")
+    expect(client).toContain("{!ordersEnabled && (")
+    expect(client).toContain("tc('ordersTurnedOffByRestaurant')")
+    expect(messages).toContain('"ordersTurnedOffByRestaurant": "Online Orders are Turned Off by Restaurant"')
+  })
 })

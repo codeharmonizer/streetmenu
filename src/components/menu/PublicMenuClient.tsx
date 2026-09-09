@@ -118,6 +118,7 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
   async function handleConfirm(e: React.FormEvent) {
     e.preventDefault()
     if (!cartItems.length)    { toast.error(tc('emptyCartError')); return }
+    if (!ordersEnabled)       { toast.error(tc('ordersTurnedOffByRestaurant')); return }
     if (!customerName.trim()) { toast.error(tc('nameRequired'));   return }
     if (!customerPhone.trim()){ toast.error(tc('phoneRequired'));  return }
 
@@ -225,7 +226,7 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
                           </span>
                         )}
                         {/* Add / stepper */}
-                        {ordersEnabled && item.available && (
+                        {item.available && (
                           <div className="mt-2">
                             {qty === 0 ? (
                               <button
@@ -298,7 +299,7 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
           )}
 
           {/* Cart / order button */}
-          {ordersEnabled && cartCount > 0 && (
+          {cartCount > 0 && (
             <button
               onClick={() => setSheet('cart')}
               className="btn-primary flex-1"
@@ -456,6 +457,19 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
                       </div>
                     )}
 
+                    {!ordersEnabled && (
+                      <div
+                        className="rounded-2xl px-4 py-3 text-sm font-semibold text-center"
+                        style={{
+                          background: 'var(--brand-light)',
+                          border: '1px solid var(--brand)',
+                          color: 'var(--brand-dark)',
+                        }}
+                      >
+                        {tc('ordersTurnedOffByRestaurant')}
+                      </div>
+                    )}
+
                     <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
                       <div>
                         <label className="label">{tc('name')} *</label>
@@ -493,8 +507,8 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
 
                     <button
                       type="submit"
-                      disabled={isPending || cartItems.length === 0}
-                      className="btn-primary w-full justify-center">
+                      disabled={isPending || cartItems.length === 0 || !ordersEnabled}
+                      className={`btn-primary w-full justify-center ${!ordersEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
                       {isPending ? tc('placing') : tc('confirm')}
                     </button>
                   </form>
