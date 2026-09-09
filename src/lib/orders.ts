@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import type { Order, OrderStatus } from '@/types'
+import { getTodayOrderWindow, hasReachedFreeDailyOrderLimit } from '@/lib/plan-limits'
 
 const ORDER_NUMBER_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'
 const ORDER_RATE_LIMIT = { windowMinutes: 10, maxEvents: 5 }
@@ -69,7 +70,7 @@ export async function placeOrder(input: {
 
   const { data: vendor } = await supabase
     .from('vendors')
-    .select('id, orders_enabled, is_open, is_active')
+    .select('id, orders_enabled, is_open, is_active, subscription_status, subscription_expires_at')
     .eq('id', vendorId)
     .single()
 
@@ -77,6 +78,18 @@ export async function placeOrder(input: {
   if (!vendor.orders_enabled)        return { error: 'orders_disabled' }
   if (!vendor.is_open)               return { error: 'vendor_closed' }
   if (vendor.is_active === false)    return { error: 'vendor_inactive' }
+
+  const { startIso, endIso } = getTodayOrderWindow()
+  const { count: todayOrderCount } = await supabase
+    .from('orders')
+    .select('id', { count: 'exact', head: true })
+    .eq('vendor_id', vendorId)
+    .gte('created_at', startIso)
+    .lt('created_at', endIso)
+
+  if (hasReachedFreeDailyOrderLimit(vendor, todayOrderCount ?? 0)) {
+    return { error: 'free_daily_order_limit_reached' }
+  }
 
   // Load referenced menu items (server-side price validation)
   const itemIds = items.map(i => i.menuItemId)

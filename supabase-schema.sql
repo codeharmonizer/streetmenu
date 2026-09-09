@@ -48,6 +48,49 @@ create index if not exists vendors_user_id_idx on public.vendors(user_id);
 create index if not exists menu_items_vendor_sort_order_idx on public.menu_items(vendor_id, sort_order, created_at);
 create index if not exists menu_items_vendor_available_sort_idx on public.menu_items(vendor_id, available desc, sort_order, created_at);
 
+-- Enforce free plan menu-item cap at the database boundary too.
+-- FREE_ITEM_LIMIT: 5
+create or replace function public.enforce_free_menu_item_limit()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  vendor_record public.vendors%rowtype;
+  current_item_count integer;
+begin
+  select * into vendor_record
+  from public.vendors
+  where id = new.vendor_id;
+
+  if vendor_record.id is null then
+    return new;
+  end if;
+
+  if vendor_record.subscription_status in ('active', 'trial')
+     and (vendor_record.subscription_expires_at is null or vendor_record.subscription_expires_at > now()) then
+    return new;
+  end if;
+
+  select count(*) into current_item_count
+  from public.menu_items
+  where vendor_id = new.vendor_id;
+
+  if current_item_count >= 5 then
+    raise exception 'Free plan menu item limit reached';
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists menu_items_free_limit_before_insert on public.menu_items;
+create trigger menu_items_free_limit_before_insert
+  before insert on public.menu_items
+  for each row
+  execute function public.enforce_free_menu_item_limit();
+
 -- Scans table (analytics)
 create table if not exists public.scans (
   id uuid primary key default uuid_generate_v4(),

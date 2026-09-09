@@ -33,7 +33,7 @@ export function isPaid(vendor: Pick<Vendor, 'subscription_status' | 'subscriptio
   return new Date(subscription_expires_at) > new Date()
 }
 
-export const FREE_ITEM_LIMIT = 10
+export { FREE_ITEM_LIMIT } from '@/lib/plan-limits'
 
 export interface MenuItem {
   id: string

@@ -9,6 +9,8 @@ import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
 import type { Metadata } from 'next'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { getAppUrl } from '@/lib/app-url'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { getTodayOrderWindow, hasReachedFreeDailyOrderLimit } from '@/lib/plan-limits'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -74,10 +76,19 @@ export default async function PublicMenuPage({ params }: Props) {
 
   const appUrl  = getAppUrl()
   const menuUrl = `${appUrl}/m/${vendor.slug}`
+  const { startIso, endIso } = getTodayOrderWindow()
+  const { count: todayOrderCount } = await createAdminClient()
+    .from('orders')
+    .select('id', { count: 'exact', head: true })
+    .eq('vendor_id', vendor.id)
+    .gte('created_at', startIso)
+    .lt('created_at', endIso)
+  const freeDailyOrderLimitReached = hasReachedFreeDailyOrderLimit(vendor, todayOrderCount ?? 0)
 
   const ordersEnabled =
     vendor.orders_enabled === true &&
-    vendor.is_open === true
+    vendor.is_open === true &&
+    !freeDailyOrderLimitReached
 
   return (
     <div className="min-h-screen pb-24" style={{ background: 'var(--bg)' }}>
@@ -170,6 +181,7 @@ export default async function PublicMenuPage({ params }: Props) {
         reviews={reviews}
         avgRating={avgRating}
         ordersEnabled={ordersEnabled}
+        freeDailyOrderLimitReached={freeDailyOrderLimitReached}
       />
     </div>
   )

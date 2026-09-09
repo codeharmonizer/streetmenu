@@ -361,6 +361,7 @@
     "orderCode": "Order code",
     "ordersDisabled": "Online ordering is not available right now",
     "ordersTurnedOff": "online orders are turned off",
+    "freeDailyOrderLimitReached": "Free plan daily order limit reached. Online orders are turned off for today.",
     "mustBeOpen": "This place is currently closed",
     "addedToast": "Added to cart",
     "failed": "Failed to place order, please try again",

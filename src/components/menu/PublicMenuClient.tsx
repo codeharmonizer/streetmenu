@@ -43,6 +43,7 @@ interface Props {
   reviews: Review[]
   avgRating: number | null
   ordersEnabled: boolean
+  freeDailyOrderLimitReached?: boolean
 }
 
 type SheetType = 'cart' | 'reviews' | 'write' | null
@@ -50,7 +51,7 @@ type SheetType = 'cart' | 'reviews' | 'write' | null
 const SM_ORDERS_KEY = 'sm_orders'
 const SM_CUSTOMER_KEY = 'sm_customer_info'
 
-export default function PublicMenuClient({ vendor, items, reviews, avgRating, ordersEnabled }: Props) {
+export default function PublicMenuClient({ vendor, items, reviews, avgRating, ordersEnabled, freeDailyOrderLimitReached = false }: Props) {
   const t      = useTranslations('publicMenu')
   const tc     = useTranslations('cart')
   const tr     = useTranslations('reviewForm')
@@ -118,7 +119,7 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
   async function handleConfirm(e: React.FormEvent) {
     e.preventDefault()
     if (!cartItems.length)    { toast.error(tc('emptyCartError')); return }
-    if (!ordersEnabled)       { toast.error(tc('ordersTurnedOff')); return }
+    if (!ordersEnabled)       { toast.error(freeDailyOrderLimitReached ? tc('freeDailyOrderLimitReached') : tc('ordersTurnedOff')); return }
     if (!customerName.trim()) { toast.error(tc('nameRequired'));   return }
     if (!customerPhone.trim()){ toast.error(tc('phoneRequired'));  return }
 
@@ -501,7 +502,7 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
 
                     {!ordersEnabled && (
                       <p className="text-center text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
-                        {tc('ordersTurnedOff')}
+                        {freeDailyOrderLimitReached ? tc('freeDailyOrderLimitReached') : tc('ordersTurnedOff')}
                       </p>
                     )}
                   </form>
