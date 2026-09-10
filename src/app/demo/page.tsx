@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { MapPin, Clock, Phone, Star } from 'lucide-react'
 import type { Metadata } from 'next'
+import CategoryTabs from '@/components/menu/CategoryTabs'
+import { categorySectionId } from '@/lib/category-section'
 
 export const metadata: Metadata = {
   title: 'بسطة أم خالد — تجريبي | Relaxed Menu',
@@ -40,6 +42,7 @@ const REVIEWS = [
 ]
 
 const avgRating = REVIEWS.reduce((s, r) => s + r.rating, 0) / REVIEWS.length
+const categories = ITEMS.map(itemGroup => itemGroup.category)
 
 export default function DemoPage() {
   return (
@@ -98,8 +101,17 @@ export default function DemoPage() {
 
       {/* Menu */}
       <div className="max-w-lg mx-auto px-4">
+        <CategoryTabs
+          categories={categories}
+          sectionPrefix="demo-menu-category"
+        />
         {ITEMS.map(({ category, items }) => (
-          <div key={category} className="mb-8">
+          <section
+            key={category}
+            id={categorySectionId('demo-menu-category', category)}
+            data-category={category}
+            className="mb-8 scroll-mt-24"
+          >
             <h2 className="font-bold text-sm uppercase tracking-wider mb-3"
               style={{ color: 'var(--brand)', fontFamily: 'var(--font-display)' }}>
               {category}
@@ -125,7 +137,7 @@ export default function DemoPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         ))}
       </div>
 

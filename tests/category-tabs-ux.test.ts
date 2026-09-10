@@ -9,9 +9,14 @@ describe('category jump tabs UX', () => {
   it('provides reusable sticky horizontal category tabs with stable scroll-spy behavior', () => {
     const component = read('src/components/menu/CategoryTabs.tsx')
 
-    expect(component).toContain('data-category-tabs')
+    expect(component).toContain('data-category-tabs-shell')
+    expect(component).toContain('setIsPinned')
+    expect(component).toContain("window.addEventListener('scroll', updatePinned")
+    expect(component).toContain('fixed top-0 inset-x-0 z-50')
+    expect(component).toContain('style={isPinned ? { height: STICKY_TABS_HEIGHT } : undefined}')
+    expect(component).toContain('data-category-tabs-scroller')
     expect(component).toContain('sticky top-0')
-    expect(component).toContain('STICKY_TABS_HEIGHT')
+    expect(component).toContain('className="overflow-x-auto overscroll-x-contain"')
     expect(component).not.toContain('fixed inset-x-0 top-0')
     expect(component).toContain('overflow-x-auto')
     expect(component).toContain('IntersectionObserver')
@@ -31,6 +36,17 @@ describe('category jump tabs UX', () => {
     expect(publicMenu).toContain('<CategoryTabs')
     expect(publicMenu).toContain('sectionPrefix="public-menu-category"')
     expect(publicMenu).toContain('id={categorySectionId')
+  })
+
+  it('adds the same sticky category tabs and scroll target ids to the public demo menu', () => {
+    const demo = read('src/app/demo/page.tsx')
+
+    expect(demo).toContain("import CategoryTabs")
+    expect(demo).toContain('<CategoryTabs')
+    expect(demo).toContain('sectionPrefix="demo-menu-category"')
+    expect(demo).toContain('id={categorySectionId')
+    expect(demo).toContain('data-category={category}')
+    expect(demo).toContain('scroll-mt-24')
   })
 
   it('groups vendor dashboard menu items into sections with category tabs', () => {
