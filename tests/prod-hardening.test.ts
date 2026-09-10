@@ -107,4 +107,16 @@ describe('production hardening checks', () => {
     expect(ar).toContain('٣٠ د.ب')
     expect(ar).toContain('وفّر شهرين')
   })
+
+  it('keeps free-plan marketing copy aligned with the 5-item launch limit', () => {
+    const en = read('messages/en.json')
+    const ar = read('messages/ar.json')
+
+    expect(en).toContain('Up to 5 menu items')
+    expect(en).toContain('5 item limit')
+    expect(ar).toContain('حتى ٥ أصناف')
+    expect(ar).toContain('حد 5 أصناف')
+    expect(en).not.toContain('Up to 10 menu items')
+    expect(ar).not.toContain('حتى ١٠ أصناف')
+  })
 })

@@ -2,21 +2,21 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { Mail, Lock, Store } from 'lucide-react'
+import { Mail, Lock, Store, CheckCircle2 } from 'lucide-react'
 import RelaxedMenuLogo from '@/components/shared/RelaxedMenuLogo'
 import { createClient } from '@/lib/supabase/client'
-import { slugify } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { useTranslations, useLocale } from 'next-intl'
 import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
 
+export const PENDING_REGISTRATION_KEY = 'relaxed_menu_pending_registration'
+
 export default function RegisterPage() {
-  const router  = useRouter()
   const t       = useTranslations('auth')
   const locale  = useLocale()
   const [step,    setStep]    = useState(1)
   const [loading, setLoading] = useState(false)
+  const [checkEmail, setCheckEmail] = useState(false)
   const [form,    setForm]    = useState({
     email: '',
     password: '',
@@ -35,9 +35,26 @@ export default function RegisterPage() {
     setLoading(true)
     const supabase = createClient()
 
-    const { data: authData, error: authError } = await supabase.auth.signUp({
+    try {
+      localStorage.setItem(PENDING_REGISTRATION_KEY, JSON.stringify({
+        vendorName: form.vendorName,
+        category: form.category || null,
+        email: form.email,
+      }))
+    } catch {
+      toast.error(locale === 'ar'
+        ? 'تعذر حفظ بيانات الإعداد مؤقتاً. حاول مرة أخرى.'
+        : 'Could not save setup details. Please try again.')
+      setLoading(false)
+      return
+    }
+
+    const { error: authError } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=/register/complete`,
+      },
     })
 
     if (authError) {
@@ -46,59 +63,43 @@ export default function RegisterPage() {
       return
     }
 
-    let userId = authData.user?.id
-    if (!userId) {
-      toast.error(locale === 'ar'
-        ? 'يرجى التحقق من بريدك الإلكتروني لتأكيد حسابك ثم تسجيل الدخول.'
-        : 'Please verify your email then sign in.')
-      setLoading(false)
-      router.push('/login')
-      return
-    }
-
-    if (!authData.session) {
-      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-        email: form.email,
-        password: form.password,
-      })
-      if (signInError || !signInData.user) {
-        toast.error(locale === 'ar'
-          ? 'تم إنشاء الحساب! يرجى تسجيل الدخول لإكمال الإعداد.'
-          : 'Account created! Please sign in to finish setup.')
-        setLoading(false)
-        router.push('/login')
-        return
-      }
-      userId = signInData.user.id
-    }
-
-    const baseSlug = slugify(form.vendorName)
-    const slug     = `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`
-
-    const { error: vendorError } = await supabase.from('vendors').insert({
-      user_id:  userId,
-      name:     form.vendorName,
-      slug,
-      category: form.category || null,
-      plan:     'free',
-      is_open:  true,
-    })
-
-    if (vendorError) {
-      console.error('Vendor insert error:', vendorError)
-      toast.error(`${locale === 'ar' ? 'فشل الإعداد' : 'Setup failed'}: ${vendorError.message}`)
-      setLoading(false)
-      return
-    }
-
-    toast.success(locale === 'ar' ? 'مرحباً بك في Relaxed Menu!' : 'Welcome to Relaxed Menu!')
-    router.push('/dashboard')
-    router.refresh()
+    setCheckEmail(true)
+    setLoading(false)
   }
 
   const categoriesAr = ['مطعم', 'أكل شعبي', 'شاحنة طعام', 'مطبخ منزلي', 'مخبز', 'حلويات', 'مشروبات وعصائر', 'مشاوي', 'أخرى']
   const categoriesEn = ['Restaurant', 'Street food', 'Food truck', 'Home kitchen', 'Bakery', 'Sweets', 'Drinks & Juices', 'Grills', 'Other']
   const categories   = locale === 'ar' ? categoriesAr : categoriesEn
+
+  if (checkEmail) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--bg)' }}>
+        <div className="w-full max-w-sm text-center">
+          <div className="flex justify-end mb-2">
+            <LanguageSwitcher variant="compact" />
+          </div>
+          <Link href="/" className="inline-flex items-center gap-2 justify-center mb-8">
+            <RelaxedMenuLogo size={36} />
+            <span className="font-bold text-xl tracking-wide" style={{ fontFamily: 'var(--font-display)', letterSpacing: '0.03em' }}>
+              Relaxed <span style={{ color: 'var(--brand)' }}>Menu</span>
+            </span>
+          </Link>
+          <div className="card py-8">
+            <CheckCircle2 size={40} className="mx-auto mb-4" style={{ color: 'var(--brand)' }} />
+            <h1 className="text-2xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+              {t('checkEmailTitle')}
+            </h1>
+            <p className="text-sm mb-5" style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+              {t('checkEmailSignupDesc', { email: form.email })}
+            </p>
+            <Link href="/login" className="btn-secondary w-full py-3 justify-center">
+              {t('loginHere')}
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--bg)' }}>
