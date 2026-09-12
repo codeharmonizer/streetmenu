@@ -16,6 +16,14 @@ describe('registration email verification flow', () => {
     expect(register).not.toContain('signInWithPassword')
   })
 
+  it('continues setup immediately when Supabase reports the signup email is already confirmed', () => {
+    const register = read('src/app/register/page.tsx')
+
+    expect(register).toContain('const { data: authData, error: authError } = await supabase.auth.signUp')
+    expect(register).toContain('authData.session || authData.user?.email_confirmed_at')
+    expect(register).toContain("router.push('/register/complete')")
+  })
+
   it('creates the vendor only on the post-confirmation completion page', () => {
     expect(existsSync(join(root, 'src/app/register/complete/page.tsx'))).toBe(true)
     const complete = read('src/app/register/complete/page.tsx')

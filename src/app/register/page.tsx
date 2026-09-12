@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Mail, Lock, Store, CheckCircle2 } from 'lucide-react'
 import RelaxedMenuLogo from '@/components/shared/RelaxedMenuLogo'
 import { createClient } from '@/lib/supabase/client'
@@ -9,9 +10,10 @@ import toast from 'react-hot-toast'
 import { useTranslations, useLocale } from 'next-intl'
 import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
 
-export const PENDING_REGISTRATION_KEY = 'relaxed_menu_pending_registration'
+const PENDING_REGISTRATION_KEY = 'relaxed_menu_pending_registration'
 
 export default function RegisterPage() {
+  const router = useRouter()
   const t       = useTranslations('auth')
   const locale  = useLocale()
   const [step,    setStep]    = useState(1)
@@ -49,7 +51,7 @@ export default function RegisterPage() {
       return
     }
 
-    const { error: authError } = await supabase.auth.signUp({
+    const { data: authData, error: authError } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
       options: {
@@ -60,6 +62,12 @@ export default function RegisterPage() {
     if (authError) {
       toast.error(authError.message)
       setLoading(false)
+      return
+    }
+
+    if (authData.session || authData.user?.email_confirmed_at) {
+      router.push('/register/complete')
+      router.refresh()
       return
     }
 
