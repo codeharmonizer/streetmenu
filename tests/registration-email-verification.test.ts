@@ -10,10 +10,9 @@ describe('registration email verification flow', () => {
     const register = read('src/app/register/page.tsx')
 
     expect(register).toContain('PENDING_REGISTRATION_KEY')
-    expect(register).toContain("emailRedirectTo: `${window.location.origin}/auth/callback?next=/register/complete`")
+    expect(register).toContain("const emailRedirectTo = `${window.location.origin}/auth/callback?next=/register/complete`")
     expect(register).toContain("localStorage.setItem(PENDING_REGISTRATION_KEY")
     expect(register).not.toContain("supabase.from('vendors').insert")
-    expect(register).not.toContain('signInWithPassword')
   })
 
   it('continues setup immediately when Supabase reports the signup email is already confirmed', () => {
@@ -22,6 +21,24 @@ describe('registration email verification flow', () => {
     expect(register).toContain('const { data: authData, error: authError } = await supabase.auth.signUp')
     expect(register).toContain('authData.session || authData.user?.email_confirmed_at')
     expect(register).toContain("router.push('/register/complete')")
+  })
+
+  it('recovers existing auth-only registrations by signing in and completing setup', () => {
+    const register = read('src/app/register/page.tsx')
+
+    expect(register).toContain('isAlreadyRegisteredError(authError)')
+    expect(register).toContain('supabase.auth.signInWithPassword')
+    expect(register).toContain("router.push('/register/complete')")
+    expect(register).toContain('supabase.auth.resend')
+    expect(register).toContain('emailRedirectTo')
+  })
+
+  it('sends logged-in users with no vendor back through setup completion', () => {
+    const login = read('src/app/login/page.tsx')
+
+    expect(login).toContain(".from('vendors')")
+    expect(login).toContain(".eq('user_id', user.id)")
+    expect(login).toContain("router.push('/register/complete')")
   })
 
   it('creates the vendor only on the post-confirmation completion page', () => {

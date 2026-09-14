@@ -22,11 +22,26 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) {
       toast.error(error.message)
       setLoading(false)
     } else {
+      const user = data.user
+      if (user) {
+        const { data: vendor } = await supabase
+          .from('vendors')
+          .select('id')
+          .eq('user_id', user.id)
+          .maybeSingle()
+
+        if (!vendor) {
+          router.push('/register/complete')
+          router.refresh()
+          return
+        }
+      }
+
       router.push('/dashboard')
       router.refresh()
     }

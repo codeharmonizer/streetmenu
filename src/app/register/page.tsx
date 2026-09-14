@@ -12,6 +12,15 @@ import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
 
 const PENDING_REGISTRATION_KEY = 'relaxed_menu_pending_registration'
 
+function isAlreadyRegisteredError(error: { message?: string } | null) {
+  return error?.message?.toLowerCase().includes('already registered') ?? false
+}
+
+function isEmailNotConfirmedError(error: { message?: string } | null) {
+  const message = error?.message?.toLowerCase() ?? ''
+  return message.includes('email not confirmed') || message.includes('not confirmed')
+}
+
 export default function RegisterPage() {
   const router = useRouter()
   const t       = useTranslations('auth')
@@ -51,15 +60,46 @@ export default function RegisterPage() {
       return
     }
 
+    const emailRedirectTo = `${window.location.origin}/auth/callback?next=/register/complete`
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/register/complete`,
+        emailRedirectTo,
       },
     })
 
     if (authError) {
+      if (isAlreadyRegisteredError(authError)) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: form.email,
+          password: form.password,
+        })
+
+        if (!signInError) {
+          router.push('/register/complete')
+          router.refresh()
+          return
+        }
+
+        if (isEmailNotConfirmedError(signInError)) {
+          await supabase.auth.resend({
+            type: 'signup',
+            email: form.email,
+            options: { emailRedirectTo },
+          })
+          setCheckEmail(true)
+          setLoading(false)
+          return
+        }
+
+        toast.error(locale === 'ar'
+          ? 'هذا البريد مسجل بالفعل. سجّل الدخول أو استخدم استعادة كلمة المرور.'
+          : 'This email is already registered. Log in or reset your password.')
+        setLoading(false)
+        return
+      }
+
       toast.error(authError.message)
       setLoading(false)
       return
