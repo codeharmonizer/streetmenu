@@ -27,6 +27,16 @@ export async function updateSession(request: NextRequest) {
 
   const path = request.nextUrl.pathname
 
+  async function hasVendor(userId: string) {
+    const { data: vendor } = await supabase
+      .from('vendors')
+      .select('id')
+      .eq('user_id', userId)
+      .maybeSingle()
+
+    return !!vendor
+  }
+
   // Protect dashboard + admin routes
   if (!user && (path.startsWith('/dashboard') || path.startsWith('/admin'))) {
     const url = request.nextUrl.clone()
@@ -34,10 +44,20 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  if (user && (path.startsWith('/dashboard') || path.startsWith('/admin'))) {
+    const hasExistingVendor = await hasVendor(user.id)
+    if (!hasExistingVendor) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/register/complete'
+      return NextResponse.redirect(url)
+    }
+  }
+
   // Redirect logged-in users away from auth pages
   if (user && (path === '/login' || path === '/register')) {
+    const hasExistingVendor = await hasVendor(user.id)
     const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
+    url.pathname = hasExistingVendor ? '/dashboard' : '/register/complete'
     return NextResponse.redirect(url)
   }
 

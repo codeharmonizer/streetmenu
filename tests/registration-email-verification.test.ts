@@ -41,6 +41,23 @@ describe('registration email verification flow', () => {
     expect(login).toContain("router.push('/register/complete')")
   })
 
+  it('middleware routes auth-only users to setup completion instead of auth loops', () => {
+    const middleware = read('src/lib/supabase/middleware.ts')
+
+    expect(middleware).toContain("select('id')")
+    expect(middleware).toContain("url.pathname = '/register/complete'")
+    expect(middleware).toContain("hasVendor")
+  })
+
+  it('lets auth-only users enter business details when pending setup data is missing', () => {
+    const complete = read('src/app/register/complete/page.tsx')
+
+    expect(complete).toContain('setSetupMode(true)')
+    expect(complete).toContain('handleManualSetup')
+    expect(complete).toContain("placeholder={locale === 'ar' ? 'مثال: مطبخ أم فاطمة' : 'e.g. Fatima\\'s Kitchen'}")
+    expect(complete).toContain("supabase.from('vendors').insert")
+  })
+
   it('creates the vendor only on the post-confirmation completion page', () => {
     expect(existsSync(join(root, 'src/app/register/complete/page.tsx'))).toBe(true)
     const complete = read('src/app/register/complete/page.tsx')
