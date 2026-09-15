@@ -5,9 +5,10 @@ import { createClient } from '@/lib/supabase/client'
 import { Vendor, SubscriptionStatus } from '@/types'
 import Image from 'next/image'
 import { getInitials } from '@/lib/utils'
-import { ExternalLink, Pencil, Check, X, MessageSquare } from 'lucide-react'
+import { ExternalLink, Pencil, Check, X, MessageSquare, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
+import { deleteVendor } from '@/app/admin/vendors/actions'
 
 interface Props {
   vendor: Vendor & { scan_count: number; review_count: number }
@@ -60,6 +61,9 @@ export default function VendorRow({ vendor: initial, email }: Props) {
   const [subStart, setSubStart]           = useState(initial.subscription_starts_at?.slice(0, 10) ?? '')
   const [subExpiry, setSubExpiry]         = useState(initial.subscription_expires_at?.slice(0, 10) ?? '')
   const [savingSub, setSavingSub]         = useState(false)
+  const [loadingDelete, setLoadingDelete] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleted, setDeleted]             = useState(false)
   const supabase = createClient()
 
   async function toggleActive() {
@@ -127,6 +131,27 @@ export default function VendorRow({ vendor: initial, email }: Props) {
     setSubStart(vendor.subscription_starts_at?.slice(0, 10) ?? '')
     setSubExpiry(vendor.subscription_expires_at?.slice(0, 10) ?? '')
   }
+
+  async function handleDelete() {
+    if (!confirmDelete) {
+      setConfirmDelete(true)
+      window.setTimeout(() => setConfirmDelete(false), 4000)
+      return
+    }
+
+    setLoadingDelete(true)
+    try {
+      await deleteVendor(vendor.id)
+      toast.success('Vendor deleted')
+      setDeleted(true)
+    } catch {
+      toast.error('Failed to delete vendor')
+      setLoadingDelete(false)
+      setConfirmDelete(false)
+    }
+  }
+
+  if (deleted) return null
 
   const isPaid = subStatus === 'active' || subStatus === 'trial'
 
@@ -284,6 +309,30 @@ export default function VendorRow({ vendor: initial, email }: Props) {
             {vendor.reviews_enabled ? 'On' : 'Off'}
           </span>
         </div>
+      </td>
+
+      {/* Delete vendor */}
+      <td className="px-4 py-3">
+        <button
+          onClick={handleDelete}
+          disabled={loadingDelete}
+          title={confirmDelete ? 'Click again to permanently delete vendor and related records' : 'Delete vendor'}
+          className="inline-flex items-center justify-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-all disabled:opacity-50"
+          style={{
+            background: confirmDelete ? '#fee2e2' : '#fff7ed',
+            color: confirmDelete ? '#dc2626' : '#ea580c',
+            border: confirmDelete ? '1px solid #fca5a5' : '1px solid #fed7aa',
+          }}>
+          {loadingDelete ? (
+            'Deleting…'
+          ) : confirmDelete ? (
+            'Confirm delete'
+          ) : (
+            <>
+              <Trash2 size={12} /> Delete
+            </>
+          )}
+        </button>
       </td>
     </tr>
   )

@@ -116,7 +116,7 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border overflow-x-auto" style={{ borderColor: '#e2e8f0' }}>
+      <div className="bg-white rounded-2xl border overflow-x-auto overscroll-x-contain" style={{ borderColor: '#e2e8f0' }}>
         {enriched.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-3xl mb-2">🔍</p>
@@ -124,7 +124,7 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
             <p className="text-sm mt-1" style={{ color: '#94a3b8' }}>Try adjusting your filters.</p>
           </div>
         ) : (
-          <table className="w-full">
+          <table className="w-full min-w-[1040px]">
             <thead>
               <tr className="border-b text-xs font-semibold uppercase tracking-wide" style={{ borderColor: '#f1f5f9', color: '#94a3b8', background: '#f8fafc' }}>
                 <th className="px-4 py-3 text-right whitespace-nowrap">Vendor</th>
@@ -136,6 +136,7 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
                 <th className="px-4 py-3 text-right whitespace-nowrap">Subscription</th>
                 <th className="px-4 py-3 text-right whitespace-nowrap">Active</th>
                 <th className="px-4 py-3 text-right whitespace-nowrap">Reviews</th>
+                <th className="px-4 py-3 text-right whitespace-nowrap">Delete</th>
               </tr>
             </thead>
             <tbody>
