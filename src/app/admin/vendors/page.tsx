@@ -71,7 +71,7 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
   ]
 
   return (
-    <div className="max-w-7xl">
+    <div className="w-full min-w-0 max-w-7xl">
       <div className="mb-6">
         <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)', color: '#0f172a' }}>
           Vendors
@@ -116,7 +116,7 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border overflow-x-auto overscroll-x-contain" style={{ borderColor: '#e2e8f0' }}>
+      <div className="w-full max-w-full overflow-x-auto overscroll-x-contain bg-white rounded-2xl border" style={{ borderColor: '#e2e8f0' }}>
         {enriched.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-3xl mb-2">🔍</p>

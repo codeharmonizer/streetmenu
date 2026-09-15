@@ -33,9 +33,12 @@ describe('admin vendor deletion', () => {
   })
 
   it('keeps the admin vendors table wider than mobile and horizontally scrollable', () => {
+    const layout = read('src/app/admin/layout.tsx')
     const page = read('src/app/admin/vendors/page.tsx')
 
-    expect(page).toContain('overflow-x-auto overscroll-x-contain')
+    expect(layout).toContain('flex-1 min-w-0')
+    expect(page).toContain('w-full min-w-0 max-w-7xl')
+    expect(page).toContain('w-full max-w-full overflow-x-auto overscroll-x-contain')
     expect(page).toContain('min-w-[1040px]')
   })
 })
