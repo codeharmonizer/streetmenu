@@ -284,7 +284,10 @@
     "saveSuccess": "تم حفظ الإعدادات!",
     "saveFailed": "فشل الحفظ",
     "uploadFailed": "فشل رفع الصورة",
-    "locationMap": "الموقع على الخريطة"
+    "locationMap": "الموقع على الخريطة",
+    "accountEmail": "البريد الإلكتروني للحساب",
+    "accountEmailDesc": "يُستخدم لتسجيل الدخول واستعادة كلمة المرور وإشعارات الحساب.",
+    "accountEmailMissing": "لا يوجد بريد إلكتروني"
   },
   "upgrade": {
     "title": "ترقية الاشتراك ⭐",

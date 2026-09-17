@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Vendor } from '@/types'
-import { Save, ToggleLeft, ToggleRight, Camera, X, MapPin } from 'lucide-react'
+import { Save, ToggleLeft, ToggleRight, Camera, X, MapPin, Mail } from 'lucide-react'
 import Image from 'next/image'
 import { getInitials } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -12,7 +12,7 @@ import HoursBuilder from './HoursBuilder'
 import LocationPicker from './LocationPicker'
 import { revalidateVendorPublicMenu } from '@/lib/public-menu-cache-actions'
 
-export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) {
+export default function VendorSettings({ vendor: initial, userEmail }: { vendor: Vendor; userEmail: string | null }) {
   const [vendor,      setVendor]      = useState(initial)
   const [saving,      setSaving]      = useState(false)
   const [logoFile,    setLogoFile]    = useState<File | null>(null)
@@ -149,6 +149,27 @@ export default function VendorSettings({ vendor: initial }: { vendor: Vendor }) 
       <div className="mb-8">
         <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)' }}>{t('title')}</h1>
         <p style={{ color: 'var(--text-secondary)' }}>{t('desc')}</p>
+      </div>
+
+      {/* Account email */}
+      <div className="card flex items-center gap-3 mb-4">
+        <div
+          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ background: 'var(--surface-2)', color: 'var(--text-secondary)' }}
+        >
+          <Mail size={18} />
+        </div>
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+            {t('accountEmail')}
+          </p>
+          <p className="font-semibold truncate" title={userEmail || undefined}>
+            {userEmail || t('accountEmailMissing')}
+          </p>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+            {t('accountEmailDesc')}
+          </p>
+        </div>
       </div>
 
       {/* Open/closed toggle */}

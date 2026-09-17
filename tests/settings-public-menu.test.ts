@@ -22,6 +22,21 @@ describe('settings and public menu regressions', () => {
     expect(settings).toMatch(/lng:\s+location\.lng/)
   })
 
+  it('shows the signed-in account email on the settings page', () => {
+    const page = read('src/app/dashboard/settings/page.tsx')
+    const settings = read('src/components/vendor/VendorSettings.tsx')
+    const en = read('messages/en.json')
+    const ar = read('messages/ar.json')
+
+    expect(page).toContain('getUser')
+    expect(page).toContain('<VendorSettings vendor={vendor} userEmail={user.email ?? null} />')
+    expect(settings).toContain('userEmail')
+    expect(settings).toContain('{userEmail || t(\'accountEmailMissing\')}')
+    expect(settings).toContain('t(\'accountEmail\')')
+    expect(en).toContain('"accountEmail": "Account email"')
+    expect(ar).toContain('"accountEmail": "البريد الإلكتروني للحساب"')
+  })
+
   it('shows opening-hour time inputs directly for selected days without hiding them behind details', () => {
     const hours = read('src/components/vendor/HoursBuilder.tsx')
     expect(hours).not.toContain('<details>')

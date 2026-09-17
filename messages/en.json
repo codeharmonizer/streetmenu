@@ -284,7 +284,10 @@
     "saveSuccess": "Settings saved!",
     "saveFailed": "Failed to save",
     "uploadFailed": "Failed to upload photo",
-    "locationMap": "Map location"
+    "locationMap": "Map location",
+    "accountEmail": "Account email",
+    "accountEmailDesc": "Used for sign in, password reset, and account notifications.",
+    "accountEmailMissing": "No email found"
   },
   "upgrade": {
     "title": "Upgrade subscription ⭐",
