@@ -7,7 +7,7 @@ import { CheckCircle2, Loader2, Store } from 'lucide-react'
 import RelaxedMenuLogo from '@/components/shared/RelaxedMenuLogo'
 import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
 import { createClient } from '@/lib/supabase/client'
-import { slugify } from '@/lib/utils'
+import { generateAvailableVendorSlug } from '@/lib/vendor-slugs'
 import { useLocale, useTranslations } from 'next-intl'
 import toast from 'react-hot-toast'
 
@@ -34,9 +34,8 @@ export default function CompleteRegistrationPage() {
   const categories = locale === 'ar' ? categoriesAr : categoriesEn
 
   const createVendor = useCallback(async (userId: string, vendorName: string, category?: string | null) => {
-    const baseSlug = slugify(vendorName)
-    const slug = `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`
     const supabase = createClient()
+    const slug = await generateAvailableVendorSlug(supabase, vendorName)
 
     return supabase.from('vendors').insert({
       user_id: userId,

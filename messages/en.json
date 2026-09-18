@@ -287,7 +287,11 @@
     "locationMap": "Map location",
     "accountEmail": "Account email",
     "accountEmailDesc": "Used for sign in, password reset, and account notifications.",
-    "accountEmailMissing": "No email found"
+    "accountEmailMissing": "No email found",
+    "publicLink": "Public link",
+    "publicLinkDesc": "Customers will open your menu at this link. You can change it anytime.",
+    "publicLinkRequired": "Please enter a public link",
+    "publicLinkTaken": "This public link is already taken"
   },
   "upgrade": {
     "title": "Upgrade subscription ⭐",

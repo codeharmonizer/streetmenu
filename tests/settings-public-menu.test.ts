@@ -37,6 +37,20 @@ describe('settings and public menu regressions', () => {
     expect(ar).toContain('"accountEmail": "البريد الإلكتروني للحساب"')
   })
 
+  it('lets vendors edit their public menu link slug in settings', () => {
+    const settings = read('src/components/vendor/VendorSettings.tsx')
+    const en = read('messages/en.json')
+    const ar = read('messages/ar.json')
+
+    expect(settings).toContain('normalizeVendorSlug')
+    expect(settings).toContain('publicSlug')
+    expect(settings).toContain('slug: nextSlug')
+    expect(settings).toContain(".neq('id', vendor.id)")
+    expect(settings).toContain('oldSlug')
+    expect(en).toContain('"publicLink": "Public link"')
+    expect(ar).toContain('"publicLink": "الرابط العام"')
+  })
+
   it('shows opening-hour time inputs directly for selected days without hiding them behind details', () => {
     const hours = read('src/components/vendor/HoursBuilder.tsx')
     expect(hours).not.toContain('<details>')

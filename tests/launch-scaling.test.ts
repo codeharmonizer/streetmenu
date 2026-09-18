@@ -26,7 +26,7 @@ describe('launch scaling and public menu cache', () => {
     expect(action).toContain("'use server'")
     expect(action).toContain('revalidateTag(publicMenuTag(vendor.slug), \'max\')')
     expect(manager).toContain('await revalidateVendorPublicMenu(vendor.id)')
-    expect(settings).toContain('await revalidateVendorPublicMenu(vendor.id)')
+    expect(settings).toContain('await revalidateVendorPublicMenu(vendor.id, oldSlug)')
   })
 
   it('adds database indexes for high-traffic public menu, order, scan, and review paths', () => {

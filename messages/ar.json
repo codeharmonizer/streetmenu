@@ -287,7 +287,11 @@
     "locationMap": "الموقع على الخريطة",
     "accountEmail": "البريد الإلكتروني للحساب",
     "accountEmailDesc": "يُستخدم لتسجيل الدخول واستعادة كلمة المرور وإشعارات الحساب.",
-    "accountEmailMissing": "لا يوجد بريد إلكتروني"
+    "accountEmailMissing": "لا يوجد بريد إلكتروني",
+    "publicLink": "الرابط العام",
+    "publicLinkDesc": "سيفتح الزبائن قائمتك من هذا الرابط. يمكنك تغييره في أي وقت.",
+    "publicLinkRequired": "يرجى إدخال رابط عام",
+    "publicLinkTaken": "هذا الرابط العام مستخدم بالفعل"
   },
   "upgrade": {
     "title": "ترقية الاشتراك ⭐",

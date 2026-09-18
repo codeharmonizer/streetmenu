@@ -6,6 +6,7 @@ import { Vendor } from '@/types'
 import { Save, ToggleLeft, ToggleRight, Camera, X, MapPin, Mail } from 'lucide-react'
 import Image from 'next/image'
 import { getInitials } from '@/lib/utils'
+import { normalizeVendorSlug } from '@/lib/vendor-slugs'
 import toast from 'react-hot-toast'
 import { useTranslations } from 'next-intl'
 import HoursBuilder from './HoursBuilder'
@@ -17,13 +18,14 @@ export default function VendorSettings({ vendor: initial, userEmail }: { vendor:
   const [saving,      setSaving]      = useState(false)
   const [logoFile,    setLogoFile]    = useState<File | null>(null)
   const [logoPreview, setLogoPreview] = useState<string | null>(initial.logo_url)
+  const [publicSlug,  setPublicSlug]  = useState(initial.slug)
   const supabase = createClient()
   const t  = useTranslations('settings')
   const tc = useTranslations('common')
 
-  async function clearPublicMenuCache() {
+  async function clearPublicMenuCache(oldSlug?: string) {
     try {
-      await revalidateVendorPublicMenu(vendor.id)
+      await revalidateVendorPublicMenu(vendor.id, oldSlug)
     } catch {}
   }
 
@@ -77,6 +79,33 @@ export default function VendorSettings({ vendor: initial, userEmail }: { vendor:
       logoUrl = null
     }
 
+    const nextSlug = normalizeVendorSlug(publicSlug || vendor.name)
+    if (!nextSlug) {
+      toast.error(t('publicLinkRequired'))
+      setSaving(false)
+      return
+    }
+
+    const { data: existingSlugOwner, error: slugLookupError } = await supabase
+      .from('vendors')
+      .select('id')
+      .eq('slug', nextSlug)
+      .neq('id', vendor.id)
+      .maybeSingle()
+
+    if (slugLookupError) {
+      toast.error(t('saveFailed'))
+      setSaving(false)
+      return
+    }
+
+    if (existingSlugOwner) {
+      toast.error(t('publicLinkTaken'))
+      setSaving(false)
+      return
+    }
+
+    const oldSlug = vendor.slug
     const { error } = await supabase
       .from('vendors')
       .update({
@@ -89,15 +118,17 @@ export default function VendorSettings({ vendor: initial, userEmail }: { vendor:
         phone:       vendor.phone,
         hours:       vendor.hours,
         logo_url:    logoUrl,
+        slug:        nextSlug,
       })
       .eq('id', vendor.id)
 
     if (error) {
-      toast.error(t('saveFailed'))
+      toast.error(error.code === '23505' ? t('publicLinkTaken') : t('saveFailed'))
     } else {
-      setVendor(v => ({ ...v, logo_url: logoUrl }))
+      setVendor(v => ({ ...v, logo_url: logoUrl, slug: nextSlug }))
+      setPublicSlug(nextSlug)
       setLogoFile(null)
-      await clearPublicMenuCache()
+      await clearPublicMenuCache(oldSlug)
       toast.success(t('saveSuccess'))
     }
     setSaving(false)
@@ -240,6 +271,25 @@ export default function VendorSettings({ vendor: initial, userEmail }: { vendor:
 
         {/* ── Basic info ── */}
         {field(`${t('vendorName')} *`, 'name')}
+
+        <div>
+          <label className="label">{t('publicLink')}</label>
+          <div className="flex rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border)' }}>
+            <span className="px-3 py-3 text-sm whitespace-nowrap" style={{ background: 'var(--surface-2)', color: 'var(--text-secondary)' }}>
+              /m/
+            </span>
+            <input
+              type="text"
+              className="input rounded-none border-0"
+              value={publicSlug}
+              placeholder="salah-admin"
+              onChange={e => setPublicSlug(normalizeVendorSlug(e.target.value))}
+            />
+          </div>
+          <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
+            {t('publicLinkDesc')}
+          </p>
+        </div>
 
         <div>
           <label className="label">{t('description')}</label>
