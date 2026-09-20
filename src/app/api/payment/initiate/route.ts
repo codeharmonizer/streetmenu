@@ -21,12 +21,31 @@ const SUBSCRIPTION_PLANS: Record<BillingPeriod, { amount: number; months: number
 }
 
 async function getBillingPeriod(req: NextRequest): Promise<BillingPeriod> {
+  const contentType = req.headers.get('content-type') ?? ''
+
   try {
+    if (contentType.includes('application/x-www-form-urlencoded') || contentType.includes('multipart/form-data')) {
+      const form = await req.formData()
+      return form.get('billingPeriod') === 'yearly' ? 'yearly' : 'monthly'
+    }
+
     const body = await req.json()
     return body?.billingPeriod === 'yearly' ? 'yearly' : 'monthly'
   } catch {
     return 'monthly'
   }
+}
+
+function wantsBrowserRedirect(req: NextRequest) {
+  const contentType = req.headers.get('content-type') ?? ''
+  return req.nextUrl.searchParams.get('redirect') === '1' || contentType.includes('application/x-www-form-urlencoded')
+}
+
+function paymentErrorResponse(req: NextRequest, error: string, status: number) {
+  if (wantsBrowserRedirect(req)) {
+    return NextResponse.redirect(`${getAppUrl()}/dashboard/upgrade?payment=error`, 303)
+  }
+  return NextResponse.json({ error }, { status })
 }
 
 export async function POST(req: NextRequest) {
@@ -38,7 +57,7 @@ export async function POST(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    return NextResponse.json({ error: 'unauthenticated' }, { status: 401 })
+    return paymentErrorResponse(req, 'unauthenticated', 401)
   }
 
   // ── 2. Load vendor ────────────────────────────────────────────────────────
@@ -49,7 +68,7 @@ export async function POST(req: NextRequest) {
     .single()
 
   if (!vendor) {
-    return NextResponse.json({ error: 'vendor_not_found' }, { status: 404 })
+    return paymentErrorResponse(req, 'vendor_not_found', 404)
   }
 
   // ── 3. Create local subscription order before leaving our app ─────────────
@@ -65,7 +84,7 @@ export async function POST(req: NextRequest) {
 
   if (orderError || !subscriptionOrder) {
     console.error('[payment/initiate] failed to create local subscription order:', orderError, 'vendor:', vendor.id)
-    return NextResponse.json({ error: 'order_create_failed' }, { status: 500 })
+    return paymentErrorResponse(req, 'order_create_failed', 500)
   }
 
   console.log('[payment/initiate] created subscription order:', {
@@ -95,7 +114,11 @@ export async function POST(req: NextRequest) {
 
   if (!result.success) {
     console.error('[payment/initiate] ePays error:', result.errorCode, 'vendor:', vendor.id)
-    return NextResponse.json({ error: result.errorCode }, { status: 502 })
+    return paymentErrorResponse(req, result.errorCode ?? 'INITIATE_FAILED', 502)
+  }
+
+  if (wantsBrowserRedirect(req) && result.redirectUrl) {
+    return NextResponse.redirect(result.redirectUrl, 303)
   }
 
   return NextResponse.json({ redirectUrl: result.redirectUrl })

@@ -7,7 +7,6 @@ import {
   ArrowRight, CheckCircle, CreditCard,
   Zap, BarChart2, Infinity, XCircle,
 } from 'lucide-react'
-import toast               from 'react-hot-toast'
 import { useTranslations, useLocale } from 'next-intl'
 
 const FEATURES = [
@@ -26,29 +25,27 @@ export default function UpgradePage() {
 
   const paymentParam = searchParams.get('payment') // 'failed' | 'error'
 
-  async function handlePay() {
+  function handlePay() {
     if (paying) return
     setPaying(true)
-    try {
-      const res  = await fetch('/api/payment/initiate', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ billingPeriod }),
-      })
-      const data = await res.json()
 
-      if (!res.ok || !data.redirectUrl) {
-        toast.error(locale === 'ar' ? 'حدث خطأ، حاول مجدداً.' : 'Something went wrong. Please try again.')
-        return
-      }
+    // Submit as a normal browser form so the payment API can return a real
+    // cross-origin 303 redirect to ePays. This is more reliable than fetch +
+    // window.location assignment on mobile browsers and gives the user a native
+    // page navigation instead of leaving the CTA in a loading state.
+    const form = document.createElement('form')
+    form.method = 'POST'
+    form.action = '/api/payment/initiate?redirect=1'
+    form.style.display = 'none'
 
-      // Redirect vendor to ePays payment page
-      window.location.href = data.redirectUrl
-    } catch {
-      toast.error(locale === 'ar' ? 'فشل الاتصال بالشبكة.' : 'Network error. Please try again.')
-    } finally {
-      setPaying(false)
-    }
+    const input = document.createElement('input')
+    input.type = 'hidden'
+    input.name = 'billingPeriod'
+    input.value = billingPeriod
+    form.appendChild(input)
+
+    document.body.appendChild(form)
+    form.submit()
   }
 
   return (

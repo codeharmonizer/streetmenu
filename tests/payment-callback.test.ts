@@ -108,6 +108,16 @@ async function callInitiate(body?: unknown) {
   return mod.POST(req)
 }
 
+async function callInitiateForm(billingPeriod: string) {
+  const mod = await import('../src/app/api/payment/initiate/route')
+  const req = new NextRequest('https://relaxedmenu.beyounded.com/api/payment/initiate?redirect=1', {
+    method: 'POST',
+    body: new URLSearchParams({ billingPeriod }),
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+  })
+  return mod.POST(req)
+}
+
 describe('payment initiate behavior', () => {
   beforeEach(() => {
     vi.resetAllMocks()
@@ -135,7 +145,6 @@ describe('payment initiate behavior', () => {
     }))
   })
 
-
   it('creates a yearly subscription order for 30 BHD when yearly billing is selected', async () => {
     const supabase = makeSupabaseMock({
       vendor: { id: 'vendor-a', name: 'Vendor A', subscription_status: 'free', subscription_expires_at: null },
@@ -155,6 +164,24 @@ describe('payment initiate behavior', () => {
       description: 'Relaxed Menu Pro — 12 month subscription (Vendor A)',
       orderNumber: 'sub-order-yearly',
       notifyUrl: 'https://relaxedmenu.beyounded.com/api/payment/callback?orderId=sub-order-yearly',
+    }))
+  })
+
+  it('submits browser form payments as a 303 redirect to the ePays hosted payment page', async () => {
+    const supabase = makeSupabaseMock({
+      vendor: { id: 'vendor-a', name: 'Vendor A', subscription_status: 'free', subscription_expires_at: null },
+      createdSubscriptionOrder: { id: 'sub-order-form', vendor_id: 'vendor-a', status: 'pending', amount: 30 },
+    })
+    createClientMock.mockResolvedValue(supabase)
+    initiatePaymentMock.mockResolvedValue({ success: true, redirectUrl: 'https://api.epays.io/Pay/60807326/123' })
+
+    const res = await callInitiateForm('yearly')
+
+    expect(res.status).toBe(303)
+    expect(res.headers.get('location')).toBe('https://api.epays.io/Pay/60807326/123')
+    expect(initiatePaymentMock).toHaveBeenCalledWith(expect.objectContaining({
+      amount: 30,
+      orderNumber: 'sub-order-form',
     }))
   })
 })
