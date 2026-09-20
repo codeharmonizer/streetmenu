@@ -1,0 +1,22 @@
+[Unit]
+Description=Relaxed Menu ePays payment forwarding proxy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=payment-proxy
+Group=payment-proxy
+WorkingDirectory=/opt/relaxedmenu-payment-proxy
+EnvironmentFile=/etc/relaxedmenu-payment-proxy.env
+ExecStart=/usr/bin/node /opt/relaxedmenu-payment-proxy/proxy-server.mjs
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/relaxedmenu-payment-proxy
+
+[Install]
+WantedBy=multi-user.target

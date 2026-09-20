@@ -26,7 +26,12 @@ PAYMENT_PROXY_BASE_URL=https://payments.relaxedmenu.beyounded.com
 PAYMENT_PROXY_SECRET=<strong shared secret>
 ```
 
-The app's `src/lib/epays.ts` keeps the same ePays client API but sends ePays requests to `PAYMENT_PROXY_BASE_URL` when configured. The proxy must forward compatible `/API/Initiate` and `/API/ProcessPayment` form-encoded requests to ePays.
+The app's `src/lib/epays.ts` keeps the same ePays client API but sends ePays requests to `PAYMENT_PROXY_BASE_URL` when configured. The proxy forwards compatible `/API/Initiate` and `/API/ProcessPayment` form-encoded requests to ePays. Requests must include:
+
+```http
+Authorization: Bearer <PAYMENT_PROXY_SECRET>
+Content-Type: application/x-www-form-urlencoded
+```
 
 ## Files
 
