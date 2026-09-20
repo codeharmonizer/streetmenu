@@ -122,6 +122,7 @@ describe('payment initiate behavior', () => {
   beforeEach(() => {
     vi.resetAllMocks()
     process.env.NEXT_PUBLIC_APP_URL = 'https://relaxedmenu.beyounded.com'
+    delete process.env.ENABLE_TEST_PAYMENT_PLAN
   })
 
   it('creates a local subscription order for the authenticated vendor and sends its id to ePays as orderNumber', async () => {
@@ -182,6 +183,45 @@ describe('payment initiate behavior', () => {
     expect(initiatePaymentMock).toHaveBeenCalledWith(expect.objectContaining({
       amount: 30,
       orderNumber: 'sub-order-form',
+    }))
+  })
+
+
+  it('creates a 0.1 BHD one-day test subscription order when the test plan is enabled', async () => {
+    process.env.ENABLE_TEST_PAYMENT_PLAN = '1'
+    const supabase = makeSupabaseMock({
+      vendor: { id: 'vendor-a', name: 'Vendor A', subscription_status: 'free', subscription_expires_at: null },
+      createdSubscriptionOrder: { id: 'sub-order-test-day', vendor_id: 'vendor-a', status: 'pending', amount: 0.1 },
+    })
+    createClientMock.mockResolvedValue(supabase)
+    initiatePaymentMock.mockResolvedValue({ success: true, redirectUrl: 'https://api.epays.io/Pay/60807326/test' })
+
+    const res = await callInitiateForm('test_day')
+
+    expect(res.status).toBe(303)
+    expect(res.headers.get('location')).toBe('https://api.epays.io/Pay/60807326/test')
+    expect(supabase.calls.some(c => c.table === 'subscription_orders' && c.op === 'insert' && c.payload.vendor_id === 'vendor-a' && c.payload.amount === 0.1 && c.payload.status === 'pending')).toBe(true)
+    expect(initiatePaymentMock).toHaveBeenCalledWith(expect.objectContaining({
+      amount: 0.1,
+      description: 'Relaxed Menu Pro — 1 day test subscription (Vendor A)',
+      orderNumber: 'sub-order-test-day',
+    }))
+  })
+
+  it('does not allow the 0.1 BHD test plan unless explicitly enabled server-side', async () => {
+    const supabase = makeSupabaseMock({
+      vendor: { id: 'vendor-a', name: 'Vendor A', subscription_status: 'free', subscription_expires_at: null },
+      createdSubscriptionOrder: { id: 'sub-order-default', vendor_id: 'vendor-a', status: 'pending', amount: 3 },
+    })
+    createClientMock.mockResolvedValue(supabase)
+    initiatePaymentMock.mockResolvedValue({ success: true, redirectUrl: 'https://api.epays.io/Pay/60807326/default' })
+
+    const res = await callInitiateForm('test_day')
+
+    expect(res.status).toBe(303)
+    expect(initiatePaymentMock).toHaveBeenCalledWith(expect.objectContaining({
+      amount: 3,
+      description: 'Relaxed Menu Pro — 1 month subscription (Vendor A)',
     }))
   })
 })
@@ -304,6 +344,31 @@ describe('payment callback behavior', () => {
     expect(expiresAt).toBeGreaterThanOrEqual(minYearlyExpiry)
     expect(expiresAt).toBeLessThanOrEqual(maxYearlyExpiry)
     expect(paymentInsert.payload.amount).toBe(30)
+    expect(paymentInsert.payload.expires_at).toBe(vendorUpdate.payload.subscription_expires_at)
+  })
+
+
+  it('extends a 0.1 BHD test subscription order by only one day after verified payment', async () => {
+    processPaymentMock.mockResolvedValue({ success: true, result: 'Completed', alreadyProcessed: false, paymentId: 'pay-test-day', orderNumber: 'order-test-day', amount: 0.1 })
+    const supabase = makeSupabaseMock({
+      subscriptionOrder: { id: 'order-test-day', vendor_id: 'vendor-a', status: 'pending', amount: 0.1 },
+      vendor: { id: 'vendor-a', name: 'Vendor A', subscription_status: 'free', subscription_expires_at: null },
+    })
+    createAdminClientMock.mockReturnValue(supabase)
+
+    const before = Date.now()
+    const res = await callCallback('?orderId=order-test-day&paymentId=pay-test-day')
+    const after = Date.now()
+    const vendorUpdate = supabase.calls.find(c => c.table === 'vendors' && c.op === 'update')
+    const paymentInsert = supabase.calls.find(c => c.table === 'subscription_payments' && c.op === 'insert')
+    const expiresAt = new Date(vendorUpdate.payload.subscription_expires_at).getTime()
+    const minTestExpiry = before + 1 * 24 * 60 * 60 * 1000
+    const maxTestExpiry = after + 2 * 24 * 60 * 60 * 1000
+
+    expect(res.headers.get('location')).toBe('https://relaxedmenu.beyounded.com/dashboard?subscription=success')
+    expect(expiresAt).toBeGreaterThanOrEqual(minTestExpiry)
+    expect(expiresAt).toBeLessThan(maxTestExpiry)
+    expect(paymentInsert.payload.amount).toBe(0.1)
     expect(paymentInsert.payload.expires_at).toBe(vendorUpdate.payload.subscription_expires_at)
   })
 

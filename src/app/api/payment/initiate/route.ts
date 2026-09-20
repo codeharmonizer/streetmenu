@@ -13,11 +13,22 @@ import { createClient }             from '@/lib/supabase/server'
 import { initiatePayment }          from '@/lib/epays'
 import { getAppUrl }                from '@/lib/app-url'
 
-type BillingPeriod = 'monthly' | 'yearly'
+type BillingPeriod = 'monthly' | 'yearly' | 'test_day'
 
-const SUBSCRIPTION_PLANS: Record<BillingPeriod, { amount: number; months: number; label: string }> = {
-  monthly: { amount: 3.000, months: 1, label: '1 month' },
-  yearly:  { amount: 30.000, months: 12, label: '12 month' },
+const SUBSCRIPTION_PLANS: Record<BillingPeriod, { amount: number; label: string }> = {
+  monthly:  { amount: 3.000, label: '1 month' },
+  yearly:   { amount: 30.000, label: '12 month' },
+  test_day: { amount: 0.100, label: '1 day test' },
+}
+
+function isTestPlanEnabled() {
+  return process.env.ENABLE_TEST_PAYMENT_PLAN === '1'
+}
+
+function normalizeBillingPeriod(value: unknown): BillingPeriod {
+  if (value === 'yearly') return 'yearly'
+  if (value === 'test_day' && isTestPlanEnabled()) return 'test_day'
+  return 'monthly'
 }
 
 async function getBillingPeriod(req: NextRequest): Promise<BillingPeriod> {
@@ -26,11 +37,11 @@ async function getBillingPeriod(req: NextRequest): Promise<BillingPeriod> {
   try {
     if (contentType.includes('application/x-www-form-urlencoded') || contentType.includes('multipart/form-data')) {
       const form = await req.formData()
-      return form.get('billingPeriod') === 'yearly' ? 'yearly' : 'monthly'
+      return normalizeBillingPeriod(form.get('billingPeriod'))
     }
 
     const body = await req.json()
-    return body?.billingPeriod === 'yearly' ? 'yearly' : 'monthly'
+    return normalizeBillingPeriod(body?.billingPeriod)
   } catch {
     return 'monthly'
   }

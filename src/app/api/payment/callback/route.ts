@@ -20,8 +20,16 @@ import { processPayment }            from '@/lib/epays'
 import { getAppUrl }                 from '@/lib/app-url'
 
 const APP_URL              = getAppUrl()
-function getSubscriptionMonths(amount: number | string | null | undefined) {
-  return Number(amount) >= 30 ? 12 : 1
+type SubscriptionDuration =
+  | { kind: 'days'; value: number }
+  | { kind: 'months'; value: number }
+
+function getSubscriptionDuration(amount: number | string | null | undefined): SubscriptionDuration {
+  const numericAmount = Number(amount)
+  if (numericAmount > 0 && numericAmount <= 0.1) {
+    return { kind: 'days', value: 1 }
+  }
+  return { kind: 'months', value: numericAmount >= 30 ? 12 : 1 }
 }
 
 function isSuccessfulPayment(result: Awaited<ReturnType<typeof processPayment>>) {
@@ -150,7 +158,12 @@ async function handler(req: NextRequest) {
 
   const nowIso = new Date().toISOString()
   const expiresAt = new Date(baseDate)
-  expiresAt.setMonth(expiresAt.getMonth() + getSubscriptionMonths(subscriptionOrder.amount))
+  const duration = getSubscriptionDuration(subscriptionOrder.amount)
+  if (duration.kind === 'days') {
+    expiresAt.setDate(expiresAt.getDate() + duration.value)
+  } else {
+    expiresAt.setMonth(expiresAt.getMonth() + duration.value)
+  }
 
   await supabase
     .from('vendors')

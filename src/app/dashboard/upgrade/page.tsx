@@ -19,9 +19,12 @@ export default function UpgradePage() {
   const t      = useTranslations('upgrade')
   const locale = useLocale()
   const searchParams = useSearchParams()
+  const testPlanEnabled = process.env.NEXT_PUBLIC_ENABLE_TEST_PAYMENT_PLAN === '1'
 
   const [paying, setPaying] = useState(false)
-  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('yearly')
+  const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly' | 'test_day'>(
+    testPlanEnabled ? 'test_day' : 'yearly',
+  )
 
   const paymentParam = searchParams.get('payment') // 'failed' | 'error'
 
@@ -112,7 +115,32 @@ export default function UpgradePage() {
       {/* Pricing + CTA card */}
       <div className="card">
         {/* Plan selector */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
+        <div className={`grid ${testPlanEnabled ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-2'} gap-3 mb-6`}>
+          {testPlanEnabled && (
+            <button
+              type="button"
+              onClick={() => setBillingPeriod('test_day')}
+              className="rounded-2xl p-4 text-center transition-all relative"
+              style={{
+                border: billingPeriod === 'test_day' ? '2px solid var(--brand)' : '1px solid var(--border)',
+                background: billingPeriod === 'test_day' ? 'var(--brand-light)' : 'transparent',
+              }}>
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-bold px-2 py-1 rounded-full whitespace-nowrap"
+                style={{ background: '#16a34a', color: 'white' }}>
+                {locale === 'ar' ? 'للاختبار فقط' : 'Testing only'}
+              </span>
+              <p className="text-xs mb-1" style={{ color: 'var(--text-muted)' }}>
+                {locale === 'ar' ? 'يوم واحد' : '1 Day'}
+              </p>
+              <p className="text-3xl font-black" style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>
+                0.1 BD
+              </p>
+              <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+                {locale === 'ar' ? '/ اختبار' : '/ test'}
+              </p>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={() => setBillingPeriod('monthly')}
@@ -165,7 +193,9 @@ export default function UpgradePage() {
           <CreditCard size={18} />
           {paying
             ? (locale === 'ar' ? 'جارٍ التوجيه للدفع…' : 'Redirecting to payment…')
-            : billingPeriod === 'yearly'
+            : billingPeriod === 'test_day'
+              ? (locale === 'ar' ? 'اختبار يوم واحد · ادفع 0.1 د.ب' : 'Test 1 Day · Pay BD 0.100')
+              : billingPeriod === 'yearly'
               ? (locale === 'ar' ? 'اشترك سنوياً · ادفع 30 د.ب' : 'Subscribe Yearly · Pay BD 30.000')
               : (locale === 'ar' ? 'اشترك شهرياً · ادفع 3 د.ب' : 'Subscribe Monthly · Pay BD 3.000')}
         </button>
