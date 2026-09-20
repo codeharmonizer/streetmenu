@@ -33,14 +33,18 @@ const BASE_URLS: Record<string, string> = {
 function getConfig() {
   const modeType = process.env.EPAYS_MODE_TYPE ?? 'live'
 
+  const paymentProxyBaseUrl = (process.env.PAYMENT_PROXY_BASE_URL ?? '').replace(/\/$/, '')
+
   return {
-    apiUrl:          BASE_URLS[modeType] ?? BASE_URLS.live,
+    apiUrl:          paymentProxyBaseUrl || BASE_URLS[modeType] || BASE_URLS.live,
     apiVersion:      process.env.EPAYS_API_VERSION      ?? '3.3',
     apiId:           process.env.EPAYS_API_ID            ?? '',
     apiMasterKey:    process.env.EPAYS_API_MASTER_KEY    ?? '',
     // Gateway-scoped (optional — only needed if ePays provides them separately)
     apiKey:          process.env.EPAYS_API_KEY           ?? '',
     merchantGateway: process.env.EPAYS_MERCHANT_GATEWAY  ?? '',
+    paymentProxySecret: process.env.PAYMENT_PROXY_SECRET ?? '',
+    usesPaymentProxy:   !!paymentProxyBaseUrl,
     testMode:        Number(process.env.EPAYS_TEST_MODE  ?? 0),
     modeType,
   }
@@ -95,13 +99,22 @@ async function epaysPost<T>(
     hasApiKey:      !!merged.apiKey,
     testMode:       merged.testMode,
     endpoint,
+    viaPaymentProxy: cfg.usesPaymentProxy,
   })
+
+  const headers: Record<string, string> = { 'Content-Type': 'application/x-www-form-urlencoded' }
+  if (cfg.usesPaymentProxy) {
+    if (!cfg.paymentProxySecret) {
+      throw new Error('PAYMENT_PROXY_SECRET_MISSING')
+    }
+    headers.Authorization = `Bearer ${cfg.paymentProxySecret}`
+  }
 
   let res: Response
   try {
     res = await fetch(url, {
       method:  'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers,
       body:    new URLSearchParams(merged),
       cache:   'no-store',
     })
