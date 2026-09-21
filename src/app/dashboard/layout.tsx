@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
 import { redirect } from 'next/navigation'
 import { getUser, getVendor } from '@/lib/data'
 import { createClient } from '@/lib/supabase/server'
 import DashboardSidebar from '@/components/shared/DashboardSidebar'
+import MetaSubscriptionTracker from '@/components/shared/MetaSubscriptionTracker'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user   = await getUser()
@@ -20,6 +22,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <div className="flex min-h-screen" style={{ background: 'var(--bg)' }}>
       <DashboardSidebar vendor={vendor} pendingOrders={pendingCount ?? 0} />
+      <Suspense fallback={null}>
+        <MetaSubscriptionTracker />
+      </Suspense>
       <main className="flex-1 rtl:mr-0 rtl:md:mr-64 ltr:ml-0 ltr:md:ml-64 p-4 pt-20 md:p-8">
         {children}
       </main>

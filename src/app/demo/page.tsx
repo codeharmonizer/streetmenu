@@ -46,7 +46,7 @@ const categories = ITEMS.map(itemGroup => itemGroup.category)
 
 export default function DemoPage() {
   return (
-    <div className="min-h-screen pb-20" style={{ background: 'var(--bg)' }}>
+    <div data-meta-view-content="demo-menu" className="min-h-screen pb-20" style={{ background: 'var(--bg)' }}>
 
       {/* Demo banner */}
       <div className="py-2 px-4 text-center text-xs font-semibold" style={{ background: 'var(--brand)', color: 'white' }}>

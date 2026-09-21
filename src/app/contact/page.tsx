@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { QrCode, Mail, User, MessageSquare, Send, CheckCircle } from 'lucide-react'
 import { sendContactEmail } from './actions'
 import toast from 'react-hot-toast'
+import { trackMetaEvent } from '@/lib/meta-pixel'
 
 type FormState = { error?: string; success?: boolean }
 const INITIAL: FormState = {}
@@ -25,6 +26,12 @@ export default function ContactPage() {
 
   useEffect(() => {
     if (state?.error) toast.error(state.error)
+    if (state?.success) {
+      trackMetaEvent('Lead', {
+        content_name: 'Contact form',
+        content_category: 'Lead form',
+      })
+    }
   }, [state])
 
   return (

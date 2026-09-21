@@ -1,6 +1,6 @@
 'use client'
 
-import { useState }         from 'react'
+import { useEffect, useState } from 'react'
 import Link                 from 'next/link'
 import { useSearchParams }  from 'next/navigation'
 import {
@@ -8,6 +8,7 @@ import {
   Zap, BarChart2, Infinity, XCircle,
 } from 'lucide-react'
 import { useTranslations, useLocale } from 'next-intl'
+import { trackMetaEvent } from '@/lib/meta-pixel'
 
 const FEATURES = [
   { icon: Infinity,  key: 'feature1' },
@@ -28,8 +29,21 @@ export default function UpgradePage() {
 
   const paymentParam = searchParams.get('payment') // 'failed' | 'error'
 
+  useEffect(() => {
+    trackMetaEvent('ViewContent', {
+      content_name: 'Upgrade pricing',
+      content_category: 'Pricing',
+    })
+  }, [])
+
   function handlePay() {
     if (paying) return
+    trackMetaEvent('InitiateCheckout', {
+      content_name: 'Relaxed Menu Pro',
+      subscription_period: billingPeriod,
+      currency: 'BHD',
+      value: billingPeriod === 'yearly' ? 30 : billingPeriod === 'test_day' ? 0.1 : 3,
+    })
     setPaying(true)
 
     // Submit as a normal browser form so the payment API can return a real

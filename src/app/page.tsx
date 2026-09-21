@@ -401,7 +401,7 @@ export default async function HomePage() {
       </section>
 
       {/* ══════════════ FEATURES (cream bg) ══════════════ */}
-      <section style={{ background: C.cream, padding: '100px 0' }}>
+      <section data-meta-view-content="features" style={{ background: C.cream, padding: '100px 0' }}>
         <div className="sb-inner" style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px' }}>
           <div style={{ marginBottom: 56 }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: "'DM Mono',monospace", fontSize: 11, color: C.red, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
@@ -460,7 +460,7 @@ export default async function HomePage() {
       </section>
 
       {/* ══════════════ PRICING ══════════════ */}
-      <section style={{ padding: '100px 0' }}>
+      <section data-meta-view-content="pricing" style={{ padding: '100px 0' }}>
         <div className="sb-inner" style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px', textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: "'DM Mono',monospace", fontSize: 11, color: '#FF6B35', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16, justifyContent: 'center' }}>
             <span style={{ width: 20, height: 1, background: C.red, display: 'inline-block' }} />

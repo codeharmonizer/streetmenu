@@ -1,6 +1,6 @@
 # Relaxed Menu
 
-> Relaxed Menu is a QR-code digital menu and online ordering platform for restaurants, cafés, food trucks, and small food businesses in Bahrain.
+> Relaxed Menu is a QR-code digital menu and online ordering platform for restaurants, cafés, food trucks, and small food businesses.
 
 > ريلاكسد منيو هو نظام قوائم طعام رقمية برمز QR وطلبات أونلاين للمطاعم والكافيهات والبسطات ومشاريع الطعام الصغيرة في البحرين.
 

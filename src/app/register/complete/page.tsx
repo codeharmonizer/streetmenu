@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/client'
 import { generateAvailableVendorSlug } from '@/lib/vendor-slugs'
 import { useLocale, useTranslations } from 'next-intl'
 import toast from 'react-hot-toast'
+import { trackMetaEvent } from '@/lib/meta-pixel'
 
 const PENDING_REGISTRATION_KEY = 'relaxed_menu_pending_registration'
 
@@ -84,6 +85,10 @@ export default function CompleteRegistrationPage() {
     }
 
     localStorage.removeItem(PENDING_REGISTRATION_KEY)
+    trackMetaEvent('CompleteRegistration', {
+      content_name: 'Restaurant account',
+      status: 'created',
+    })
     toast.success(locale === 'ar' ? 'مرحباً بك في Relaxed Menu!' : 'Welcome to Relaxed Menu!')
     router.replace('/dashboard')
     router.refresh()
