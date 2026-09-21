@@ -6,17 +6,18 @@ const root = join(__dirname, '..')
 const read = (path: string) => readFileSync(join(root, path), 'utf8')
 
 describe('admin vendor deletion', () => {
-  it('provides an admin-only destructive action that deletes vendor files before cascading vendor records', () => {
+  it('provides an admin-only destructive action that removes vendor files and the owner auth account', () => {
     const actions = read('src/app/admin/vendors/actions.ts')
 
     expect(actions).toContain("'use server'")
     expect(actions).toContain('assertCurrentUserIsAdmin')
     expect(actions).toContain("from('admins')")
     expect(actions).toContain('createAdminClient()')
+    expect(actions).toContain("select('id, user_id')")
     expect(actions).toContain("storage.from('menu-photos').list")
     expect(actions).toContain("storage.from('menu-photos').remove")
-    expect(actions).toContain("from('vendors').delete()")
-    expect(actions.indexOf("storage.from('menu-photos').remove")).toBeLessThan(actions.indexOf("from('vendors').delete()"))
+    expect(actions).toContain('auth.admin.deleteUser(vendor.user_id)')
+    expect(actions.indexOf("storage.from('menu-photos').remove")).toBeLessThan(actions.indexOf('auth.admin.deleteUser(vendor.user_id)'))
     expect(actions).toContain("revalidatePath('/admin/vendors')")
   })
 

@@ -47,7 +47,7 @@ export async function deleteVendor(vendorId: string) {
 
   const { data: vendor, error: vendorLookupError } = await adminSupabase
     .from('vendors')
-    .select('id')
+    .select('id, user_id')
     .eq('id', vendorId)
     .single()
 
@@ -62,11 +62,12 @@ export async function deleteVendor(vendorId: string) {
     if (storageError) throw new Error(storageError.message)
   }
 
-  // Related database records cascade from public.vendors foreign keys:
-  // menu_items, scans, reviews, orders, subscription orders/payments, and rate limits.
-  const { error: deleteError } = await adminSupabase.from('vendors').delete().eq('id', vendor.id)
+  // Delete the owning auth account. The public.vendors.user_id foreign key has
+  // ON DELETE CASCADE, so this removes the vendor and related vendor records at
+  // the same root that allows the owner to sign in again after an admin delete.
+  const { error: authDeleteError } = await adminSupabase.auth.admin.deleteUser(vendor.user_id)
 
-  if (deleteError) throw new Error(deleteError.message)
+  if (authDeleteError) throw new Error(authDeleteError.message)
 
   revalidatePath('/admin/vendors')
 }
