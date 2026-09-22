@@ -1,9 +1,18 @@
 export type Plan = 'free' | 'pro'
 export type SubscriptionStatus = 'free' | 'trial' | 'active' | 'expired'
+export type VendorStatus = 'managed' | 'invited' | 'active' | 'suspended' | 'deleted'
 
 export interface Vendor {
   id: string
-  user_id: string
+  user_id: string | null
+  username: string | null
+  vendor_status: VendorStatus
+  invited_email: string | null
+  invited_at: string | null
+  activated_at: string | null
+  created_by_admin_id: string | null
+  updated_by_admin_id: string | null
+  last_admin_action_at: string | null
   name: string
   slug: string
   description: string | null

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Vendor, SubscriptionStatus } from '@/types'
+import { Vendor, SubscriptionStatus, VendorStatus } from '@/types'
 import Image from 'next/image'
 import { getInitials } from '@/lib/utils'
 import { ExternalLink, Pencil, Check, X, MessageSquare, Trash2 } from 'lucide-react'
@@ -37,6 +37,14 @@ const STATUS_META: Record<SubscriptionStatus, { label: string; bg: string; color
   expired: { label: 'Expired', bg: '#fee2e2', color: '#dc2626' },
 }
 
+const VENDOR_STATUS_META: Record<VendorStatus, { label: string; bg: string; color: string }> = {
+  managed:   { label: 'Managed',      bg: '#fff7ed', color: '#ea580c' },
+  invited:   { label: 'Invited',      bg: '#eff6ff', color: '#2563eb' },
+  active:    { label: 'Active login', bg: '#dcfce7', color: '#16a34a' },
+  suspended: { label: 'Suspended',    bg: '#fee2e2', color: '#dc2626' },
+  deleted:   { label: 'Deleted',      bg: '#f1f5f9', color: '#64748b' },
+}
+
 function fmtDate(iso: string | null) {
   if (!iso) return '—'
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' })
@@ -47,6 +55,15 @@ function SubBadge({ status }: { status: SubscriptionStatus }) {
   return (
     <span className="text-xs px-2 py-0.5 rounded-full font-semibold whitespace-nowrap"
       style={{ background: m.bg, color: m.color }}>
+      {m.label}
+    </span>
+  )
+}
+
+function VendorStatusBadge({ status }: { status: VendorStatus }) {
+  const m = VENDOR_STATUS_META[status] ?? VENDOR_STATUS_META.active
+  return (
+    <span className="text-xs px-2 py-0.5 rounded-full font-semibold whitespace-nowrap" style={{ background: m.bg, color: m.color }}>
       {m.label}
     </span>
   )
@@ -173,7 +190,16 @@ export default function VendorRow({ vendor: initial, email }: Props) {
           )}
           <div>
             <p className="font-semibold text-sm">{vendor.name}</p>
-            <p className="text-xs" style={{ color: '#94a3b8' }}>{vendor.category || '—'}</p>
+            <p className="text-xs" style={{ color: '#94a3b8' }}>@{vendor.username || vendor.slug}</p>
+            <div className="mt-1 flex flex-wrap items-center gap-1.5">
+              <VendorStatusBadge status={vendor.vendor_status ?? 'active'} />
+              <Link href={`/admin/vendors/${vendor.id}/edit`} className="text-xs font-semibold hover:underline" style={{ color: 'var(--brand)' }}>
+                Edit
+              </Link>
+              <Link href={`/admin/vendors/${vendor.id}/menu`} className="text-xs font-semibold hover:underline" style={{ color: 'var(--brand)' }}>
+                Menu
+              </Link>
+            </div>
           </div>
         </div>
       </td>

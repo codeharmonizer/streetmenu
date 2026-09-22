@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import VendorRow from '@/components/admin/VendorRow'
-import { Search } from 'lucide-react'
+import { Plus, Search } from 'lucide-react'
+import Link from 'next/link'
 
 interface Props {
   searchParams: { q?: string; status?: string }
@@ -58,7 +59,7 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
       ...v,
       scan_count: scanCounts[v.id] ?? 0,
       review_count: reviewCounts[v.id] ?? 0,
-      email: emailByUserId[v.user_id] ?? '',
+      email: v.user_id ? (emailByUserId[v.user_id] ?? '') : (v.invited_email ?? ''),
     }))
     .filter(v => !q || v.name.toLowerCase().includes(q) || v.slug.toLowerCase().includes(q) || v.email.toLowerCase().includes(q))
 
@@ -72,11 +73,16 @@ export default async function AdminVendorsPage({ searchParams }: Props) {
 
   return (
     <div className="w-full min-w-0 max-w-7xl">
-      <div className="mb-6">
-        <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)', color: '#0f172a' }}>
-          Vendors
-        </h1>
-        <p style={{ color: '#64748b' }}>Manage vendor visibility and reviews.</p>
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-black mb-1" style={{ fontFamily: 'var(--font-display)', color: '#0f172a' }}>
+            Vendors
+          </h1>
+          <p style={{ color: '#64748b' }}>Manage vendor visibility, menus, reviews, and admin-created accounts.</p>
+        </div>
+        <Link href="/admin/vendors/new" className="inline-flex items-center gap-2 rounded-xl bg-[var(--brand)] px-4 py-2.5 text-sm font-bold text-white">
+          <Plus size={16} /> Create vendor
+        </Link>
       </div>
 
       {/* Filters */}

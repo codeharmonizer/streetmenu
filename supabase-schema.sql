@@ -7,7 +7,15 @@ create extension if not exists "uuid-ossp";
 -- Vendors table
 create table if not exists public.vendors (
   id uuid primary key default uuid_generate_v4(),
-  user_id uuid references auth.users(id) on delete cascade not null,
+  user_id uuid references auth.users(id) on delete cascade,
+  username text unique,
+  vendor_status text not null default 'active' check (vendor_status in ('managed', 'invited', 'active', 'suspended', 'deleted')),
+  invited_email text,
+  invited_at timestamptz,
+  activated_at timestamptz,
+  created_by_admin_id uuid references auth.users(id) on delete set null,
+  updated_by_admin_id uuid references auth.users(id) on delete set null,
+  last_admin_action_at timestamptz,
   name text not null,
   slug text unique not null,
   description text,
@@ -125,10 +133,10 @@ create policy "Vendors can be created by authenticated users"
   on public.vendors for insert with check (auth.uid() = user_id);
 
 create policy "Vendors can be updated by their owner"
-  on public.vendors for update using (auth.uid() = user_id);
+  on public.vendors for update using (user_id is not null and auth.uid() = user_id);
 
 create policy "Vendors can be deleted by their owner"
-  on public.vendors for delete using (auth.uid() = user_id);
+  on public.vendors for delete using (user_id is not null and auth.uid() = user_id);
 
 -- Menu items policies
 create policy "Menu items are publicly readable"
@@ -138,7 +146,9 @@ create policy "Menu items can be managed by vendor owner"
   on public.menu_items for all using (
     exists (
       select 1 from public.vendors
-      where id = menu_items.vendor_id and user_id = auth.uid()
+      where id = menu_items.vendor_id
+        and user_id is not null
+        and user_id = auth.uid()
     )
   );
 
