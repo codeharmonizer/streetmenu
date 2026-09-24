@@ -3,14 +3,15 @@ import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import AdminVendorMenuManager from '@/components/admin/AdminVendorMenuManager'
 
-export default async function AdminVendorMenuPage({ params }: { params: { id: string } }) {
+export default async function AdminVendorMenuPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = createAdminClient()
   const [{ data: vendor }, { data: items }] = await Promise.all([
-    supabase.from('vendors').select('*').eq('id', params.id).single(),
+    supabase.from('vendors').select('*').eq('id', id).single(),
     supabase
       .from('menu_items')
       .select('*')
-      .eq('vendor_id', params.id)
+      .eq('vendor_id', id)
       .order('sort_order', { ascending: true })
       .order('created_at', { ascending: true }),
   ])

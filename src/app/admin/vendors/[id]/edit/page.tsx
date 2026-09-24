@@ -3,9 +3,10 @@ import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import CreateManagedVendorForm from '@/components/admin/CreateManagedVendorForm'
 
-export default async function EditAdminVendorPage({ params }: { params: { id: string } }) {
+export default async function EditAdminVendorPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = createAdminClient()
-  const { data: vendor } = await supabase.from('vendors').select('*').eq('id', params.id).single()
+  const { data: vendor } = await supabase.from('vendors').select('*').eq('id', id).single()
 
   if (!vendor) notFound()
 

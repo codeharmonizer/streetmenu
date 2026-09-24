@@ -38,12 +38,15 @@ describe('admin-managed vendors', () => {
     expect(actions).toContain('updateAdminMenuItem')
     expect(actions).toContain('deleteAdminMenuItem')
     expect(actions).toContain('uploadAdminVendorImage')
+    expect(actions).toContain('sendVendorInvite')
     expect(actions).toContain('assertCurrentUserIsAdmin')
     expect(actions).toContain('createAdminClient()')
     expect(actions).toContain("'managed'")
     expect(actions).toContain('normalizeVendorUsername')
     expect(actions).toContain('normalizeVendorSlug')
     expect(actions).toContain("storage.from('menu-photos').upload")
+    expect(actions).toContain('auth.admin.inviteUserByEmail')
+    expect(actions).toContain('invited_at')
   })
 
   it('adds admin routes for creating vendors and managing vendor menus', () => {
@@ -59,6 +62,8 @@ describe('admin-managed vendors', () => {
     expect(listPage).toContain('/admin/vendors/new')
     expect(newPage).toContain('CreateManagedVendorForm')
     expect(editPage).toContain('CreateManagedVendorForm')
+    expect(editPage).toContain('params: Promise<{ id: string }>')
+    expect(editPage).toContain('const { id } = await params')
     expect(menuPage).toContain('AdminVendorMenuManager')
   })
 
@@ -71,5 +76,14 @@ describe('admin-managed vendors', () => {
     expect(row).toContain('Managed')
     expect(row).toContain('Invited')
     expect(row).toContain('Active login')
+  })
+
+  it('activates invited vendors after the invite auth callback succeeds', () => {
+    const callback = read('src/app/auth/callback/route.ts')
+
+    expect(callback).toContain('createAdminClient')
+    expect(callback).toContain("vendor_status: 'active'")
+    expect(callback).toContain('activated_at')
+    expect(callback).toContain("eq('invited_email', user.email.toLowerCase())")
   })
 })

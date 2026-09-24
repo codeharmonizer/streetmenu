@@ -6,10 +6,11 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { normalizeVendorSlug } from '@/lib/vendor-slugs'
 import { normalizeVendorUsername } from '@/lib/vendor-usernames'
+import { getAppUrl } from '@/lib/app-url'
 
 type AdminUser = { id: string }
 
-type ActionResult = { ok: true; vendorId?: string; publicUrl?: string } | { ok: false; error: string }
+type ActionResult = { ok: true; vendorId?: string; publicUrl?: string; inviteSent?: boolean } | { ok: false; error: string }
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
 const IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
@@ -98,7 +99,7 @@ function vendorPayloadFromForm(formData: FormData, adminUserId: string, isCreate
   const name = formText(formData, 'name')
   const username = normalizeVendorUsername(formText(formData, 'username') || name)
   const slug = normalizeVendorSlug(formText(formData, 'slug') || name)
-  const invitedEmail = nullableFormText(formData, 'invited_email')
+  const invitedEmail = nullableFormText(formData, 'invited_email')?.toLowerCase() ?? null
 
   if (!name) throw new Error('Restaurant name is required')
   if (!username) throw new Error('Username is required')
@@ -122,9 +123,39 @@ function vendorPayloadFromForm(formData: FormData, adminUserId: string, isCreate
       last_admin_action_at: new Date().toISOString(),
       ...(isCreate ? { created_by_admin_id: adminUserId, is_active: true } : {}),
     },
+    invitedEmail,
     username,
     slug,
   }
+}
+
+export async function sendVendorInvite(
+  adminSupabase: ReturnType<typeof createAdminClient>,
+  vendorId: string,
+  email: string,
+  adminUserId: string,
+) {
+  const normalizedEmail = email.trim().toLowerCase()
+  if (!normalizedEmail) throw new Error('Vendor email is required before sending an invite')
+
+  const redirectTo = `${getAppUrl()}/auth/callback?next=/dashboard`
+  const { data, error } = await adminSupabase.auth.admin.inviteUserByEmail(normalizedEmail, { redirectTo })
+  if (error) throw new Error(error.message)
+
+  const invitedUserId = data.user?.id ?? null
+  const { error: updateError } = await adminSupabase
+    .from('vendors')
+    .update({
+      ...(invitedUserId ? { user_id: invitedUserId } : {}),
+      invited_email: normalizedEmail,
+      invited_at: new Date().toISOString(),
+      vendor_status: 'invited',
+      updated_by_admin_id: adminUserId,
+      last_admin_action_at: new Date().toISOString(),
+    })
+    .eq('id', vendorId)
+
+  if (updateError) throw new Error(updateError.message)
 }
 
 export async function createManagedVendor(formData: FormData): Promise<ActionResult> {
@@ -132,7 +163,7 @@ export async function createManagedVendor(formData: FormData): Promise<ActionRes
   const adminSupabase = createAdminClient()
 
   try {
-    const { payload, username, slug } = vendorPayloadFromForm(formData, admin.id, true)
+    const { payload, invitedEmail, username, slug } = vendorPayloadFromForm(formData, admin.id, true)
     await assertUniqueVendorIdentity(adminSupabase, username, slug)
 
     const { data, error } = await adminSupabase
@@ -142,9 +173,11 @@ export async function createManagedVendor(formData: FormData): Promise<ActionRes
       .single()
 
     if (error) throw new Error(error.message)
+    const inviteSent = Boolean(invitedEmail)
+    if (invitedEmail) await sendVendorInvite(adminSupabase, data.id, invitedEmail, admin.id)
 
     revalidatePath('/admin/vendors')
-    return { ok: true, vendorId: data.id }
+    return { ok: true, vendorId: data.id, inviteSent }
   } catch (error) {
     return { ok: false, error: error instanceof Error ? error.message : 'Failed to create vendor' }
   }
@@ -155,7 +188,15 @@ export async function updateManagedVendor(vendorId: string, formData: FormData):
   const adminSupabase = createAdminClient()
 
   try {
-    const { payload, username, slug } = vendorPayloadFromForm(formData, admin.id)
+    const { data: existingVendor, error: existingError } = await adminSupabase
+      .from('vendors')
+      .select('id, invited_email, user_id')
+      .eq('id', vendorId)
+      .single()
+
+    if (existingError || !existingVendor) throw new Error(existingError?.message ?? 'Vendor not found')
+
+    const { payload, invitedEmail, username, slug } = vendorPayloadFromForm(formData, admin.id)
     await assertUniqueVendorIdentity(adminSupabase, username, slug, vendorId)
 
     const { error } = await adminSupabase
@@ -165,9 +206,13 @@ export async function updateManagedVendor(vendorId: string, formData: FormData):
 
     if (error) throw new Error(error.message)
 
+    const previousEmail = existingVendor.invited_email?.toLowerCase() ?? null
+    const inviteSent = Boolean(invitedEmail && invitedEmail !== previousEmail && !existingVendor.user_id)
+    if (inviteSent && invitedEmail) await sendVendorInvite(adminSupabase, vendorId, invitedEmail, admin.id)
+
     revalidatePath('/admin/vendors')
     revalidatePath(`/admin/vendors/${vendorId}/edit`)
-    return { ok: true, vendorId }
+    return { ok: true, vendorId, inviteSent }
   } catch (error) {
     return { ok: false, error: error instanceof Error ? error.message : 'Failed to update vendor' }
   }

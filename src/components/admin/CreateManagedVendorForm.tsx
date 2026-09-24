@@ -65,7 +65,9 @@ export default function CreateManagedVendorForm({ vendor, mode }: Props) {
         return
       }
 
-      toast.success(mode === 'create' ? 'Vendor created' : 'Vendor updated')
+      toast.success(result.inviteSent
+        ? 'Vendor saved and invite email sent'
+        : mode === 'create' ? 'Vendor created' : 'Vendor updated')
       router.push(result.vendorId ? `/admin/vendors/${result.vendorId}/edit` : '/admin/vendors')
       router.refresh()
     })
