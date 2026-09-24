@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import type { MenuItem, Review, Vendor } from '@/types'
 
 export const PUBLIC_MENU_REVALIDATE_SECONDS = 60 * 60 * 24
+export const PUBLIC_MENU_CACHE_VERSION = 'v2'
 export const publicMenuTag = (slug: string) => `public-menu:${slug}`
 
 type PublicMenuVendor = Vendor
@@ -52,7 +53,7 @@ async function loadPublicMenuData(slug: string): Promise<PublicMenuData> {
 export async function getCachedPublicMenuData(slug: string) {
   return unstable_cache(
     () => loadPublicMenuData(slug),
-    ['public-menu', slug],
+    [PUBLIC_MENU_CACHE_VERSION, 'public-menu', slug],
     {
       revalidate: PUBLIC_MENU_REVALIDATE_SECONDS,
       tags: [publicMenuTag(slug)],
