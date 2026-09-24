@@ -1,0 +1,22 @@
+{
+  "source": "https://www.instagram.com/example_karak/ — menu board photo in post from 2026-09-10",
+  "vendor": {
+    "name": "Example Karak House",
+    "slug": "example-karak-house",
+    "instagram": "@example_karak",
+    "category": "Café",
+    "description": "Karak, chips-o-late and fresh paratha. Budaiya Highway.",
+    "address": "Budaiya Highway, Bahrain",
+    "phone": "+97333000000",
+    "hours": "4:00 PM – 1:00 AM",
+    "logo": null
+  },
+  "items": [
+    { "category": "Karak", "name": "Karak Tea", "price": 0.200, "description": "Classic cardamom karak" },
+    { "category": "Karak", "name": "Saffron Karak", "price": "0.300 BD" },
+    { "category": "Paratha", "name": "Chips-o-late Paratha", "price": 0.500, "description": "Chips, chocolate, cheese" },
+    { "category": "Paratha", "name": "Egg & Cheese Paratha", "price": 0.600 },
+    { "category": "Cold Drinks", "name": "Mint Lemonade", "price": 0.800, "photo": null },
+    { "category": "Cold Drinks", "name": "Iced Spanish Latte", "price": 1.200, "available": false }
+  ]
+}

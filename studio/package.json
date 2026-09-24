@@ -1,0 +1,35 @@
+{
+  "name": "@relaxedmenu/studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Isolated Remotion ad-video studio for Relaxed Menu / Streetmenu campaigns",
+  "license": "UNLICENSED",
+  "scripts": {
+    "studio": "remotion studio",
+    "preview": "remotion studio",
+    "compositions": "remotion compositions src/index.tsx",
+    "render": "remotion render src/index.tsx",
+    "render:ar": "remotion render src/index.tsx RelaxedMenuAd-AR out/relaxed-menu-ad-ar.mp4",
+    "render:en": "remotion render src/index.tsx RelaxedMenuAd-EN out/relaxed-menu-ad-en.mp4",
+    "render:square": "remotion render src/index.tsx RelaxedMenuAd-AR-Square out/relaxed-menu-ad-ar-square.mp4",
+    "still:ar": "remotion still src/index.tsx RelaxedMenuAd-AR out/cover-ar.png --frame=45",
+    "bench": "remotion render src/index.tsx RelaxedMenuAd-AR out/_smoke.mp4 --frames=0-29",
+    "typecheck": "tsc --noEmit",
+    "upgrade": "remotion upgrade"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.527",
+    "@remotion/fonts": "4.0.527",
+    "@remotion/media-utils": "4.0.527",
+    "@remotion/shapes": "4.0.527",
+    "@remotion/transitions": "4.0.527",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.527"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "typescript": "5.9.3"
+  }
+}

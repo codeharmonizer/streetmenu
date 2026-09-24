@@ -44,38 +44,11 @@ export default async function HomePage() {
     grayLight: '#BFBDB5',
   }
 
-  const vendors = [
-    'Basta Umm Khalid', 'Mashawi Al Noor', 'Café Zafran',
-    'Gulf Grill House', 'Al Waha Kitchen', 'Burger District',
-    'Saffron Bistro', 'Kabab Street',
-  ]
+  // Real customers only — add a vendor's name here once they are live and agree to be listed.
+  const vendors: string[] = []
 
-  const testimonials = [
-    {
-      quote: isAr
-        ? '"أعددته في 10 دقائق بين وجبتي الغداء. الآن الزبائن يمسحون وأخطاء طلباتي انخفضت النصف."'
-        : '"Set it up in 10 minutes between the lunch rush. Now customers just scan and my order mistakes dropped by half."',
-      name: isAr ? 'أبو خالد' : 'Abu Khalid',
-      role: isAr ? 'صاحب بسطة، المنامة' : 'Basta owner, Manama',
-      initials: 'AK',
-    },
-    {
-      quote: isAr
-        ? '"قائمتي تبدو أكثر احترافية من مطاعم أضعاف حجمي. الزبائن يثقون بمطعم يمكنهم قراءة عنه قبل الجلوس."'
-        : '"My menu looks more professional than restaurants 10x my size. Customers trust a restaurant they can read about before they sit."',
-      name: isAr ? 'سارة ح.' : 'Sara H.',
-      role: isAr ? 'صاحبة كافيه، الرفاع' : 'Café owner, Riffa',
-      initials: 'SH',
-    },
-    {
-      quote: isAr
-        ? '"غيّرت أسعاري في يوم جمعة مزدحم. استغرق 30 ثانية. القوائم المطبوعة كانت ستكلفني 3 أيام و40 ديناراً."'
-        : '"I updated my prices during a busy Friday. Took 30 seconds. Printed menus would\'ve cost me 3 days and 40 dinars."',
-      name: isAr ? 'محمد ن.' : 'Mohammed N.',
-      role: isAr ? 'مطعم مشاوي، المحرق' : 'Mashawi restaurant, Muharraq',
-      initials: 'MN',
-    },
-  ]
+  // Real, permissioned quotes only. The section stays hidden until at least one exists.
+  const testimonials: { quote: string; name: string; role: string; initials: string }[] = []
 
   return (
     <div style={{ background: C.charcoal, color: C.white, fontFamily: "'DM Sans','Cairo',sans-serif", overflowX: 'hidden' }}>
@@ -306,14 +279,16 @@ export default async function HomePage() {
       </section>
 
       {/* ══════════════ LOGOS STRIP ══════════════ */}
-      <div style={{ background: C.charcoal2, borderTop: '0.5px solid rgba(255,255,255,0.06)', borderBottom: '0.5px solid rgba(255,255,255,0.06)', padding: '28px 0', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', gap: 56, alignItems: 'center', animation: 'scroll 24s linear infinite', width: 'max-content' }}>
-          {[...vendors, ...vendors].map((v, i) => (
-            <span key={i} style={{ fontFamily: "'DM Sans','Cairo',sans-serif", fontSize: 14, fontWeight: 500, color: 'rgba(255,255,255,0.22)', whiteSpace: 'nowrap', letterSpacing: '0.02em' }}>
-              {i % 2 === 1 ? '·' : v}
-            </span>
-          ))}
-        </div>
+      <div style={vendors.length > 0 ? { background: C.charcoal2, borderTop: '0.5px solid rgba(255,255,255,0.06)', borderBottom: '0.5px solid rgba(255,255,255,0.06)', padding: '28px 0', overflow: 'hidden' } : undefined}>
+        {vendors.length > 0 && (
+          <div style={{ display: 'flex', gap: 56, alignItems: 'center', animation: 'scroll 24s linear infinite', width: 'max-content' }}>
+            {[...vendors, ...vendors].map((v, i) => (
+              <span key={i} style={{ fontFamily: "'DM Sans','Cairo',sans-serif", fontSize: 14, fontWeight: 500, color: 'rgba(255,255,255,0.22)', whiteSpace: 'nowrap', letterSpacing: '0.02em' }}>
+                {i % 2 === 1 ? '·' : v}
+              </span>
+            ))}
+          </div>
+        )}
         <style>{`
           @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
           @media (max-width: 767px) {
@@ -384,10 +359,10 @@ export default async function HomePage() {
           {/* Stats */}
           <div className="sb-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', marginTop: 80, border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden' }}>
             {[
-              { n: '2', suffix: 'K+', label: t('statMenus') },
-              { n: '50', suffix: 'K+', label: t('statScans') },
-              { n: '4.9', suffix: '★', label: t('statRating') },
               { n: '5', suffix: isAr ? 'د' : 'min', label: t('statSetup') },
+              { n: '0', suffix: isAr ? ' د.ب' : ' BD', label: t('statFreeStart') },
+              { n: '0', suffix: '', label: t('statNoApp') },
+              { n: '2', suffix: '', label: t('statLanguages') },
             ].map((s, i) => (
               <div key={i} style={{ padding: '36px 32px', borderRight: i < 3 ? '0.5px solid rgba(255,255,255,0.06)' : 'none', background: C.charcoal2 }}>
                 <div style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 52, color: C.white, lineHeight: 1, marginBottom: 6 }}>
@@ -539,36 +514,38 @@ export default async function HomePage() {
       </section>
 
       {/* ══════════════ TESTIMONIALS ══════════════ */}
-      <section style={{ background: C.charcoal2, padding: '100px 0' }}>
-        <div className="sb-inner" style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: "'DM Mono',monospace", fontSize: 11, color: '#FF6B35', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
-            <span style={{ width: 20, height: 1, background: C.red, display: 'inline-block' }} />
-            {t('sectionTestimonials')}
-          </div>
-          <h2 style={{ fontFamily: isAr ? "'Cairo',sans-serif" : "'Bebas Neue',sans-serif", fontSize: 'clamp(48px, 5vw, 72px)', lineHeight: 0.95, color: C.white, marginBottom: 56, fontWeight: isAr ? 900 : 400 }}>
-            {t('testimonialsHeadline1')}<br /><span style={{ color: C.red }}>{t('testimonialsHeadline2')}</span>
-          </h2>
-          <div className="sb-testi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-            {testimonials.map((tm, i) => (
-              <div key={i} style={{ background: C.charcoal3, border: '0.5px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: 28 }}>
-                <div style={{ display: 'flex', gap: 3, marginBottom: 16 }}>
-                  {[1,2,3,4,5].map(s => <span key={s} style={{ color: C.red, fontSize: 14 }}>★</span>)}
-                </div>
-                <p style={{ fontSize: 15, fontWeight: 300, color: C.grayLight, lineHeight: 1.65, marginBottom: 20 }}>{tm.quote}</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(232,75,26,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600, color: '#FF6B35' }}>
-                    {tm.initials}
+      {testimonials.length > 0 && (
+        <section style={{ background: C.charcoal2, padding: '100px 0' }}>
+          <div className="sb-inner" style={{ maxWidth: 1160, margin: '0 auto', padding: '0 48px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: "'DM Mono',monospace", fontSize: 11, color: '#FF6B35', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
+              <span style={{ width: 20, height: 1, background: C.red, display: 'inline-block' }} />
+              {t('sectionTestimonials')}
+            </div>
+            <h2 style={{ fontFamily: isAr ? "'Cairo',sans-serif" : "'Bebas Neue',sans-serif", fontSize: 'clamp(48px, 5vw, 72px)', lineHeight: 0.95, color: C.white, marginBottom: 56, fontWeight: isAr ? 900 : 400 }}>
+              {t('testimonialsHeadline1')}<br /><span style={{ color: C.red }}>{t('testimonialsHeadline2')}</span>
+            </h2>
+            <div className="sb-testi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+              {testimonials.map((tm, i) => (
+                <div key={i} style={{ background: C.charcoal3, border: '0.5px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: 28 }}>
+                  <div style={{ display: 'flex', gap: 3, marginBottom: 16 }}>
+                    {[1,2,3,4,5].map(s => <span key={s} style={{ color: C.red, fontSize: 14 }}>★</span>)}
                   </div>
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 500, color: C.white }}>{tm.name}</div>
-                    <div style={{ fontSize: 12, color: C.gray, marginTop: 1 }}>{tm.role}</div>
+                  <p style={{ fontSize: 15, fontWeight: 300, color: C.grayLight, lineHeight: 1.65, marginBottom: 20 }}>{tm.quote}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(232,75,26,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600, color: '#FF6B35' }}>
+                      {tm.initials}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 500, color: C.white }}>{tm.name}</div>
+                      <div style={{ fontSize: 12, color: C.gray, marginTop: 1 }}>{tm.role}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ══════════════ CTA ══════════════ */}
       <div style={{ background: C.red, padding: '100px 0', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>

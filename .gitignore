@@ -37,3 +37,11 @@ next-env.d.ts
 .claude/
 .brandSuggestion/
 .env*
+
+# Menu importer prospect specs (contain vendor contact details)
+/menus/
+
+# Rendered ad videos and voice experiments (kept local, not in git)
+/social-assets/
+/studio/out/
+/studio/voice-tests/
