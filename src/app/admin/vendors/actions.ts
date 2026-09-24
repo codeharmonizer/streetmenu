@@ -183,7 +183,7 @@ export async function sendVendorInvite(
   const menuUrl = `${appUrl}/m/${vendor.slug}`
   const resend = new Resend(process.env.RESEND_API_KEY)
 
-  await resend.emails.send({
+  const { error: resendError } = await resend.emails.send({
     from: getFromAddress(),
     to: normalizedEmail,
     subject: `Manage ${vendor.name} on Relaxed Menu`,
@@ -200,6 +200,8 @@ export async function sendVendorInvite(
       </div>
     `,
   })
+
+  if (resendError) throw new Error(resendError.message)
 
   const { error: updateError } = await adminSupabase
     .from('vendors')
