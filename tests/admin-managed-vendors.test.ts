@@ -45,7 +45,10 @@ describe('admin-managed vendors', () => {
     expect(actions).toContain('normalizeVendorUsername')
     expect(actions).toContain('normalizeVendorSlug')
     expect(actions).toContain("storage.from('menu-photos').upload")
-    expect(actions).toContain('auth.admin.inviteUserByEmail')
+    expect(actions).toContain('auth.admin.generateLink')
+    expect(actions).toContain('new Resend')
+    expect(actions).toContain('resend.emails.send')
+    expect(actions).toContain('existingVendor.vendor_status !== \'active\'')
     expect(actions).toContain('invited_at')
   })
 

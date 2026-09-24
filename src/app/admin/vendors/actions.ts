@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { Resend } from 'resend'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { normalizeVendorSlug } from '@/lib/vendor-slugs'
@@ -14,6 +15,24 @@ type ActionResult = { ok: true; vendorId?: string; publicUrl?: string; inviteSen
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
 const IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif'])
+
+function getFromAddress(): string {
+  const raw = process.env.RESEND_FROM_EMAIL?.trim()
+  if (!raw) return 'Relaxed Menu <onboarding@resend.dev>'
+  if (raw.includes('<')) return raw
+  if (!raw.includes(' ')) return raw
+  const lastSpace = raw.lastIndexOf(' ')
+  return `${raw.slice(0, lastSpace)} <${raw.slice(lastSpace + 1)}>`
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
 
 async function assertCurrentUserIsAdmin(): Promise<AdminUser> {
   const supabase = await createClient()
@@ -137,12 +156,51 @@ export async function sendVendorInvite(
 ) {
   const normalizedEmail = email.trim().toLowerCase()
   if (!normalizedEmail) throw new Error('Vendor email is required before sending an invite')
+  if (!process.env.RESEND_API_KEY) throw new Error('Email service is not configured')
+
+  const { data: vendor, error: vendorError } = await adminSupabase
+    .from('vendors')
+    .select('id, name, slug')
+    .eq('id', vendorId)
+    .single()
+
+  if (vendorError || !vendor) throw new Error(vendorError?.message ?? 'Vendor not found')
 
   const redirectTo = `${getAppUrl()}/auth/callback?next=/dashboard`
-  const { data, error } = await adminSupabase.auth.admin.inviteUserByEmail(normalizedEmail, { redirectTo })
+  const { data, error } = await adminSupabase.auth.admin.generateLink({
+    type: 'invite',
+    email: normalizedEmail,
+    options: { redirectTo },
+  })
   if (error) throw new Error(error.message)
 
+  const inviteUrl = data.properties?.action_link
+  if (!inviteUrl) throw new Error('Could not generate vendor invite link')
+
   const invitedUserId = data.user?.id ?? null
+  const appUrl = getAppUrl()
+  const vendorName = escapeHtml(vendor.name)
+  const menuUrl = `${appUrl}/m/${vendor.slug}`
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
+  await resend.emails.send({
+    from: getFromAddress(),
+    to: normalizedEmail,
+    subject: `Manage ${vendor.name} on Relaxed Menu`,
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#1f2933;line-height:1.6">
+        <h2 style="color:#E84B1A;margin-bottom:8px">You're invited to manage ${vendorName}</h2>
+        <p>Relaxed Menu has created a digital QR menu for <strong>${vendorName}</strong>.</p>
+        <p>Set your password and access your dashboard using the button below:</p>
+        <p style="margin:24px 0">
+          <a href="${inviteUrl}" style="background:#E84B1A;color:white;text-decoration:none;padding:12px 18px;border-radius:12px;font-weight:700;display:inline-block">Accept invite</a>
+        </p>
+        <p style="font-size:14px;color:#64748b">Your public menu: <a href="${menuUrl}">${menuUrl}</a></p>
+        <p style="font-size:12px;color:#94a3b8">If the button does not work, copy and paste this link into your browser:<br><a href="${inviteUrl}">${inviteUrl}</a></p>
+      </div>
+    `,
+  })
+
   const { error: updateError } = await adminSupabase
     .from('vendors')
     .update({
@@ -190,7 +248,7 @@ export async function updateManagedVendor(vendorId: string, formData: FormData):
   try {
     const { data: existingVendor, error: existingError } = await adminSupabase
       .from('vendors')
-      .select('id, invited_email, user_id')
+      .select('id, invited_email, user_id, vendor_status')
       .eq('id', vendorId)
       .single()
 
@@ -207,7 +265,7 @@ export async function updateManagedVendor(vendorId: string, formData: FormData):
     if (error) throw new Error(error.message)
 
     const previousEmail = existingVendor.invited_email?.toLowerCase() ?? null
-    const inviteSent = Boolean(invitedEmail && invitedEmail !== previousEmail && !existingVendor.user_id)
+    const inviteSent = Boolean(invitedEmail && (invitedEmail !== previousEmail || existingVendor.vendor_status !== 'active'))
     if (inviteSent && invitedEmail) await sendVendorInvite(adminSupabase, vendorId, invitedEmail, admin.id)
 
     revalidatePath('/admin/vendors')
