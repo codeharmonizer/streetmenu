@@ -1,0 +1,118 @@
+{
+  "source": "https://www.instagram.com/p/CiVLgiOsuEd/ — menu board post from 2022-09-10 (latest menu on the profile); descriptions from item posts of 2022-06-19",
+  "notes": "Menu is from Sept 2022 and the account's last post is May 2023 — confirm prices are still current. Fish Cake (Korean sauce or Tteokbokki sauce) appears in a June 2022 post with no price, left out. 'Kimbap' 1.7 BD is likely the Spam kimbap (the post lists Spam/Chicken/Shrimp/Crab) but the board just says Kimbap. Full-menu story highlight needs Instagram login, not checked. No hours or address public (hashtags mention Muharraq/Busaiteen). No photos: Instagram image download was blocked from this machine. Updated with public vendor-owned Instagram photos downloaded from @thekfoodtruck; repeated photos are representative for item variants where the vendor uses one product-family photo.",
+  "vendor": {
+    "name": "The K Food Truck",
+    "slug": "the-k-food-truck",
+    "instagram": "@thekfoodtruck",
+    "category": "Food Truck",
+    "description": "Korean street food 🇧🇭🇰🇷 Corn dogs, kimbap, tteokbokki and Korean fried chicken. Order on WhatsApp or DM.",
+    "phone": "+97339337937",
+    "logo": "the-k-food-truck-photos/instagram-04.webp"
+  },
+  "items": [
+    {
+      "category": "Corn Dogs",
+      "name": "Cheese Corndog",
+      "price": 1.7,
+      "photo": "the-k-food-truck-photos/instagram-06.webp"
+    },
+    {
+      "category": "Corn Dogs",
+      "name": "Sausage Corndog",
+      "price": 1.5,
+      "photo": "the-k-food-truck-photos/instagram-01.jpg"
+    },
+    {
+      "category": "Corn Dogs",
+      "name": "Mix Corndog",
+      "price": 2.0,
+      "photo": "the-k-food-truck-photos/instagram-08.webp"
+    },
+    {
+      "category": "Corn Dogs",
+      "name": "Cheese Potato Corndog",
+      "price": 2.0,
+      "photo": "the-k-food-truck-photos/instagram-07.webp"
+    },
+    {
+      "category": "Corn Dogs",
+      "name": "Sausage Potato Corndog",
+      "price": 1.8,
+      "photo": "the-k-food-truck-photos/instagram-07.webp"
+    },
+    {
+      "category": "Corn Dogs",
+      "name": "Mix Potato Corndog",
+      "price": 2.3,
+      "photo": "the-k-food-truck-photos/instagram-07.webp"
+    },
+    {
+      "category": "Corn Dogs",
+      "name": "Cheese Cheetos Corndog",
+      "price": 2.0,
+      "photo": "the-k-food-truck-photos/instagram-09.webp"
+    },
+    {
+      "category": "Corn Dogs",
+      "name": "Sausage Cheetos Corndog",
+      "price": 1.8,
+      "photo": "the-k-food-truck-photos/instagram-09.webp"
+    },
+    {
+      "category": "Corn Dogs",
+      "name": "Mix Cheetos Corndog",
+      "price": 2.3,
+      "photo": "the-k-food-truck-photos/instagram-09.webp"
+    },
+    {
+      "category": "Korean Dishes",
+      "name": "Tteokbokki",
+      "price": 2.0,
+      "description": "Spicy Korean rice cakes",
+      "photo": "the-k-food-truck-photos/instagram-12.webp"
+    },
+    {
+      "category": "Kimbap",
+      "name": "Kimbap",
+      "price": 1.7,
+      "photo": "the-k-food-truck-photos/instagram-05.webp"
+    },
+    {
+      "category": "Kimbap",
+      "name": "Chicken Kimbap",
+      "price": 2.0,
+      "photo": "the-k-food-truck-photos/instagram-05.webp"
+    },
+    {
+      "category": "Kimbap",
+      "name": "Shrimp Kimbap",
+      "price": 2.0,
+      "photo": "the-k-food-truck-photos/instagram-05.webp"
+    },
+    {
+      "category": "Kimbap",
+      "name": "Crab Kimbap",
+      "price": 2.0,
+      "photo": "the-k-food-truck-photos/instagram-05.webp"
+    },
+    {
+      "category": "Korean Dishes",
+      "name": "Kimchi Fried Rice",
+      "price": 2.2,
+      "photo": "the-k-food-truck-photos/instagram-02.jpg"
+    },
+    {
+      "category": "Korean Dishes",
+      "name": "Korean Fried Chicken",
+      "price": 2.5,
+      "photo": "the-k-food-truck-photos/instagram-10.webp"
+    },
+    {
+      "category": "Korean Dishes",
+      "name": "Korean Fried Shrimp",
+      "price": 3.0,
+      "photo": "the-k-food-truck-photos/instagram-11.webp"
+    }
+  ]
+}

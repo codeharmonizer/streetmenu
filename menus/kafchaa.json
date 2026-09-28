@@ -1,0 +1,148 @@
+{
+  "source": "https://www.instagram.com/kafchaa/ bio + Linktree https://linktr.ee/Kafchaa + Talabat menu search result https://www.talabat.com/ar/bahrain/restaurant/670294/kafchaa-cafe-jurdab?aid=2392",
+  "notes": "Public Instagram confirms Kafchaa food truck in Diyar Al Muharraq, hours 6:00 PM–9:00 PM, WhatsApp +97333320433. Menu items/prices are from public Talabat listing crawled by web search. Vendor's own item photos were not downloaded yet; importer will generate illustration placeholders in dry run. Logo sourced from public Talabat restaurant listing.",
+  "vendor": {
+    "name": "عربة گفشه | ديار المحرق",
+    "slug": "kafchaa",
+    "instagram": "@kafchaa",
+    "category": "Food Truck",
+    "description": "أطباق شعبية خفيفة بنكهة بحرينية في ديار المحرق.",
+    "address": "حديقة ديار المحرق، البحرين",
+    "phone": "+97333320433",
+    "hours": "6:00 PM – 9:00 PM",
+    "logo": "https://talabat.dhmedia.io/image/talabat/restaurants/Logo_29637815570962043957.jpg?width=750"
+  },
+  "items": [
+    {
+      "category": "أطباق رمضان",
+      "name": "سمبوسك بالجبنة",
+      "price": 1.0,
+      "description": "6 قطع"
+    },
+    {
+      "category": "أطباق رمضان",
+      "name": "لقيمات",
+      "price": 2.0,
+      "description": "طبق كبير لقيمات"
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "فول",
+      "price": 1.0,
+      "description": "فول مطبوخ ببطء مع الثوم والليمون والبهارات"
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "شكشوكة",
+      "price": 1.0,
+      "description": "بيض بصلصة الطماطم والفلفل والبهارات"
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "فاصولياء",
+      "price": 1.0,
+      "description": "فاصولياء مطبوخة بالأعشاب والبهارات"
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "اومليت بالجبن",
+      "price": 0.8,
+      "description": "أومليت مع جبن ذائب"
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "لبنة بالزعتر",
+      "price": 1.0
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "قشطة بالعسل",
+      "price": 0.8
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "نخي بشير",
+      "price": 1.0
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "فلافل قطع",
+      "price": 0.66,
+      "description": "5 قطع فلافل مع صوص طحينة"
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "بوكس فلافل",
+      "price": 1.1,
+      "description": "10 قطع"
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "رول شباتي شكشوكة",
+      "price": 1.0
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "مهياوة بالجبنة",
+      "price": 1.2
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "رول شباتي لبنة بالزعتر",
+      "price": 1.0
+    },
+    {
+      "category": "قائمة الإفطار",
+      "name": "رول شباتي فلافل باللبنة",
+      "price": 1.2
+    },
+    {
+      "category": "بوكس الريوق البحريني",
+      "name": "بوكس كبير",
+      "price": 5.5,
+      "description": "6 أطباق"
+    },
+    {
+      "category": "بوكس الريوق البحريني",
+      "name": "بوكس صغير",
+      "price": 2.5,
+      "description": "3 أطباق"
+    },
+    {
+      "category": "قائمة الحلويات",
+      "name": "لقيمات",
+      "price": 1.3,
+      "description": "لقيمات مقلية مع دبس/عسل وسمسم"
+    },
+    {
+      "category": "قائمة الحلويات",
+      "name": "بلاليط بحريني",
+      "price": 1.0
+    },
+    {
+      "category": "قائمة الحلويات",
+      "name": "عصيدة بحريني",
+      "price": 1.0
+    },
+    {
+      "category": "المشروبات الباردة",
+      "name": "مياه معدنية",
+      "price": 0.15
+    },
+    {
+      "category": "المشروبات الساخنة",
+      "name": "شاي كرك",
+      "price": 0.5
+    },
+    {
+      "category": "المشروبات الساخنة",
+      "name": "شاي أحمر",
+      "price": 0.4
+    },
+    {
+      "category": "المشروبات الساخنة",
+      "name": "شاي أخضر",
+      "price": 0.3
+    }
+  ]
+}
