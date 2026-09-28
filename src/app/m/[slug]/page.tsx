@@ -1,6 +1,5 @@
 import { getCachedPublicMenuData, getPublicMenuMetadata } from '@/lib/public-menu-cache'
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import { MapPin, Clock, Phone, Star } from 'lucide-react'
 import ShareButton from '@/components/menu/ShareButton'
 import PublicMenuClient from '@/components/menu/PublicMenuClient'
@@ -111,7 +110,13 @@ export default async function PublicMenuPage({ params }: Props) {
         <div className="flex items-start gap-4 mb-4">
           {vendor.logo_url ? (
             <div className="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 relative">
-              <Image src={vendor.logo_url} alt={vendor.name} fill className="object-cover" />
+              <img
+                src={vendor.logo_url}
+                alt={vendor.name}
+                className="h-full w-full object-cover"
+                loading="eager"
+                decoding="async"
+              />
             </div>
           ) : (
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 font-bold text-white"
