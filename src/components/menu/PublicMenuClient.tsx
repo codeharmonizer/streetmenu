@@ -51,6 +51,31 @@ type SheetType = 'cart' | 'reviews' | 'write' | null
 const SM_ORDERS_KEY = 'sm_orders'
 const SM_CUSTOMER_KEY = 'sm_customer_info'
 
+function DishPlaceholder() {
+  return (
+    <div className="w-20 h-20 rounded-xl flex items-center justify-center text-3xl flex-shrink-0"
+      style={{ background: 'var(--surface-2)' }}>🍽️</div>
+  )
+}
+
+function MenuItemPhoto({ photoUrl, name, available, soldOutLabel }: { photoUrl: string | null; name: string; available: boolean; soldOutLabel: string }) {
+  const [imageFailed, setImageFailed] = useState(false)
+
+  if (!photoUrl || imageFailed) return <DishPlaceholder />
+
+  return (
+    <div className="w-20 h-20 rounded-xl overflow-hidden relative flex-shrink-0">
+      <Image src={photoUrl} alt={name} fill sizes="80px" className="object-cover" onError={() => setImageFailed(true)} />
+      {!available && (
+        <div className="absolute inset-0 flex items-center justify-center rounded-xl"
+          style={{ background: 'rgba(0,0,0,0.5)' }}>
+          <span className="text-white text-xs font-bold">{soldOutLabel}</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function PublicMenuClient({ vendor, items, reviews, avgRating, ordersEnabled, freeDailyOrderLimitReached = false }: Props) {
   const t      = useTranslations('publicMenu')
   const tc     = useTranslations('cart')
@@ -199,20 +224,12 @@ export default function PublicMenuClient({ vendor, items, reviews, avgRating, or
                   return (
                     <div key={item.id} className="card flex gap-4 p-4"
                       style={{ opacity: item.available ? 1 : 0.5 }}>
-                      {item.photo_url ? (
-                        <div className="w-20 h-20 rounded-xl overflow-hidden relative flex-shrink-0">
-                          <Image src={item.photo_url} alt={item.name} fill className="object-cover" />
-                          {!item.available && (
-                            <div className="absolute inset-0 flex items-center justify-center rounded-xl"
-                              style={{ background: 'rgba(0,0,0,0.5)' }}>
-                              <span className="text-white text-xs font-bold">{t('soldOut')}</span>
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="w-20 h-20 rounded-xl flex items-center justify-center text-3xl flex-shrink-0"
-                          style={{ background: 'var(--surface-2)' }}>🍽️</div>
-                      )}
+                      <MenuItemPhoto
+                        photoUrl={item.photo_url}
+                        name={item.name}
+                        available={item.available}
+                        soldOutLabel={t('soldOut')}
+                      />
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold">{item.name}</p>
                         {item.description && (
