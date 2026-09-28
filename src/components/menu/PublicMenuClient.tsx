@@ -67,7 +67,8 @@ function MenuItemPhoto({ photoUrl, name, available, soldOutLabel }: { photoUrl: 
       <img
         src={photoUrl}
         alt={name}
-        loading="lazy"
+        loading="eager"
+        fetchPriority="high"
         decoding="async"
         className="w-full h-full object-cover"
         onError={() => setImageFailed(true)}
