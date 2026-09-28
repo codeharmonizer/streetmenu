@@ -1,16 +1,16 @@
-import { logPublicScan } from '@/lib/public-actions'
 import { getCachedPublicMenuData, getPublicMenuMetadata } from '@/lib/public-menu-cache'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { MapPin, Clock, Phone, Star } from 'lucide-react'
 import ShareButton from '@/components/menu/ShareButton'
 import PublicMenuClient from '@/components/menu/PublicMenuClient'
+import PublicScanLogger from '@/components/menu/PublicScanLogger'
 import LanguageSwitcher from '@/components/shared/LanguageSwitcher'
 import type { Metadata } from 'next'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { getAppUrl } from '@/lib/app-url'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { getTodayOrderWindow, hasReachedFreeDailyOrderLimit } from '@/lib/plan-limits'
+import { getTodayOrderWindow, hasActivePaidAccess, hasReachedFreeDailyOrderLimit } from '@/lib/plan-limits'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -68,22 +68,32 @@ export default async function PublicMenuPage({ params }: Props) {
     )
   }
 
-  await logPublicScan(vendor.id)
-
   const avgRating = reviews?.length
     ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
     : null
 
   const appUrl  = getAppUrl()
   const menuUrl = `${appUrl}/m/${vendor.slug}`
-  const { startIso, endIso } = getTodayOrderWindow()
-  const { count: todayOrderCount } = await createAdminClient()
-    .from('orders')
-    .select('id', { count: 'exact', head: true })
-    .eq('vendor_id', vendor.id)
-    .gte('created_at', startIso)
-    .lt('created_at', endIso)
-  const freeDailyOrderLimitReached = hasReachedFreeDailyOrderLimit(vendor, todayOrderCount ?? 0)
+  const shouldCheckFreeDailyOrderLimit =
+    vendor.orders_enabled === true &&
+    vendor.is_open === true &&
+    !hasActivePaidAccess(vendor)
+
+  let todayOrderCount = 0
+  if (shouldCheckFreeDailyOrderLimit) {
+    const { startIso, endIso } = getTodayOrderWindow()
+    const { count } = await createAdminClient()
+      .from('orders')
+      .select('id', { count: 'exact', head: true })
+      .eq('vendor_id', vendor.id)
+      .gte('created_at', startIso)
+      .lt('created_at', endIso)
+    todayOrderCount = count ?? 0
+  }
+
+  const freeDailyOrderLimitReached = shouldCheckFreeDailyOrderLimit
+    ? hasReachedFreeDailyOrderLimit(vendor, todayOrderCount)
+    : false
 
   const ordersEnabled =
     vendor.orders_enabled === true &&
@@ -92,6 +102,7 @@ export default async function PublicMenuPage({ params }: Props) {
 
   return (
     <div className="min-h-screen pb-24" style={{ background: 'var(--bg)' }}>
+      <PublicScanLogger vendorId={vendor.id} />
       {/* Header — server-rendered */}
       <div className="px-4 pt-4 pb-6 max-w-lg mx-auto">
         <div className="flex justify-end mb-4">
