@@ -12,6 +12,8 @@ describe('public menu image fallback', () => {
     expect(client).toContain('MenuItemPhoto')
     expect(client).toContain('onError={() => setImageFailed(true)}')
     expect(client).toContain('if (!photoUrl || imageFailed)')
+    expect(client).toContain('<img')
+    expect(client).not.toContain('<Image src={photoUrl}')
     expect(client).toContain('🍽️')
   })
 })

@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState, useTransition } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Star, X, Pencil, ShoppingBag, Plus, Minus, Trash2 } from 'lucide-react'
 import { useTranslations, useLocale } from 'next-intl'
@@ -65,7 +64,14 @@ function MenuItemPhoto({ photoUrl, name, available, soldOutLabel }: { photoUrl: 
 
   return (
     <div className="w-20 h-20 rounded-xl overflow-hidden relative flex-shrink-0">
-      <Image src={photoUrl} alt={name} fill sizes="80px" className="object-cover" onError={() => setImageFailed(true)} />
+      <img
+        src={photoUrl}
+        alt={name}
+        loading="lazy"
+        decoding="async"
+        className="w-full h-full object-cover"
+        onError={() => setImageFailed(true)}
+      />
       {!available && (
         <div className="absolute inset-0 flex items-center justify-center rounded-xl"
           style={{ background: 'rgba(0,0,0,0.5)' }}>
