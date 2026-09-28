@@ -19,6 +19,11 @@ describe('Next image remote hosts', () => {
           protocol: 'https',
           hostname: 'talabat.dhmedia.io',
         }),
+        expect.objectContaining({
+          protocol: 'https',
+          hostname: 'relaxedmenu.beyounded.com',
+          pathname: '/prospect-photos/**',
+        }),
       ]),
     )
   })

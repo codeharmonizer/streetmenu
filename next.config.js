@@ -18,6 +18,12 @@ const nextConfig = {
         port: '',
         pathname: '/image/talabat/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'relaxedmenu.beyounded.com',
+        port: '',
+        pathname: '/prospect-photos/**',
+      },
     ],
   },
 }
