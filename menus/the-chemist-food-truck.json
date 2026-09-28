@@ -1,0 +1,267 @@
+{
+  "source": "https://www.talabat.com/bahrain/restaurant/52036/the-chemist-food-truck-isa-town?aid=2390 — public Talabat menu extracted 2026-09-28; photos from Talabat item images",
+  "vendor": {
+    "name": "The Chemist Food Truck",
+    "slug": "the-chemist-food-truck",
+    "instagram": "@thechemistbh",
+    "category": "Food Truck",
+    "description": "American food truck in Isa Town serving burgers, sandwiches, meals, fries, snacks and mojitos.",
+    "address": "Isa Town, Bahrain",
+    "hours": null,
+    "logo": "https://talabat.dhmedia.io/image/talabat/restaurants/logo_637691379785116911.jpg"
+  },
+  "items": [
+    {
+      "category": "Offers",
+      "name": "Beef Tikka Sandwich",
+      "price": 2.0,
+      "description": "Beef tikka sandwich with special sauce, lettuce and cheddar cheese",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638177106069805430"
+    },
+    {
+      "category": "Offers",
+      "name": "Mojito Vimto",
+      "price": 1.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_637847745772135850"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Hot Dog Sandwich",
+      "price": 2.0,
+      "description": "Hot dog with cheese, sous, onion crunchy  and lettuce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637694686636013039"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Burger Toast Sandwich",
+      "price": 2.0,
+      "description": "French toast bread steak burger fresh\nWith lettuce, cheddar cheese and sous",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637694687267752690"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Classic Beef Burger Sandwich",
+      "price": 2.0,
+      "description": "French  bread steak burger fresh\nWith lettuce, cheddar cheese and sous",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637694690566584763"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Crispy Chicken Sandwich",
+      "price": 2.0,
+      "description": "Crispy Chicken  fresh\nWith lettuce, cheddar cheese and sous",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/CRISPY_CHICKEN_637691402526955431.jpg"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Beef Steak Sandwich",
+      "price": 2.0,
+      "description": "Beef Steak fresh\nWith lettuce, cheddar cheese and sous",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/ALJASMI_(BEEF_STEAK)_637691402535785443.jpg"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Mix Beef Steak And Chicken Sandwich",
+      "price": 2.0,
+      "description": "Mix Beef Steak And Chicken  fresh\nWith lettuce, cheddar cheese and sous",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/ABODKA_(MIX_BEEF_STE_637691402544285435.jpg"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Chicken Steak Sandwich",
+      "price": 2.0,
+      "description": "Chicken Steak \nWith lettuce, cheddar cheese and special sauce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637694691690825288"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Double Beef Burger Sandwich",
+      "price": 3.8,
+      "description": "Double Beef Burger  \nWith lettuce, cheddar cheese and special sauce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/DOUBLE_BURGER_BEEF_637691402560492164.jpg"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Triple Beef Burger Sandwich",
+      "price": 4.5,
+      "description": "Triple Beef Burger \nWith lettuce, cheddar cheese and special sauce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/TRIPLE_BURGER_637691402571288448.jpg"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Double Chicken Burger Sandwich",
+      "price": 3.8,
+      "description": "Double Chicken Burger \nWith lettuce, cheddar cheese and special sauce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/DOUBLE_BURGER_CHICKEN_637691402580374661.jpg"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Beef Burger With Shawerma Sandwich",
+      "price": 3.3,
+      "description": "Beef Burger With Shawerma \nWith lettuce, cheddar cheese and special sauce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/SHAWARMA_BURGER_BEEF_637691402590960877.jpg"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Chicken Burger With Shawerma Sandwich",
+      "price": 3.3,
+      "description": "Chicken Burger With Shawerma  \nWith lettuce, cheddar cheese and special sauce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/SHAWARMA_CHICKEN_BUR_637691402599037571.jpg"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Crispy Buffalo Burger Sandwich",
+      "price": 2.3,
+      "description": "Crispy Buffalo Burger   \nWith lettuce, cheddar cheese and special sauce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/BUFFALO_CRISPY_BURGER_637691402606687969.jpg"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Nuggets Burger Sandwich",
+      "price": 3.0,
+      "description": "Nuggets Burger  \nWith lettuce, cheddar cheese and special sauce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/BURGER_NUGGETS_637691402617714025.jpg"
+    },
+    {
+      "category": "Meals",
+      "name": "Hot Dog Meal",
+      "price": 3.0,
+      "description": "Served with french fries and coca-cola\nHot Dog Meal\nWith lettuce, cheddar cheese and special sauce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637694693282024643"
+    },
+    {
+      "category": "Meals",
+      "name": "Classic Beef Burger Meal",
+      "price": 3.0,
+      "description": "Classic Beef Burger Meal\nWith lettuce, cheddar cheese and special sauce\nServed with french fries and coca-cola",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637694692579305319"
+    },
+    {
+      "category": "Meals",
+      "name": "Crispy Chicken Meal",
+      "price": 3.0,
+      "description": "Crispy Chicken Meal\nWith lettuce, cheddar cheese and special sauce\nServed with french fries and coca-cola",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637694694100824775"
+    },
+    {
+      "category": "Meals",
+      "name": "Mix Beef Steak And Chicken Meal",
+      "price": 3.0,
+      "description": "Mix Beef Steak And Chicken Meal\nWith lettuce, cheddar cheese and special sauce\nServed with french fries and coca-cola",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637694768433234473"
+    },
+    {
+      "category": "Meals",
+      "name": "Chicken Steak Meal",
+      "price": 3.0,
+      "description": "chicken steak meal with lettuce, cheddar cheese and special sauce served with French fries and Coca-Cola",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637694695327751495"
+    },
+    {
+      "category": "Meals",
+      "name": "Crispy Buffalo Burger Meal",
+      "price": 3.5,
+      "description": "Crispy Buffalo Burger Meal\nWith lettuce, cheddar cheese and special sauce\nServed with french fries and coca-cola",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637694697812960042"
+    },
+    {
+      "category": "Meals",
+      "name": "Beef Tikka Meal",
+      "price": 3.0,
+      "description": "Meat tikka meal with special sauce, lettuce and cheddar cheese\r\nServed with French fries and Coca-Cola",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637797065534543671"
+    },
+    {
+      "category": "Snacks",
+      "name": "Buffalo Chicken Snack",
+      "price": 1.5,
+      "description": "Buffalo Chicken Snack\nWith lettuce, cheddar cheese and special sauce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/BUFFALO_CHICKEN_SNACK_637691402658155406.jpg"
+    },
+    {
+      "category": "Snacks",
+      "name": "Nuggets",
+      "price": 1.0,
+      "description": "5 pieces of chicken nuggets",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/NUGGET_637691402665881452.jpg"
+    },
+    {
+      "category": "Snacks",
+      "name": "Chicken Strips",
+      "price": 1.0,
+      "description": "4 Pieces of chicken strips",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/CHICKEN_STRIPS_637691402673583609.jpg"
+    },
+    {
+      "category": "French Fries",
+      "name": "Amal French Fries With Chicken",
+      "price": 3.0,
+      "description": "Fresh fries with chicken tikka pieces and nachos with cheddar cheese and special sauce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/AMAL_FRIES_(_CHICKEN_637691402625586531.jpg"
+    },
+    {
+      "category": "French Fries",
+      "name": "French Fries",
+      "price": 1.5,
+      "description": "Medium.",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/FRESH_FRIES_MEDIUM_637691402641369081.jpg"
+    },
+    {
+      "category": "French Fries",
+      "name": "Amal French Fries With Beef",
+      "price": 3.0,
+      "description": "Fresh fries with BEEF tikka pieces and nachos with cheddar cheese and special sauce",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/AMAL_FRIES_BEEF_637691402650618903.jpg"
+    },
+    {
+      "category": "French Fries",
+      "name": "French Fries Chemist",
+      "price": 2.0,
+      "description": "Large.",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637797076407696304"
+    },
+    {
+      "category": "Drinks",
+      "name": "Blue Lagoon Cocktail",
+      "price": 1.5,
+      "description": "Blue Lagoon Cocktail\nWith slices of lemon and mint",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/BLUE_LAGOON_637691402690880738.jpg"
+    },
+    {
+      "category": "Drinks",
+      "name": "Strawberry Mojito",
+      "price": 1.5,
+      "description": "Strawberry Mojito Cocktail\nWith slices of lemon and mint",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/STRAWBERRY_MOJITO_637691402699186986.jpg"
+    },
+    {
+      "category": "Drinks",
+      "name": "Cherry Mojito",
+      "price": 1.5,
+      "description": "Cherry Mojito\n Cocktail\nWith slices of lemon and mint",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/CHERRY_MOJITO_637691402708047001.jpg"
+    },
+    {
+      "category": "Drinks",
+      "name": "Lemon With Mint Mojito",
+      "price": 1.5,
+      "description": "Lemon With Mint Mojito\n Cocktail\nWith slices of lemon and mint",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/LEMON_MINT_MOJITO_637691402716383230.jpg"
+    },
+    {
+      "category": "Drinks",
+      "name": "Coca-Cola",
+      "price": 0.3,
+      "description": "Coca-Cola",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Cola_637691402724239648.jpg"
+    },
+    {
+      "category": "Drinks",
+      "name": "Mineral Water",
+      "price": 0.2,
+      "description": "Mineral Water",
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/WATER_637691402731909657.jpg"
+    }
+  ],
+  "notes": "Built from public Talabat listing. Ordering remains disabled until the owner claims the account."
+}
