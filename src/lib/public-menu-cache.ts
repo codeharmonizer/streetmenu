@@ -3,7 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import type { MenuItem, Review, Vendor } from '@/types'
 
 export const PUBLIC_MENU_REVALIDATE_SECONDS = 60 * 60 * 24
-export const PUBLIC_MENU_CACHE_VERSION = 'v4'
+export const PUBLIC_MENU_CACHE_VERSION = 'v5'
 export const publicMenuTag = (slug: string) => `public-menu:${slug}`
 
 type PublicMenuVendor = Vendor
