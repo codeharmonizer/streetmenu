@@ -1,0 +1,36 @@
+{
+  "source": "https://talabat.com/bahrain/restaurant/604845/sr-churros-sanad?aid=1115 — public Talabat menu extracted 2026-09-29; prices/photos from Talabat item data",
+  "vendor": {
+    "name": "SR.Churros",
+    "slug": "sr-churros",
+    "instagram": "@sr.churros_bh",
+    "category": "Dessert",
+    "description": "Churros, waffles, crepes, pancakes, mini pancakes, ice cream and drinks.",
+    "address": "Bahrain",
+    "logo": "https://talabat.dhmedia.io/image/talabat/restaurants/Logo_Sr_636967881741722442.jpg?width=180"
+  },
+  "items": [
+    {
+      "category": "Desserts",
+      "name": "Classic Churros",
+      "price": 2.1,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Classic_Churros_636967880177134745.jpg",
+      "description": "Classic churros with sugar and cinnamon with your choice of dips."
+    },
+    {
+      "category": "Desserts",
+      "name": "Classic Family Box 16 Pieces",
+      "price": 6.9,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Classic_Family_Box_636967880270406660.jpg",
+      "description": "Classic churros with sugar and cinnamon with your choice of dip."
+    },
+    {
+      "category": "Desserts",
+      "name": "Family Pop Churrso Box 35 Pieces",
+      "price": 6.9,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/ALI_1796-11_637277642036182538.jpg",
+      "description": "Gathering mini churros box with your choice of dips."
+    }
+  ],
+  "notes": "Built from public Talabat listing. Included only items with valid public photos and prices. Skipped 0. Ordering remains disabled until owner claims account."
+}
