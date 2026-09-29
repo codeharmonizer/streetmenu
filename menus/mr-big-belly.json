@@ -1,0 +1,181 @@
+{
+  "source": "https://www.talabat.com/bahrain/restaurant/634679/mr-big-belly-al-sayh?aid=1029 — public Talabat menu extracted 2026-09-29; prices and photos from Talabat item data",
+  "vendor": {
+    "name": "Mr Big Belly",
+    "slug": "mr-big-belly",
+    "instagram": "@mr.bigbellybh",
+    "category": "Burgers",
+    "description": "American burgers, crispy chicken, wraps, bites and sides.",
+    "address": "Bahrain",
+    "logo": "https://talabat.dhmedia.io/image/talabat/restaurants/logo_637389730398301634.jpg?width=180"
+  },
+  "items": [
+    {
+      "category": "Sandwiches",
+      "name": "Original Crispy Chicken Sandwich",
+      "price": 1.9,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Original_crispy_chic_637389719683875553.jpg",
+      "description": "Crispy chicken breast topped with cheese, lettuce and special sauce."
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Spicy Crispy Chicken Sandwich",
+      "price": 2.2,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Spicy_crispy_chicken__637389719720671693.jpg",
+      "description": "Crispy chicken breast topped with lettuce, jalapeno and hot sauce."
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Crispy Chicken With Cheetos Sandwich",
+      "price": 2.2,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Crispy_chicken_with__637389719748947007.jpg",
+      "description": "Crispy chicken breast topped with cheese, lettuce, cheetos and special sauce."
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Crispy Chicken Dip It In Cheetos And Cheese Sandwich",
+      "price": 2.7,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Original_crispy_chic_637389719773154353.jpg",
+      "description": "Crispy chicken breast topped with cheese, lettuce and special sauce. Served with melted cheese and cheetos on side."
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Crispy Chicken With Buffalo Sauce Sandwich",
+      "price": 2.2,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Crispy_chicken_with__637389719804454143.jpg",
+      "description": "Crispy chicken breast with buffalo sauce, topped with cheese and lettuce."
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Lollipop Chicken burger",
+      "price": 2.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637516519077709862",
+      "description": "6 mini burger with topped with cheese, lettuce,  special sauce. and French fries"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Lollipop angus Beef Burger",
+      "price": 2.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637516522761524319",
+      "description": "6 pieces of mini angus beef burger topped with cheese, lettuce, special sauce. and French fries"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "beef burger skewers regular",
+      "price": 2.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637516531261793627",
+      "description": "Beef burger mini topped with special mix of sauces and melted cheese, crunchy potato sticks, lettuce, pomegranate"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Beef Burger skewers spicy",
+      "price": 2.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637516572179767565",
+      "description": "Angus Beef burger mini topped special mix of spicy sauces, melted , cheese, flaming Cheetos, jalapeño’ lettuce"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Chicken Burger Skewer spicy",
+      "price": 2.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637516579065056446",
+      "description": "Crispy Chicken mini burger topped with special mix of spicy sauces, melted cheese, flaming Cheetos, jalapeño, lettuce"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Chicken Burger Skewer regular",
+      "price": 2.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637516582770360894",
+      "description": "Chicken burger mini topped with special mix of sauces, melted cheese,  crunchy potato sticks, lettuce, and pomegranate"
+    },
+    {
+      "category": "Burger",
+      "name": "Classic Angus Beef Burger",
+      "price": 1.9,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Classic_angus_beef_b_637389719823441624.jpg",
+      "description": "Beef patty topped with cheese, onion, tomato, lettuce and special sauce, served in potato bun"
+    },
+    {
+      "category": "Burger",
+      "name": "The Signature Beef",
+      "price": 2.1,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637625726949291455",
+      "description": "Angus beef with Caramelized onions, cheddar cheese, pickles and special sauce"
+    },
+    {
+      "category": "Burger",
+      "name": "Cheesy Beef Burger",
+      "price": 2.7,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637625735350093519",
+      "description": "Beef, special sauce, special cheeses, pickled and crispy pickled"
+    },
+    {
+      "category": "Burger",
+      "name": "The Shroom",
+      "price": 2.7,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637781085168467784",
+      "description": "Beef patty topped with truffle mushroom, cheese and our special sauce."
+    },
+    {
+      "category": "Wrap",
+      "name": "Belly Arabic Wrap",
+      "price": 1.9,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637535879417372663",
+      "description": "Chicken, lettuce, tomato, cheese and special sauce."
+    },
+    {
+      "category": "Wrap",
+      "name": "Belly Mexican Wrap",
+      "price": 1.9,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637535879812522214",
+      "description": "Chicken, lettuce, tomatoes, cheese and special spicy sauce."
+    },
+    {
+      "category": "Bites And Brisket",
+      "name": "Crispy Chicken Popcorn And French Fries",
+      "price": 2.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Chicken_popcorn_with_637389719860097869.jpg"
+    },
+    {
+      "category": "Bites And Brisket",
+      "name": "Buffalo Chicken Bits With French Fries",
+      "price": 2.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Buffalo_chicken_bite_637389719871879174.jpg",
+      "description": "Chicken pops dipped in buffalo sauce served with French fries and ranch sauce."
+    },
+    {
+      "category": "Bites And Brisket",
+      "name": "Crispy Chicken Strips",
+      "price": 2.4,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Crispy_chicken_strip_637389719883562145.jpg",
+      "description": "4 Pieces of chicken strips."
+    },
+    {
+      "category": "Bites And Brisket",
+      "name": "Buffalo Chicken Strips",
+      "price": 2.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637568807257053354",
+      "description": "5 pieces of chicken strips dipped in buffalo sauce. Served with ranch sauce on the side."
+    },
+    {
+      "category": "Bites And Brisket",
+      "name": "The Shroom",
+      "price": 2.8,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637535064652845102",
+      "description": "Beef patty topped with truffle mushroom, cheese and our special sauce."
+    },
+    {
+      "category": "Side Dishes",
+      "name": "French Fries With Sauces",
+      "price": 1.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Fries_with_sauces__637389719970732152.jpg"
+    },
+    {
+      "category": "Side Dishes",
+      "name": "Loaded French Fries",
+      "price": 2.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/Loaded_fries__637389720020359121.jpg",
+      "description": "French fries topped with chicken pops, cheddar cheese, crispy onion, jalapeno, cheetos and mixed sauces."
+    }
+  ],
+  "notes": "Built from public Talabat listing. Included only items with clear numeric prices and valid public item photos. Skipped unclear/price-on-selection/no-photo rows: 0. Ordering remains disabled until owner claims the account."
+}

@@ -1,0 +1,181 @@
+{
+  "source": "https://www.talabat.com/bahrain/restaurant/741416/salud-manama-center?aid=1008 — public Talabat menu extracted 2026-09-29; prices and photos from Talabat item data",
+  "vendor": {
+    "name": "SALUD",
+    "slug": "salud-bh",
+    "instagram": "@salud_bh",
+    "category": "Restaurant",
+    "description": "Indian, Arabic, grills, sliders and Chinese dishes.",
+    "address": "Bahrain",
+    "logo": "https://talabat.dhmedia.io/image/talabat/restaurants/LOGO638627162773666915.jpg?width=180"
+  },
+  "items": [
+    {
+      "category": "1BD Deals",
+      "name": "Chicken Noodles (Soya)",
+      "price": 1.6,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/NoodlesChicken638688090901404387.jpeg",
+      "description": "Indulge in the savory goodness of our chicken noodles, a perfect blend of tender chicken pieces and flavorful noodles"
+    },
+    {
+      "category": "1BD Deals",
+      "name": "Kolkata Biryani (Chicken)",
+      "price": 1.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638629373658332767",
+      "description": "fresh chicken thigh biryani served with tahini salad, red shatta, Allergies: dairy"
+    },
+    {
+      "category": "Combos",
+      "name": "Combo 1",
+      "price": 2.1,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Chicken_21_Bd_Combojpeg638774812755587087.jpg",
+      "description": "Includes: Chicken Biryani, Chicken Malai Tikka, Roomali Bread and Cold Drink Bottle"
+    },
+    {
+      "category": "Combos",
+      "name": "Combo 2",
+      "price": 2.6,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Chicken_26_Bd_Combojpeg638774812905744958.jpg",
+      "description": "Includes: Chicken Biryani, Chicken Malai Tikka and Green Chicken Tikka"
+    },
+    {
+      "category": "Combos",
+      "name": "Combo 3",
+      "price": 3.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Chicken_32_Bd_Combojpeg638774812956780377.jpg",
+      "description": "Includes: Chicken Biryani, Chicken Malai Tikka, Green Chicken Tikka, Chicken Tangri Bhuna, Roomali Roti and Cold Drink Bottle"
+    },
+    {
+      "category": "GRILLS",
+      "name": "MIX GRILL",
+      "price": 5.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/MIX_Grill638689180806367987.jpeg"
+    },
+    {
+      "category": "HOT STARTERS",
+      "name": "Veg Manchurian ",
+      "price": 1.8,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Veg_Manchurian_1638689163385544732.jpeg",
+      "description": "Vegetables in manchurian gravy"
+    },
+    {
+      "category": "HOT STARTERS",
+      "name": "Paneer Chilly ",
+      "price": 2.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638715388459721380",
+      "description": "Marinated pieces of paneer (cheese) with bell peppers and onions."
+    },
+    {
+      "category": "HOT STARTERS",
+      "name": "SFC - Salud Fried Chicken ",
+      "price": 2.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638714601711233789",
+      "description": "Chicken thigh boneless shallow fried"
+    },
+    {
+      "category": "HOT STARTERS",
+      "name": "Lamb kebab",
+      "price": 1.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/LAMB_KEBAB638783130772794745.jpg",
+      "description": "{dairy/Nuts}spicy tomato sauce, garlic tahini yogurt, sumac"
+    },
+    {
+      "category": "SLIDERS",
+      "name": "Cottage cheese SLIDER",
+      "price": 2.3,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Salud___Cottage_cheese__f638628431839083340.jpg",
+      "description": "Each portion contains two pieces, potato bun, tahini yogurt, lettuce, pickle jalapeno, cucumber, cheddar cheese, Allergies: dairy, gluten free and vegetarian"
+    },
+    {
+      "category": "SLIDERS",
+      "name": "Hot and Crispy Chicken SLIDER",
+      "price": 2.7,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Salud__Hot_and_Crispy_Chi638628431847502222.jpg",
+      "description": "Each portion contains two pieces, potato bun, buffalo chicken, cheddar cheese, Allergies: dairy and gluten free"
+    },
+    {
+      "category": "SLIDERS",
+      "name": "Smashed Lamb SLIDER",
+      "price": 2.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Salud__Smashed_Lamb__fadh638628431839112724.jpg",
+      "description": "Each portion contains two pieces, potato bun, tahini yogurt, lettuce, pickle jalapeno & cucumber, cheddar cheese, Allergies: dairy and gluten free"
+    },
+    {
+      "category": "MAINS",
+      "name": "Smoke Chicken",
+      "price": 2.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Salud__Smoke_Chicken__fad638628431939671373.jpg",
+      "description": "biryani rice, fresh half grilled baby chicken, tahini salad, Allergies: dairy"
+    },
+    {
+      "category": "CHEFS PREMIUM SELECTION ( PREMIUM CATEGORY)",
+      "name": "Lamb Chops",
+      "price": 4.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638629373038863184",
+      "description": "fresh Lamb Chops, tahini yogurt salad, Allergies: dairy"
+    },
+    {
+      "category": "CHEFS PREMIUM SELECTION ( PREMIUM CATEGORY)",
+      "name": "Whole Grilled Seabream",
+      "price": 4.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638629387690572686",
+      "description": "fresh Seabream, salsa cruda, lemon, Allergies: dairy"
+    },
+    {
+      "category": "SHARING PLATTER",
+      "name": "Mix Grill ",
+      "price": 5.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/MIX_Grill638689181000075688.jpeg"
+    },
+    {
+      "category": "EXTRAS",
+      "name": "EXTRA Crunchy Fries",
+      "price": 0.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Salud__Crunchy_Fries__fad638628431782705695.jpg",
+      "description": "Allergies: dairy and vegetarian"
+    },
+    {
+      "category": "EXTRAS",
+      "name": "EXTRA Chilli Dusted Fries",
+      "price": 1.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Salud__Chilli_Dusted_Frie638628431798879797.jpg",
+      "description": "fresh potato fries with chili, Allergies: dairy and vegetarian"
+    },
+    {
+      "category": "COLD DRINKS",
+      "name": "Water 500 ml",
+      "price": 0.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638698885429964467",
+      "description": "Drinking water"
+    },
+    {
+      "category": "COLD DRINKS",
+      "name": "Coke",
+      "price": 0.4,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Coke638627575747909367.jpg",
+      "description": "Carbonated Soft drink"
+    },
+    {
+      "category": "COLD DRINKS",
+      "name": "Coke Zero",
+      "price": 0.4,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Coca_Cola_Zero_Generic638627599030799639.jpg",
+      "description": "Carbonated Soft drink"
+    },
+    {
+      "category": "COLD DRINKS",
+      "name": "Sprite",
+      "price": 0.4,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Sprite_Regular638627599060078156.jpg",
+      "description": "Carbonated Soft drink"
+    },
+    {
+      "category": "COLD DRINKS",
+      "name": "Fanta Orange",
+      "price": 0.4,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Fanta638627575757005828.jpg",
+      "description": "Carbonated Soft drink"
+    }
+  ],
+  "notes": "Built from public Talabat listing. Included only items with clear numeric prices and valid public item photos. Skipped unclear/price-on-selection/no-photo rows: 42. Ordering remains disabled until owner claims the account."
+}

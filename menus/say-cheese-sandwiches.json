@@ -1,0 +1,139 @@
+{
+  "source": "https://www.talabat.com/bahrain/restaurant/666655/say-cheese-sandwiches-al-qurayyah?aid=1035 — public Talabat menu extracted 2026-09-29; prices and photos from Talabat item data",
+  "vendor": {
+    "name": "Say Cheese Sandwiches",
+    "slug": "say-cheese-sandwiches",
+    "instagram": "@saycheese.bh",
+    "category": "Sandwiches",
+    "description": "Grilled cheese sandwiches, burgers, fries and drinks.",
+    "address": "Bahrain",
+    "logo": "https://talabat.dhmedia.io/image/talabat/restaurants/WhatsApp_Image_2021-_637557579037201167.jpeg?width=180"
+  },
+  "items": [
+    {
+      "category": "Sandwiches",
+      "name": "Triple Cheese Sandwich",
+      "price": 1.7,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637547202296984760"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Mac And Cheese Sandwich",
+      "price": 1.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637547203040627086",
+      "description": "Macaroni, cheddar cheese and provolone cheese."
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Chicken And Beef Bacon Sandwich",
+      "price": 2.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637547201645629019",
+      "description": "Grilled chicken, beef bacon, american cheese and cheddar cheese."
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Grilled Chicken Sandwich",
+      "price": 2.8,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637547200006802905",
+      "description": "Rosemary chicken, provolone cheese and cheddar cheese."
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Philly Beef Sandwich",
+      "price": 3.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637547203514200350",
+      "description": "Ribeye, mixed with onions, capsicum topped with provolone cheese and cheddar cheese."
+    },
+    {
+      "category": "Sandwiches",
+      "name": "The Italian Sandwich",
+      "price": 3.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637547201967648266",
+      "description": "Peperoni, tomato, provolone cheese and mozzarella cheese."
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Mahyawa Grilled Cheese Sandwich",
+      "price": 2.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637547200990347313",
+      "description": "Mahyawa with mozzarella and provolone cheese"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Brisket Grilled Cheese Sandwich",
+      "price": 3.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637547202792973138",
+      "description": "Beef steamed for 12 Hours."
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Grilled Mushroom Burger Sandwich",
+      "price": 3.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637547201359193569"
+    },
+    {
+      "category": "Sandwiches",
+      "name": "Grilled Egg Cheese Sandwich",
+      "price": 1.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637814900788247386",
+      "description": "Our signature grilled cheese stuffed with our new Special made omelet."
+    },
+    {
+      "category": "French Fries",
+      "name": "Mac And Cheese Fries",
+      "price": 1.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Mac__Cheese_Fries_637197929761889870.jpg",
+      "description": "French fries,  bacon crumble,mac, cheese and american cheese."
+    },
+    {
+      "category": "French Fries",
+      "name": "Chili Cheese Fries",
+      "price": 1.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Chilly_Cheese_Fries_637197929772610211.jpg",
+      "description": "French fries, spicy ground beef and cheddar cheese."
+    },
+    {
+      "category": "French Fries",
+      "name": "Plain Frise",
+      "price": 1.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/300400_637199653034847724.jpg",
+      "description": "crispy plain fries"
+    },
+    {
+      "category": "Beverages",
+      "name": "Coca-Cola",
+      "price": 0.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Coca-Cola_330ML_637197931592356434.jpg",
+      "description": "Carbonated soft drink"
+    },
+    {
+      "category": "Beverages",
+      "name": "Coca-Cola Zero",
+      "price": 0.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Coca_Cola_Zero_355_ml_637197931600869190.jpg",
+      "description": "Carbonated soft drink with zero sugar & zero calories"
+    },
+    {
+      "category": "Beverages",
+      "name": "Fanta Orange",
+      "price": 0.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Fanta_Orange_330ML_(_637197931611749620.jpg",
+      "description": "Carbonated soft drink"
+    },
+    {
+      "category": "Beverages",
+      "name": "Sprite",
+      "price": 0.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Sprite_330ML_(1)_637197931622489925.jpg",
+      "description": "Non-caffeinated soft drink"
+    },
+    {
+      "category": "Beverages",
+      "name": "Mineral Water",
+      "price": 0.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Mineral_Water_638935436203241070",
+      "description": "Small."
+    }
+  ],
+  "notes": "Built from public Talabat listing. Included only items with clear numeric prices and valid public item photos. Skipped unclear/price-on-selection/no-photo rows: 0. Ordering remains disabled until owner claims the account."
+}

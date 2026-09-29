@@ -1,0 +1,183 @@
+{
+  "source": "https://www.talabat.com/bahrain/restaurant/620298/the-mexican-corner-busaiteen?aid=993 — public Talabat menu extracted 2026-09-29; prices and photos from Talabat item data",
+  "vendor": {
+    "name": "The Mexican Corner",
+    "slug": "the-mexican-corner",
+    "instagram": "@mexican.corn",
+    "category": "Mexican",
+    "description": "Mexican street food, nachos, fries, tacos, corn dogs and mojitos.",
+    "address": "Bahrain",
+    "logo": "https://talabat.dhmedia.io/image/talabat/restaurants/Logo101_637421583843672225.jpg?width=180"
+  },
+  "items": [
+    {
+      "category": "Potato And Nachos",
+      "name": "Mexican Beef Or Chicken Fries",
+      "price": 2.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637781861061551303",
+      "description": "This indulgent treat is drizzled with rich, spicy salsa and melted cheese, and often garnished with fresh toppings like cilantro, jalapenos, and sour cream."
+    },
+    {
+      "category": "Potato And Nachos",
+      "name": "Mexican Nachos",
+      "price": 2.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637781858994982120",
+      "description": "Mexican Nachos"
+    },
+    {
+      "category": "Crazy Corn",
+      "name": "Mexican Corn Boat",
+      "price": 2.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637781863712160440",
+      "description": "Mexican Corn Boat"
+    },
+    {
+      "category": "Crispy Chicken Strips",
+      "name": "Crispy Chicken Strips",
+      "price": 2.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637791433819654245",
+      "description": "Chicken strips coated in a crispy breading."
+    },
+    {
+      "category": "Mexican Sandwich",
+      "name": "Carne Asado Sandwich",
+      "price": 2.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637786501361438324",
+      "description": "Carne Asado Sandwich"
+    },
+    {
+      "category": "Mexican Sandwich",
+      "name": "New Jersey Hotdog",
+      "price": 2.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637786503978843225",
+      "description": "New Jersey Hotdog"
+    },
+    {
+      "category": "Mexican Sandwich",
+      "name": "Chicken Fajita Warps",
+      "price": 2.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637786529356167339",
+      "description": "Chicken Fajita Warps"
+    },
+    {
+      "category": "Mexican Sandwich",
+      "name": "Chicago-style Hot Dog",
+      "price": 2.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637786531210207559",
+      "description": "Chicago-style Hot Dog"
+    },
+    {
+      "category": "Mexican Sandwich",
+      "name": "Crispy Chicken Sandwich",
+      "price": 2.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637789727410311639",
+      "description": "Made with seasoned chicken, topped with fresh veggies and sauce, t's a perfect meal for those who love a hearty sandwich."
+    },
+    {
+      "category": "Mexican Dishes",
+      "name": "Mexican Tacos",
+      "price": 3.6,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637781840253253224",
+      "description": "Choice of beef or chicken"
+    },
+    {
+      "category": "Mexican Dishes",
+      "name": "Mexican Burrito",
+      "price": 3.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637781841625140588",
+      "description": "Mexican Burrito"
+    },
+    {
+      "category": "Mexican Dishes",
+      "name": "Mexican Quesadilla",
+      "price": 3.6,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637781842166441986",
+      "description": "Mexican Quesadilla"
+    },
+    {
+      "category": "Mexican Dishes",
+      "name": "Mexican Chicken Wrap",
+      "price": 2.6,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637781843279674511",
+      "description": "Mexican Chicken Wrap"
+    },
+    {
+      "category": "Mexican Corn Dog",
+      "name": "Cheesy Corn Dog",
+      "price": 2.8,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637781846002953245",
+      "description": "Cheesy Corn Dog"
+    },
+    {
+      "category": "Mexican Corn Dog",
+      "name": "Crispy Corn Dog",
+      "price": 2.8,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637781846636196814",
+      "description": "Hot Dog Covered With Crispy Dough"
+    },
+    {
+      "category": "Mexican Corn Dog",
+      "name": "Mexican Signature Box",
+      "price": 10.8,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637781857402255800",
+      "description": "Crispy corn dog, curly corn dog, flaming cheetos corn dog, potato corn dog and siding mixed corn with jalapeno"
+    },
+    {
+      "category": "Mexican Corn Dog",
+      "name": "Potato Corndog",
+      "price": 2.8,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637782160599736292",
+      "description": "Potato Corndog"
+    },
+    {
+      "category": "Mexican Corn Dog",
+      "name": "Corndog",
+      "price": 2.8,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637786398424185411",
+      "description": "Corndog"
+    },
+    {
+      "category": "Mojitos",
+      "name": "Mojito Blue Ocean",
+      "price": 2.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637789707540964162",
+      "description": "Mojito Blue Ocean"
+    },
+    {
+      "category": "Mojitos",
+      "name": "Mojito Strawberry",
+      "price": 2.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637789708804928002",
+      "description": "Mojito Strawberry made of tangy lime, fresh mint leaves, and juicy strawberries, mixed with soda water."
+    },
+    {
+      "category": "Vimto",
+      "name": "Slush Vimto",
+      "price": 2.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637787989353706821",
+      "description": "Slush Vimto"
+    },
+    {
+      "category": "Soft Drinks And Water",
+      "name": "Coca-Cola",
+      "price": 0.6,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Coca-Cola_636721900139536417.jpg",
+      "description": "Carbonated soft drink"
+    },
+    {
+      "category": "Soft Drinks And Water",
+      "name": "Coca-Cola Zero",
+      "price": 0.6,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637787982807541813",
+      "description": "Carbonated soft drink with zero sugar & zero calories"
+    },
+    {
+      "category": "Soft Drinks And Water",
+      "name": "Sprite",
+      "price": 0.6,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/blob_637787978788617351",
+      "description": "Non-caffeinated soft drink"
+    }
+  ],
+  "notes": "Built from public Talabat listing. Included only items with clear numeric prices and valid public item photos. Skipped unclear/price-on-selection/no-photo rows: 0. Ordering remains disabled until owner claims the account."
+}

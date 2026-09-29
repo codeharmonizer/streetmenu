@@ -1,0 +1,183 @@
+{
+  "source": "https://www.talabat.com/bahrain/restaurant/735536/golden-star-karak-manama-center?aid=1105 — public Talabat menu extracted 2026-09-29; prices and photos from Talabat item data",
+  "vendor": {
+    "name": "GOLDEN STAR KARAK",
+    "slug": "golden-star-karak",
+    "instagram": "@golden_karak_bahrain",
+    "category": "Café",
+    "description": "Karak, sandwiches, burgers, juices, mojitos and milkshakes.",
+    "address": "Bahrain",
+    "logo": "https://talabat.dhmedia.io/image/talabat/restaurants/golden_star_logo638560577062198170.jpg?width=180"
+  },
+  "items": [
+    {
+      "category": "Burger Special",
+      "name": "Zinger Fillet",
+      "price": 1.1,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Zinger_Fillet638559953689369215.jpg",
+      "description": "Crispy, crunchy, and juicy chicken coated in a blend of spices."
+    },
+    {
+      "category": "Burger Special",
+      "name": "Royal Burger",
+      "price": 1.1,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Royal_Burger638560315130308630.jpg",
+      "description": "Juicy and succulent chicken or beef royal burger, layered with fresh lettuce, ripe tomatoes, melted cheese, served on a freshly toasted bun, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Burger Jumbo",
+      "price": 1.1,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Burger_Jumbo638560584067031332.jpg",
+      "description": "Massive,  juicy chicken patty, smothered in zesty sauces and nestled between two fluffy buns with fresh lettuce, and ripe tomato, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Grilled Burger Special",
+      "price": 1.35,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Grilled_Burger_Special638560302077441774.jpg",
+      "description": "Flame grilled beef burger topped melted cheddar cheese, crisp lettuce, and juicy tomato, sandwiched between soft buns slathered with zesty sauce, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Chicken Fillet Burger",
+      "price": 1.1,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Chicken_Fillet638560273811146314.jpg",
+      "description": "Crispy and juicy chicken fillet burger, topped with fresh veggies and savory sauce, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Garlic Burger",
+      "price": 1.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Garlic_Burger638560596527127682.jpg",
+      "description": "Featuring an enticing blend of fresh, tender burger to perfection with fragrant garlic and meaty mushrooms, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Spanish Zinger Spicy",
+      "price": 1.3,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Spanish_Zinger_Spicy638560319457311247.jpg",
+      "description": "Made with spicy chicken, cheese and sautéed vegetabls, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Jumbo Prawn",
+      "price": 1.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Jumbo_Prawn638560305734433961.jpg",
+      "description": "Featuring plump and juicy prawns, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Golden Milky",
+      "price": 1.6,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Golden_Milky638560299930856468.jpg",
+      "description": "Our special chicken burger with cheese onions and lettuce, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Ronaldo",
+      "price": 1.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Ronaldo638560314243547767.jpg",
+      "description": "Our special beef burger with hotdog slices and cheese, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Royal King Burger",
+      "price": 1.3,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Royal_King_Burger638559948488509331.jpg",
+      "description": "Juicy and succulent chicken or beef royal burger, layered with fresh lettuce, ripe tomatoes, melted cheese, served on a freshly toasted bun."
+    },
+    {
+      "category": "Burger Special",
+      "name": "Super Delux",
+      "price": 1.45,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Super_Delux638560320068674849.jpg",
+      "description": "Our special chicken burger with nuggets and egg, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Double Zinger",
+      "price": 1.6,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/golden_star_logo638560577638682964503297624.jpg",
+      "description": "Crispy zinger double burger, with juicy beef patties, melted Mozzarella, zesty marinara sauce, and a golden brioche bun."
+    },
+    {
+      "category": "Burger Special",
+      "name": "Double Burger",
+      "price": 1.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Double_Burger638561044604907344.jpg",
+      "description": "Featuring two juicy beef patties layered with melted cheese and a tangy special sauce, all served on a soft and fluffy bun, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Golden Special Burger",
+      "price": 1.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/GOLDEN_SPECIAL_BURGER_638559936050371051.jpg",
+      "description": "Breaded chicken in a bun served with fries."
+    },
+    {
+      "category": "Burger Special",
+      "name": "Corden Blue",
+      "price": 1.35,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Corden_Blue638560283528381436.jpg",
+      "description": "Chicken burger stuffed with cheese, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Jumbo Fillet",
+      "price": 1.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Jumbo_Fillet638559939513161351.jpg",
+      "description": "Crispy and juicy chicken fillet burger, topped with fresh veggies and savory sauce."
+    },
+    {
+      "category": "Burger Special",
+      "name": "Titanic",
+      "price": 1.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Titanic638560613991157699.jpg",
+      "description": "Sliced bread with chicken burger, sausage and egg, served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "Spider Man",
+      "price": 1.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Spiderman638559950314537406.jpg",
+      "description": "Toasted sliced bread with chicken burger, chicken fillet and egg."
+    },
+    {
+      "category": "Burger Special",
+      "name": "Spanich Mix Burger",
+      "price": 1.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Spanish_Mix_Burger638560318057134218.jpg",
+      "description": "Served with fries"
+    },
+    {
+      "category": "Burger Special",
+      "name": "DVD",
+      "price": 1.3,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/DVD638559928131930371.jpg",
+      "description": "Two chicket fillets with fries inside."
+    },
+    {
+      "category": "Burger Special",
+      "name": "Chicken Fillet",
+      "price": 1.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/chicken_fillet638561043331332066.jpg",
+      "description": "Breaded chicken fillet fried to perfection."
+    },
+    {
+      "category": "Club Sandwiches",
+      "name": "Club Sandwich Chicken Or Beef",
+      "price": 1.3,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Club638560282704401407.jpg",
+      "description": "Tender chicken or meat, fresh veggies, and creamy mayo between toasted bread slice, served with fries"
+    },
+    {
+      "category": "Club Sandwiches",
+      "name": "Veg Club",
+      "price": 1.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Veg_club638560324325011115.jpg",
+      "description": "Fresh and crispy veggies layered between soft, fluffy bread, served with fries"
+    }
+  ],
+  "notes": "Built from public Talabat listing. Included only items with clear numeric prices and valid public item photos. Skipped unclear/price-on-selection/no-photo rows: 3. Ordering remains disabled until owner claims the account."
+}
