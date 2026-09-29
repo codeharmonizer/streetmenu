@@ -1,0 +1,183 @@
+{
+  "source": "https://www.talabat.com/bahrain/restaurant/605978/the-seven-dosa-food-truck-tubli?aid=1031 — public Talabat menu extracted 2026-09-29; prices/photos from Talabat item data",
+  "vendor": {
+    "name": "The 7 Dosa Food Truck",
+    "slug": "the-7-dosa",
+    "instagram": "@the_7_dosa",
+    "category": "Food Truck",
+    "description": "Indian street food truck serving dosa, chaat, vada pav and snacks.",
+    "address": "Bahrain",
+    "logo": "https://talabat.dhmedia.io/image/talabat/restaurants/unnamed_(3)_637557333893771401.jpg?width=180"
+  },
+  "items": [
+    {
+      "category": "Bombay Special",
+      "name": "Egg Roll",
+      "price": 0.9,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637576321492372801",
+      "description": "Crispy roll filled with egg."
+    },
+    {
+      "category": "Bombay Special",
+      "name": "Omelette Bread",
+      "price": 1.2,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637574799093290482",
+      "description": "A classic Indian savory snack"
+    },
+    {
+      "category": "South Indian Meals",
+      "name": "Puri Bhaji",
+      "price": 1.2,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/POORI_BHAJI_637342480901124401.jpg",
+      "description": "These deep-fried Indian bread and spiced potato curry"
+    },
+    {
+      "category": "South Indian Meals",
+      "name": "Chana Puri",
+      "price": 1.2,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637574708850926662",
+      "description": "Fried Puri's served with chana"
+    },
+    {
+      "category": "South Indian Meals",
+      "name": "Chana Puri And Bhaji",
+      "price": 1.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/POORI_CHANA__BHAJI_637342480909384966.jpg",
+      "description": "Fried Puri's served with bhaji"
+    },
+    {
+      "category": "South Indian Meals",
+      "name": "Bhaji Platter",
+      "price": 0.75,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/BHAJI_PLATE_637342476398284614.jpg",
+      "description": "A savory dish made from seasoned potato"
+    },
+    {
+      "category": "South Indian Meals",
+      "name": "Chana Platter",
+      "price": 0.75,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637574702209647496",
+      "description": "A savory dish made from seasoned chana"
+    },
+    {
+      "category": "Sandwiches And Rolls",
+      "name": "Omelette Sandwich",
+      "price": 0.8,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/OMELETE_SANDWICH_637342480925966831.jpg",
+      "description": "Indulge in our Omelette Sandwich - fluffy eggs, melted cheese, and a crispy exterior that will leave you wanting more."
+    },
+    {
+      "category": "Sandwiches And Rolls",
+      "name": "Cheese Grill Sandwich",
+      "price": 0.8,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/grilled-cheese-sandw_637342478615687765.jpg",
+      "description": "Cheddar cheese, white bread, butter"
+    },
+    {
+      "category": "Sandwiches And Rolls",
+      "name": "Bombay Sandwich",
+      "price": 1.2,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/BOMBAY_SANDWICH_637342476405883275.jpg",
+      "description": "A popular Indian sandwich filled with a variety of ingredients"
+    },
+    {
+      "category": "Sandwiches And Rolls",
+      "name": "Bombay Grilled Sandwich",
+      "price": 1.5,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/BOMBAY_GRILL_SANDWICH_637342476415476004.jpg",
+      "description": "A classic Bombay sandwich, a must try"
+    },
+    {
+      "category": "Sandwiches And Rolls",
+      "name": "Egg Paratha",
+      "price": 0.8,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637576322591406110",
+      "description": "A flaky and buttery flatbread filled with a fluffy egg mixture"
+    },
+    {
+      "category": "Sandwiches And Rolls",
+      "name": "Cheese Paratha",
+      "price": 0.9,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/CHEESE_PARATHA_637342476436831763.jpg",
+      "description": "A delectable fusion of flaky, golden-brown bread stuffed with a generous filling of creamy cheese."
+    },
+    {
+      "category": "North Indian Meals",
+      "name": "Panipuri",
+      "price": 1.0,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/pani-puri_637342480959165479.jpg",
+      "description": "Panipuri, Potatoes, Chickpeas, Onions, Tamarind chutney, Sweet and sour water"
+    },
+    {
+      "category": "North Indian Meals",
+      "name": "Dahipuri",
+      "price": 1.0,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/dahi-puri_637342476444518744.jpg",
+      "description": "A classic Indian savory snack"
+    },
+    {
+      "category": "North Indian Meals",
+      "name": "Sev Puri",
+      "price": 1.0,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/SEV_PURI_637342484461704435.jpg",
+      "description": "Crispy puris topped with a delightful combination of spicy chutneys, tangy tamarind sauce, and crunchy sev"
+    },
+    {
+      "category": "North Indian Meals",
+      "name": "Mix Chaat",
+      "price": 1.0,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/MIX_CHAAT_637342480969052593.jpg",
+      "description": "made with a mix of various chickpeas, potatoes, chutneys, and spices."
+    },
+    {
+      "category": "North Indian Meals",
+      "name": "Ragda Pattice",
+      "price": 1.0,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/RAGDA_PATIES_637342484470336049.jpg",
+      "description": "Indian street food consisting of potato patties served with a spicy gravy."
+    },
+    {
+      "category": "North Indian Meals",
+      "name": "Batata Vada",
+      "price": 0.3,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637574720536905433",
+      "description": "1 piece."
+    },
+    {
+      "category": "North Indian Meals",
+      "name": "Vada Pav",
+      "price": 0.6,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/VADA_PAV_637342484506094446.jpg",
+      "description": "1 piece."
+    },
+    {
+      "category": "North Indian Meals",
+      "name": "Papdi Chaat Dahi",
+      "price": 1.0,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637573158185406612",
+      "description": "Served with puri and dahi"
+    },
+    {
+      "category": "Dosa Items",
+      "name": "Sada Dosa",
+      "price": 0.6,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/SADA_DOSA_637342484526794272.jpg",
+      "description": "Plain and crispy South Indian pancake."
+    },
+    {
+      "category": "Dosa Items",
+      "name": "Onion Sada Dosa",
+      "price": 0.75,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637574723197959167",
+      "description": "Plain and crispy South Indian pancake with onion"
+    },
+    {
+      "category": "Dosa Items",
+      "name": "Masala Dosa",
+      "price": 0.9,
+      "photo": "https://images.deliveryhero.io/image/talabat/MenuItems/blob_637574723528054841",
+      "description": "Experience the authentic taste of Masala Dosa with its crispy crepe, spicy potato filling, and tangy coconut chutney."
+    }
+  ],
+  "notes": "Built from public Talabat listing. Included only items with valid public photos and prices. Skipped 0. Ordering remains disabled until owner claims account."
+}

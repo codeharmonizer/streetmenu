@@ -1,0 +1,183 @@
+{
+  "source": "https://talabat.com/bahrain/restaurant/693763/muncheez?aid=993 — public Talabat menu extracted 2026-09-29; prices/photos from Talabat item data",
+  "vendor": {
+    "name": "Muncheeze",
+    "slug": "muncheeze-bh",
+    "instagram": "@muncheeze.bh",
+    "category": "Restaurant",
+    "description": "Fried chicken, pasta, pizza, salads and comfort food in District 1.",
+    "address": "District 1, Bahrain",
+    "logo": "https://talabat.dhmedia.io/image/talabat/restaurants/LOGO638053389455688402.jpg?width=180"
+  },
+  "items": [
+    {
+      "category": "Best Sellers",
+      "name": "Chicken Avocado Salad",
+      "price": 3.85,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638148271839761329",
+      "description": "Serve with grilled chicken, avocado, dates, pecan nuts, mix greens and fetta cheese"
+    },
+    {
+      "category": "Best Sellers",
+      "name": "Chicken Pasta",
+      "price": 3.08,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/CHICKEN_PASTA638053386109663222.jpg",
+      "description": "Comes with Chicken Breast and creamy alfredo"
+    },
+    {
+      "category": "Best Sellers",
+      "name": "Cheesy Balls",
+      "price": 1.98,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/CHEESY_BALLS638053386108274165.jpg",
+      "description": "Mixed cheese with Spicy jalapeno pepper"
+    },
+    {
+      "category": "Best Sellers",
+      "name": "Muncheeze healthy meal",
+      "price": 3.85,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638480821717550962",
+      "description": "Comes with grilled chicken, iceberg lettuce, cucumber, cherry tomato, mushroom, grilled onion, criscut fries, cheddar cheese, spring onion on the top, toasted bread and serve with the mustard sauce."
+    },
+    {
+      "category": "Best Sellers",
+      "name": "Spicy Chicken Wrap",
+      "price": 2.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/SPICY_CHICKEN_WRAPS638053386151934690.jpg",
+      "description": "2 pieces of Chicken tenders, lettuce, American cheese and Sriracha sauce"
+    },
+    {
+      "category": "Best Sellers",
+      "name": "Halloumi Salad",
+      "price": 2.97,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/HALLOUMI_SALAD638053386124797434.jpg",
+      "description": "110g Grilled halloumi coated with black and white sesame."
+    },
+    {
+      "category": "Starters",
+      "name": "Cheesy Balls",
+      "price": 1.98,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/CHEESY_BALLS638053386108274165.jpg",
+      "description": "Mixed cheese with Spicy jalapeno pepper"
+    },
+    {
+      "category": "Starters",
+      "name": "Skinned Potato Fries",
+      "price": 0.99,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638053961491291937",
+      "description": "Served with homemade ranch sauce"
+    },
+    {
+      "category": "Starters",
+      "name": "Sweet Potato Fries",
+      "price": 1.43,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638147710003305132",
+      "description": "Serve with chipotle sauce"
+    },
+    {
+      "category": "Starters",
+      "name": "Curly Fries",
+      "price": 1.1,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/CURLY_FRISE638053386164101659.jpg",
+      "description": "Served with spicy chipotle sauce"
+    },
+    {
+      "category": "Starters",
+      "name": "Waffle Fries",
+      "price": 1.1,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/WAFFLE_FRISE638053386162159984.jpg",
+      "description": "Served with ranch sauce"
+    },
+    {
+      "category": "Starters",
+      "name": "Potato Scoopers",
+      "price": 1.1,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638053962582314591",
+      "description": "Served with the ranch sauce"
+    },
+    {
+      "category": "Starters",
+      "name": "Cheesy Fries",
+      "price": 1.76,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638111304058965703",
+      "description": "Skinned potato with homemade signature sauce with cheese."
+    },
+    {
+      "category": "Starters",
+      "name": "Spicy Cheesy Fries",
+      "price": 1.76,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638053948208390902",
+      "description": "Skinned potato with homemade signature sauce with cheese"
+    },
+    {
+      "category": "Starters",
+      "name": "Nashville Fries",
+      "price": 2.64,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638053947930361618",
+      "description": "served with chicken, nashville sauce, cheese sauce and scooper fries"
+    },
+    {
+      "category": "Starters",
+      "name": "Beef Bacon Fries",
+      "price": 2.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/BACON_FRIES638053386212141197.jpg",
+      "description": "Mix Cheese with Beef Bacon"
+    },
+    {
+      "category": "Salads",
+      "name": "Chicken Avocado Salad",
+      "price": 3.85,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638148271839761329",
+      "description": "Serve with grilled chicken, avocado, dates, pecan nuts, mix greens and fetta cheese"
+    },
+    {
+      "category": "Salads",
+      "name": "Halloumi Salad",
+      "price": 2.97,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/HALLOUMI_SALAD638053386124797434.jpg",
+      "description": "110g Grilled halloumi coated with black and white sesame."
+    },
+    {
+      "category": "Salads",
+      "name": "Chicken Caesar Salad ",
+      "price": 2.97,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638303160335142240",
+      "description": "Caesar sauce, romaine lettuce and come with grilled chicken"
+    },
+    {
+      "category": "Meals",
+      "name": "Classic crispy chicken meal",
+      "price": 3.74,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/classic_crispy_sandwich638447116228479596.png",
+      "description": "Crispy chicken breast, lettuce, American cheese, and mayonnaise; served in brioche bun.\n\nServed with fries and a drink"
+    },
+    {
+      "category": "Meals",
+      "name": "Classic Crispy Spicy meal",
+      "price": 3.74,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/CLASSIC_SPICY_CRISPY_SAND638447116383655704.png",
+      "description": "Served with fries and a drink"
+    },
+    {
+      "category": "Meals",
+      "name": "Buffalo Crispy Chicken Meal",
+      "price": 3.74,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/BUFFALO_CRISPY_SANDWICH638447116429940468.png",
+      "description": "Crispy chicken breast coated with buffalo sauce, topped with cheddar cheese, lettuce, ranch sauce, sweet relish and served in brioche bun\n\nServed with fries and a drink"
+    },
+    {
+      "category": "Meals",
+      "name": "Nashville Crispy Chicken Meal",
+      "price": 3.74,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/NASHVILLE_CRISPY_SANDWICH638447116490835252.png",
+      "description": "Crispy chicken breast coated with spicy Nashville glaze, Topped with cheddar cheese, Pickles, Coleslaw and homemade sauce. Served in Brioche Bun\n\nServed with fries and a drink"
+    },
+    {
+      "category": "Meals",
+      "name": "Maple Sriracha Meal",
+      "price": 3.74,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/MAPLE_SARIRACHA_SANDWICH638447116533584354.png",
+      "description": "Crispy chicken breast coated with maple sriracha sauce, topped with american cheese, coleslaw, and homemade sauce. Served in brioche bun.\n\nServed with fries and a drink"
+    }
+  ],
+  "notes": "Built from public Talabat listing. Included only items with valid public photos and prices. Skipped 14. Ordering remains disabled until owner claims account."
+}

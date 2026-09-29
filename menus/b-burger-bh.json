@@ -1,0 +1,182 @@
+{
+  "source": "https://www.talabat.com/bahrain/restaurant/713016/b-burger-aljuffair?aid=1077 — public Talabat menu extracted 2026-09-29; prices/photos from Talabat item data",
+  "vendor": {
+    "name": "B Burger",
+    "slug": "b-burger-bh",
+    "instagram": "@bburger.bh",
+    "category": "Burgers",
+    "description": "Burgers, sandwiches, fries, mojitos and comfort food in Juffair.",
+    "address": "Al Shabab Avenue, Juffair, Bahrain",
+    "logo": "https://talabat.dhmedia.io/image/talabat/restaurants/B_Burger_logo1_6383867232638386723299807403.jpg?width=180"
+  },
+  "items": [
+    {
+      "category": "Appetizer",
+      "name": "Onion Rings",
+      "price": 1.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Onion_Ring_638302032348605980.jpg",
+      "description": "8 Pcs onion rings."
+    },
+    {
+      "category": "Appetizer",
+      "name": "Chicken Pop Corn",
+      "price": 2.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Chicken_POP_Corn638302032405537145.jpg",
+      "description": "Serving with sweet and chilli sauce."
+    },
+    {
+      "category": "Appetizer",
+      "name": "Potato Wedges",
+      "price": 1.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Potato_Wedges638302032525051657.jpg",
+      "description": "Deep fried."
+    },
+    {
+      "category": "Appetizer",
+      "name": "Cheese Sticks 5 Pcs",
+      "price": 2.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638315204296931623",
+      "description": "We serve it in a bowl full of handy sticks and marinara dipping sauce."
+    },
+    {
+      "category": "Appetizer",
+      "name": "Cheese Sticks 9 Pcs",
+      "price": 2.8,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638303013855551718",
+      "description": "We serve it in a bowl full of handy sticks and marinara dipping sauce."
+    },
+    {
+      "category": "Appetizer",
+      "name": "Chilli Fries",
+      "price": 2.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/CHILLI_FRISE638302033477243611.jpg",
+      "description": "Deep fried fries with ground bees sauce, jalapeno slice, and cheddar cheese."
+    },
+    {
+      "category": "Burger",
+      "name": "Fresco Chicken Double",
+      "price": 2.7,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638855129195367297",
+      "description": "Chicken patty with buttermilk ranch dressing, tomato and cheese."
+    },
+    {
+      "category": "Pasta",
+      "name": "Penne Chicken Popcorn",
+      "price": 2.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638855121447319083",
+      "description": "Penne pasta with mix sauce, onion and popcorn chicken"
+    },
+    {
+      "category": "Pasta",
+      "name": "Alfredo Chicken",
+      "price": 2.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638315206200204891",
+      "description": "Italian recipe of fettuccine pasta in creamy alfredo sauce with char grilled chicken, sprinkled with parmesan cheese and garnished with parsley."
+    },
+    {
+      "category": "Pasta",
+      "name": "Spaghetti Spicy Chicken",
+      "price": 2.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Spaghetti_Spicy_Chicken638302033819110069.jpg",
+      "description": "Spaghetti and spicy chicken in white cream sauce."
+    },
+    {
+      "category": "Pasta",
+      "name": "Spaghetti Turkey And Mushroom",
+      "price": 2.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Shaghetti_Turky_Ham__Mush638302034291494715.jpg",
+      "description": "Spaghetti cooked in creamy mushroom white sauce with turkey."
+    },
+    {
+      "category": "Pasta",
+      "name": "Spaghetti Carbonara",
+      "price": 2.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Pasta_Carbonara_Classic638302034997561050.jpg",
+      "description": "Spaghetti and smoked turkey in carbonara sauce sprinkled with parmesan cheese."
+    },
+    {
+      "category": "Pasta",
+      "name": "Chicken Penne",
+      "price": 2.9,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Penne_Chicken638302034676846383.jpg",
+      "description": "Penne pasta with butter chicken, and mix sauce."
+    },
+    {
+      "category": "Pasta",
+      "name": "Spaghetti Vegetable",
+      "price": 2.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638315206736604355",
+      "description": "Spaghetti sauteed in our tasty mix sauce with healthy baby corn, mushrooms, capsicum and tomatoes."
+    },
+    {
+      "category": "Extra Toppings",
+      "name": "Cheddar Cheese Sauce",
+      "price": 0.4,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Cheddar_Cheese_Sauce_638386744472328205",
+      "description": "Smooth and creamy sauce made from cheddar cheese,"
+    },
+    {
+      "category": "Extra Toppings",
+      "name": "Bbq Sauce",
+      "price": 0.4,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/barbecue_sauce638378979458104219.jpg",
+      "description": "Smokey flavor bbq sauce made with perfect balance of sweet, spicy and savory ingredients"
+    },
+    {
+      "category": "Extra Toppings",
+      "name": "Ranch Sauce",
+      "price": 0.4,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/qdLaKX4c6i6BqGr_638430642444034598",
+      "description": "Made with a blend of herbs and spices"
+    },
+    {
+      "category": "MOKHTAILS And JUICE",
+      "name": "Iced Tea",
+      "price": 1.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638303045348282530",
+      "description": "Freshly brewed tea leaves and sweetened to perfection"
+    },
+    {
+      "category": "MOKHTAILS And JUICE",
+      "name": "Fresh Orange Juice",
+      "price": 1.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/FRESH_ORANGE_JUICE638302036604232094.jpg",
+      "description": "Made with freshly squeezed oranges, great source of vitamin c"
+    },
+    {
+      "category": "MOKHTAILS And JUICE",
+      "name": "Fresh Mango Juice",
+      "price": 1.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/FRESH_MANGO_JUICE638302036635902515.jpg",
+      "description": "Made from the freshest, ripest mangos"
+    },
+    {
+      "category": "MOKHTAILS And JUICE",
+      "name": "Fresh Avocado Juice",
+      "price": 2.0,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/FRESH_ABOCADO_JUICE638302036670963213.jpg",
+      "description": "Made from freshly pressed avocados, it's packed with healthy fats, vitamins and minerals"
+    },
+    {
+      "category": "MOKHTAILS And JUICE",
+      "name": "Fresh Pineapple Juice",
+      "price": 1.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638303030420142812",
+      "description": "Tropical drink made by blending pineapple. It is a rich source of vitamin c and contains enzymes that can aid digestion."
+    },
+    {
+      "category": "MOKHTAILS And JUICE",
+      "name": "Fresh Lemon Juice",
+      "price": 1.2,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Fresh_Lemon_Juice_638386720328120373",
+      "description": "Made with lemons and a hint of sweetness"
+    },
+    {
+      "category": "MOKHTAILS And JUICE",
+      "name": "Blue Jungle",
+      "price": 1.5,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/mmw_638347200862548108"
+    }
+  ],
+  "notes": "Built from public Talabat listing. Included only items with valid public photos and prices. Skipped 11. Ordering remains disabled until owner claims account."
+}

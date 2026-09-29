@@ -1,0 +1,150 @@
+{
+  "source": "https://www.talabat.com/bahrain/restaurant/765551/bacon-al-sayh?aid=1048 — public Talabat menu extracted 2026-09-29; prices/photos from Talabat item data",
+  "vendor": {
+    "name": "BACON",
+    "slug": "bacon-bh",
+    "instagram": "@bacon__bh",
+    "category": "Burgers",
+    "description": "Food truck serving burgers, fries, drinks and signature bacon-style items.",
+    "address": "Bahrain",
+    "logo": "https://talabat.dhmedia.io/image/talabat/restaurants/logo638839567255205334.jpg?width=180"
+  },
+  "items": [
+    {
+      "category": "Best Sellers",
+      "name": "Normal Fries",
+      "price": 0.91,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/normal_fries638839600821659713.jpg"
+    },
+    {
+      "category": "Best Sellers",
+      "name": "Paka Chicken Meal",
+      "price": 3.9,
+      "photo": "https://talabat.dhmedia.io/image/global-menu-service/TB_BH/vendor/765551/product/d3701e60-4aee-45a8-8e86-bc27cb7f982a.jpg",
+      "description": "Crispy fried chicken served with fresh lettuce and our special sauce accompanied by golden fries and a refreshing beverage"
+    },
+    {
+      "category": "Best Sellers",
+      "name": "Mirinda",
+      "price": 0.65,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Mirinda_Citrus638839600819432255.jpg"
+    },
+    {
+      "category": "Best Sellers",
+      "name": "Paka Chicken",
+      "price": 2.73,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/WhatsApp_Image_20260609_a639166975199013902.jpeg"
+    },
+    {
+      "category": "Best Sellers",
+      "name": "Mabooch Chicken Meal",
+      "price": 3.7,
+      "photo": "https://talabat.dhmedia.io/image/global-menu-service/TB_BH/vendor/765551/product/d6b4ff7a-0fa5-4251-9f26-631d6ef16f2a.jpg",
+      "description": "Crispy fried chicken served with traditional Kuwaiti Mabooch sauce alongside golden fries and a chilled soft drink for a complete satisfying meal"
+    },
+    {
+      "category": "Best Sellers",
+      "name": "Mabooch Chicken",
+      "price": 2.6,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/WhatsApp_Image_20260609_a639166975422204561.jpeg"
+    },
+    {
+      "category": "Burgers",
+      "name": "Paka Chicken",
+      "price": 2.73,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/WhatsApp_Image_20260609_a639166975199013902.jpeg"
+    },
+    {
+      "category": "Burgers",
+      "name": "Mabooch Chicken",
+      "price": 2.6,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/WhatsApp_Image_20260609_a639166975422204561.jpeg"
+    },
+    {
+      "category": "Burgers",
+      "name": "Original Chicken Burger",
+      "price": 3.498,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/orignal_chicken638839600845389490.jpg",
+      "description": "American Slice Cheese, Mayonnaise, American Lettuce. Single"
+    },
+    {
+      "category": "Meals",
+      "name": "Mabooch Chicken Meal",
+      "price": 3.7,
+      "photo": "https://talabat.dhmedia.io/image/global-menu-service/TB_BH/vendor/765551/product/d6b4ff7a-0fa5-4251-9f26-631d6ef16f2a.jpg",
+      "description": "Crispy fried chicken served with traditional Kuwaiti Mabooch sauce alongside golden fries and a chilled soft drink for a complete satisfying meal"
+    },
+    {
+      "category": "Meals",
+      "name": "Paka Chicken Meal",
+      "price": 3.9,
+      "photo": "https://talabat.dhmedia.io/image/global-menu-service/TB_BH/vendor/765551/product/d3701e60-4aee-45a8-8e86-bc27cb7f982a.jpg",
+      "description": "Crispy fried chicken served with fresh lettuce and our special sauce accompanied by golden fries and a refreshing beverage"
+    },
+    {
+      "category": "Meals",
+      "name": "Original Chicken Burger Meal",
+      "price": 5.1,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/orignal_chicken_meal638839600837790813.jpg",
+      "description": "Original Chicken, Soft Drink, Fries. Single"
+    },
+    {
+      "category": "Fries & Sides",
+      "name": "Normal Fries",
+      "price": 0.91,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/normal_fries638839600821659713.jpg"
+    },
+    {
+      "category": "Sauces",
+      "name": "Paka Sauce",
+      "price": 0.4,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/WhatsApp_Image_20260609_a639166974962294009.jpeg"
+    },
+    {
+      "category": "Sauces",
+      "name": "Mabooch Sauce",
+      "price": 0.4,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/WhatsApp_Image_20260609_a639166974981589781.jpeg"
+    },
+    {
+      "category": "Sauces",
+      "name": "Jam Sauce",
+      "price": 0.4,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/WhatsApp_Image_20260609_a639166975032812160.jpeg"
+    },
+    {
+      "category": "Sauces",
+      "name": "Paka Burger Sauce ",
+      "price": 0.4,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/WhatsApp_Image_20260609_a639166975055106066.jpeg",
+      "description": "Creamy, tangy Paka burger sauce, crafted to elevate your burger experience with rich savory flavors and smooth texture that complements all toppings perfectly"
+    },
+    {
+      "category": "Drinks",
+      "name": "Water",
+      "price": 0.4,
+      "photo": "https://talabat.dhmedia.io/image/global-menu-service/TB_BH/vendor/765551/product/7d5d9b73-39ba-464a-a3d5-a7df4923db0d.jpg",
+      "description": "Pure refreshing water served chilled to keep you hydrated throughout your meal"
+    },
+    {
+      "category": "Drinks",
+      "name": "Pepsi",
+      "price": 0.65,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Pepsi638839616507353184.jpg",
+      "description": "Chilled Drink"
+    },
+    {
+      "category": "Drinks",
+      "name": "Pepsi Zero",
+      "price": 0.65,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Pepsi_Zero638839616350980263.jpg"
+    },
+    {
+      "category": "Drinks",
+      "name": "Mirinda",
+      "price": 0.65,
+      "photo": "https://talabat.dhmedia.io/image/talabat/MenuItems/Mirinda_Citrus638839600819432255.jpg"
+    }
+  ],
+  "notes": "Built from public Talabat listing. Included only items with valid public photos and prices. Skipped 0. Ordering remains disabled until owner claims account."
+}
